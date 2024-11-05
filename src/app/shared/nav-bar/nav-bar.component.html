@@ -1,0 +1,80 @@
+<!-- <nav>
+    <div class="d-flex img-title" (click)="GoTo('Inicio')">
+        <img src="../../../assets/imperiologdor.png" alt="">
+        <h1 class="h1 d-flex align-items-center" (click)="GoToSection('queres-asc')">Clínica Imperio</h1>
+    </div>
+    <ul>
+        @if(perfil == 'Paciente'){
+            <li><button (click)="GoTo('usuarios')">Usuarios</button></li>
+        }
+        @if(!UsuarioLogeado()){
+                <li><button (click)="GoTo('registro')">Quiero ser parte</button></li>
+        }
+        <li><button (click)="GoToSection('planes')">Planes</button></li>
+        <li><button (click)="GoToSection('galeria')">Galeria</button></li>
+        @if(UsuarioLogeado()){
+            @if(showButton){
+            }@else {
+                <li><button id="btn-mi-imperio" mat-button [matMenuTriggerFor]="menu">Cuenta</button></li>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="CerrarSesion()">Cerrar Sesion</button>
+                    <button mat-menu-item aria-readonly="true" *ngIf="perfil">Perfil: {{ perfil }}</button>
+                </mat-menu>
+            }
+        }@else {
+            @if(showButton){
+            }@else {
+                <li><button id="btn-mi-imperio" (click)="GoTo('login')">Iniciar Sesión</button></li>
+            }
+        }
+    </ul>
+</nav> -->
+<!--ó  é  ú  á í--> 
+<nav>
+    <div class="d-flex img-title" (click)="GoTo('Inicio')">
+        <img src="../../../assets/imperiologdor.png" alt="">
+        <h1 class="h1 d-flex align-items-center" (click)="GoToSection('queres-asc')">Clínica Imperio</h1>
+    </div>
+    @if(CheckUserLog()){
+        @if(perfil == 'Administrador'){
+                <ul>
+                    <li><button (click)="GoTo('usuarios')">Usuarios</button></li>
+                    <li><button (click)="GoToSection('planes')">Planes</button></li>
+                    <li><button (click)="GoToSection('galeria')">Galeria</button></li>
+                    <li><button id="btn-mi-imperio" mat-button [matMenuTriggerFor]="menu">Cuenta</button></li>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="CerrarSesion()">Cerrar Sesion</button>
+                        <button mat-menu-item aria-readonly="true" *ngIf="perfil">Mi Perfil</button>
+                    </mat-menu>
+                </ul>
+        }@else if(perfil == 'Especialista'){
+                <ul>
+                    <li><button (click)="CrearAdmin()">Planes</button></li>
+                    <li><button (click)="GoToSection('galeria')">Galeria</button></li>
+                    <li><button id="btn-mi-imperio" mat-button [matMenuTriggerFor]="menu">Cuenta</button></li>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="CerrarSesion()">Cerrar Sesion</button>
+                        <button mat-menu-item aria-readonly="true" *ngIf="perfil">Mi Perfil</button>
+                    </mat-menu>
+                </ul>
+        }@else if(perfil == 'Paciente'){
+                <ul>
+                    <li><button (click)="GoToSection('planes')">Planes</button></li>
+                    <li><button (click)="GoToSection('galeria')">Galeria</button></li>
+                    <li><button id="btn-mi-imperio" mat-button [matMenuTriggerFor]="menu">Cuenta</button></li>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="CerrarSesion()">Cerrar Sesion</button>
+                        <button mat-menu-item aria-readonly="true" *ngIf="perfil">Mi Perfil</button>
+                    </mat-menu>
+                </ul>
+        }
+    }@else{
+        <ul>
+            <li><button (click)="GoTo('registro')">Quiero ser parte</button></li>
+            <li><button (click)="GoToSection('planes')">Planes</button></li>
+            <li><button (click)="GoToSection('galeria')">Galeria</button></li>
+            <li><button id="btn-mi-imperio" (click)="GoTo('login')">Iniciar Sesión</button></li>
+        </ul>
+    }
+</nav>
+

@@ -1,0 +1,93 @@
+.carousel{
+    position:relative;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+}
+.card-wrapper{
+    max-width: 1260px;
+    padding: 24px 0px;
+    overflow-x: hidden;
+    background-color: transparent;
+    display: flex;
+    /* gap: 12px; */
+    position: relative;
+    z-index: 100;
+}
+.carousel:hover .next-products {
+    display: block;
+}
+.card{
+    background-color: #fff;
+    min-width: 400px;
+    margin: 0px 10px;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.card:hover{
+    transform: scale(1.06);
+    box-shadow: 0px 8px 6px  rgba(0, 0, 0, 0.732);
+}
+
+.card figure{
+    width: 100%;
+    height: 400px;
+    padding: 0px;
+    margin: 0px;
+}
+img{
+    /* height: 40vh; */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0px;
+    margin: 0px;
+    border-radius: 8px;
+}
+
+.next-products-der{
+    position: absolute;
+    background-color: #8B0000;
+    z-index: 200;
+    color: #D4AF37;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    border: none;
+    top: 50%;
+    right: -35px;
+    cursor:pointer;
+}
+.next-products-der:hover{
+    transition: box-shadow 0.2s ease-in-out;
+    box-shadow: 0px 8px 16px 0 rgba(0, 0, 0, 0.732);
+}
+
+.next-products-izq{
+    position: absolute;
+    background-color: #8B0000;
+    z-index: 200;
+    color: #D4AF37;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    border: none;
+    top: 50%;
+    /* right: 35px; */
+    left: -35px;
+    cursor:pointer;
+}
+.next-products-izq:hover{
+    transition: box-shadow 0.2s ease-in-out;
+    box-shadow: 0px 8px 16px 0 rgba(0, 0, 0, 0.732);
+}

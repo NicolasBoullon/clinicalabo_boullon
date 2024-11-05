@@ -1,0 +1,17 @@
+<div class="carousel">
+    <div class="card-wrapper" id="cards">
+        @for (imagen of imagenes; track $index) {
+            <div class="card">
+                <figure>
+                    <img [src]="imagen.src" alt="">
+                </figure>
+            </div>
+        }
+    </div>
+    <button class="next-products-izq" (click)="nextProductLeft()">
+        <
+    </button>
+    <button class="next-products-der" (click)="nextProductRight()">
+        >
+    </button>
+</div>

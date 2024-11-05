@@ -1,0 +1,82 @@
+nav{
+    font-family: "Lato", sans-serif;
+    font-style: normal;
+    margin: 0px;
+    padding: 0px;
+    height: 7vh;
+    display: flex;
+    background-color: #8B0000;
+    align-items: center;
+    justify-content: space-between;
+    img{
+        margin-left: 10%;
+        height: 5vh;
+        width: auto;
+    }
+    ul{
+        display: flex;
+        align-items: center;
+        list-style: none;
+        justify-self: end;
+        margin: 0px;
+        padding: 0px;
+        li{
+            margin: 0px 15px 0px 15px;  
+        }
+        button {
+            background-color: #8B0000;
+            /* background-color: #f3f7fe; */
+            color: #D4AF37;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            width: auto;
+            /* width: 100px; */
+            height: 4vh;
+            /* height: 45px; */
+            transition: 0.3s;
+            margin: 0px;
+            padding: 0px 10px;
+            font-size: 1rem;
+          }
+          
+          button:hover {
+            background-color: #8a1414;
+            box-shadow: 0 0 0 5px #8a1515;
+            color: #D4AF37;
+          }
+    }
+}
+#btn-mi-imperio{
+    background-color: #556B2F;
+    /* background-color: #f3f7fe; */
+    color: #D4AF37;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    width: auto;
+    height: fit-content;
+    transition: 0.3s;
+    margin: 0px;
+    padding: 0px 10px;
+    font-size: 1.5rem;
+}
+#btn-mi-imperio:hover{
+    background-color: #3f4d28;
+    box-shadow: 0 0 0 5px #3f4d28;
+    color: #D4AF37;
+}
+
+.h1{
+    font-size: 2vw;
+    font-family: "Amarante", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #D4AF37;
+    margin: 0px;
+    padding: 0px;
+}
+.img-title{
+    width: 20%;
+    cursor: pointer;
+}

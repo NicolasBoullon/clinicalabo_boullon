@@ -1,0 +1,52 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col d-flex justify-content-center align-items-center">
+            <form [formGroup]="form" (submit)="EnviarForm()">
+                <h2 class="h2-iniciar-sesion">Iniciar Sesión</h2>
+                <div class="row d-flex justify-content-center">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Correo electrónico</mat-label><!--      -----------------------EMAIL---------------------    -->
+                        <input matInput placeholder="Ingresar" formControlName="correo" maxlength="50">
+                        @if(correo?.hasError('required')){
+                            <mat-error>Campo requerido</mat-error>
+                        }
+                        @if(correo?.hasError('email')){
+                            <mat-error>Correo electrónico invalido</mat-error>
+                        }
+                        @if(correo?.hasError('maxlength')){
+                            <mat-error>Máximo 50 caracteres</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Clave</mat-label><!--      -----------------PASSWORD---------------------    -->
+                        <input matInput [type]="hide ? 'password' : 'text'" placeholder="Ingresar" formControlName="clave"> 
+                        <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        @if(clave?.hasError('required')){
+                            <mat-error>Campo requerido</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+                <button type="submit" class="btn-ingresar">Ingresar</button>
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col d-flex justify-content-center align-items-center">
+                        <button class="btn-acceso-rapido" (click)="AutoCompletar('administrador')" type="button">Administrador</button>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col d-flex justify-content-center align-items-center">
+                        <button class="btn-acceso-rapido" (click)="AutoCompletar('especialista')" type="button">Especialista</button>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col d-flex justify-content-center align-items-center">
+                        <button class="btn-acceso-rapido" (click)="AutoCompletar('paciente')" type="button">Paciente</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

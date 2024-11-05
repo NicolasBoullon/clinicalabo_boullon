@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-dialog-container {
+    --mdc-dialog-container-shape: 0px;
+  }
+
+  .cont-primary{
+    background-color: #F8F4E3;
+  }
+
+  /* #D4AF37 dorado
+    #F8F4E3 fondo claro
+    #556B2F verde
+   */
+
+/* @import 'ngx-toastr/toastr-bs5-alert'; */

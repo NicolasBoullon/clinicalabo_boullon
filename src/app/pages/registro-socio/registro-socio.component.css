@@ -1,0 +1,38 @@
+.container-fluid{
+    height: 93vh;
+    background-color: #F8F4E3;
+    /* height: 100%; */
+    margin: 0px;
+    padding: 0px;
+}
+.row,.col{
+    height: 100%;
+}
+
+.row {
+    position: relative;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    z-index: 100;
+}
+
+.row::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("../../../assets/socios.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    transform: scaleX(-1); /* Mirror the background image */
+    z-index: -1;
+}
+
+.col-4{
+    background: linear-gradient(to right,  #ffffffd2,#ffffffb7,#ffffffd2);
+    z-index: 200;
+}

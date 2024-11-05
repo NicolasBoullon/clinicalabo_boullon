@@ -1,0 +1,88 @@
+.btn-esp{
+    text-align: center;
+    width: 45%;
+    /* margin: 10px; */
+    border: black solid 1px;
+    box-shadow: 0px 0px 5px rgb(36, 36, 36);
+    border-radius: 4px;
+    height: fit-content;
+    padding: 10px 0px;
+}
+.btn-aceptar{
+    background-color: #8B0000;
+    color: #D4AF37;
+}
+
+table{
+    tr,th,td{
+        text-align: center;
+        margin: 10px;
+        width: 100%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    td{
+        font-size: 1.2rem;
+    }
+    tr{
+        border:#D4AF37 solid 1px;
+        cursor: pointer;
+    }
+    tr.especialidades-creadas:hover{
+        background-color: #dfd1a5;
+    }
+    border-collapse: collapse;
+    max-height: 100px;
+    overflow-y: auto;
+    width: 100%;
+    background-color: #e9d89d;
+    border: 1px solid #D4AF37;
+}
+
+.container-fluid{
+    max-height: 90vh;
+    background-color: #fff7d3;
+    overflow: hidden;
+}
+.col-esp{
+    background-color: #e9ddb4;
+    border: solid 1px #D4AF37;
+    margin:  20px ;
+}
+
+#input-buscar-esp,#input-agregar-esp{
+    border: none;
+    background-color: #dbc98e;
+    height: 2rem;
+}
+#input-buscar-esp{
+    width: 100%;
+}
+#input-agregar-esp{
+    width: 70%;
+}
+#btn-agregar{
+    /* height: fit-content; */
+    height: 2rem;
+    background-color: #556B2F;
+    color: #D4AF37;
+    width: 20%;
+    border: none;
+    border-radius: 3px;
+}
+
+#div-tabla-container{
+max-height: 250px;
+overflow-y: auto;
+}
+
+h2{
+    padding: 0px;
+    margin: 0px;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+*{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}

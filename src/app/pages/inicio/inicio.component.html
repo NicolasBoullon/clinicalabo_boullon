@@ -1,0 +1,116 @@
+<div class="container-fluid ">
+  <!--SECCION DE ASOCIARTE-->
+    <div class="row row-section-asc" id="queres-asc">
+        <section class="section-asociarte d-flex justify-content-center align-items-start flex-column">
+          @if(!UsuarioLogeado()){
+            <div>
+                <h2 class="h2-asoc">¿Querés asociarte?</h2>
+                <h4 class="h4-asoc">Contratá la mejor cobertura médica
+                  para vos y tu familia.</h4>
+                <button  class="button-to-asoc" (click)="GoTo('registro')">Haz click aqui</button>
+            </div>
+          }
+        </section>
+    </div>
+    <div class="row row-planes" id="planes">
+      <h2 class="d-flex justify-content-center"><img src="../../../assets/imperiolog.png" alt="" id="img-logo-negro-divisor"></h2>
+      <h3 class="d-flex justify-content-center">Planes de Salud</h3>
+      <!--SECCION DE CARDS PLANES-->
+      <section class="articles-section">
+        <article class="card">
+          <img src="../../../assets/planes/plan1.webp" alt="Descripción imagen 1">
+          <div class="card-content">
+            <h3>Plan Imperial 500</h3>
+            <p>Ideal para quienes desean iniciarse en nuestra comunidad. 
+              Este plan ofrece acceso a beneficios básicos y soporte prioritario. Perfecto para miembros que buscan una opción accesible 
+              para comenzar a disfrutar de todas las ventajas de asociarse con nosotros.<br>
+              <strong>Incluye</strong><br>
+              Acceso a eventos exclusivos<br>
+              Soporte básico<br>
+              Descuentos en servicios selectos</p>
+          </div>
+        </article>
+      
+        <article class="card">
+          <img src="../../../assets/planes/plan2.webp" alt="Descripción imagen 2">
+          <div class="card-content">
+            <h3>Plan Imperial 1000</h3>
+            <p>Diseñado para quienes buscan una experiencia completa con acceso extendido a beneficios exclusivos y soporte premium. Con este plan, disfrutarás de ventajas adicionales y una experiencia personalizada.<br>
+              <strong>Incluye</strong><br>
+              Todo lo del Plan Imperial 500<br>
+              Soporte dedicado y personalizado<br>
+              Acceso a promociones exclusivas<br>
+              Mayor porcentaje de descuentos en servicios
+            </p>
+          </div>
+        </article>
+      
+        <article class="card">
+          <img src="../../../assets/planes/plan3.webp" alt="Descripción imagen 3">
+          <div class="card-content">
+            <h3>Plan Imperial 1500</h3>
+            <p>El plan más completo, pensado para quienes desean disfrutar de todos los beneficios de ser socios de élite. Con descuentos máximos y beneficios exclusivos, es perfecto para aquellos que buscan lo mejor en servicios y atención.<br>
+              <strong>Incluye</strong><br>
+              Todo lo del Plan Imperial 1000<br>
+              Acceso VIP a eventos especiales<br>
+              Soporte prioritario 24/7<br>
+              Descuentos máximos en todos los servicios
+            </p>
+          </div>
+        </article>
+      </section>
+    </div>
+    <!--SECCION DE GALERIA-->
+    <h3 class="h3-galeria d-flex justify-content-center" id="galeria">Galería</h3>
+    <section class="section-galeria">
+      <app-carrusel></app-carrusel>
+    </section>
+
+
+    <footer>
+      <div class="row footer-1-row">1</div>
+      <div class="row footer-2-row">
+        <div class="col d-flex justify-content-center flex-column align-items-center">
+          <ul>
+            Sumate a Clinica Imperial
+              <li><a href="">Asociate</a></li>
+              <li><a href="">Accede a tu perfil</a></li>
+              <li><a href="">Trabaja con nosotros</a></li>
+              <li><a href="">Formas de pago</a></li>
+            </ul>
+        </div>
+        <div class="col d-flex justify-content-center flex-column align-items-center">
+          <ul>
+            Contacto
+            <li><a href="">+54 9 544-334-004</a></li>
+            <li><a href="">Av. Libertador 3618</a></li>
+            <li><a href="">Instagram<img src="../../../assets/logotipo-de-instagram.png" alt="" id="icon-instagram"></a></li>
+            <li><a href="">{{ email }}</a></li>
+          </ul>
+      </div>
+        <div class="col d-flex justify-content-center">
+          <div class="col d-flex justify-content-center flex-column align-items-center">
+            <ul>
+              Links de ayuda
+              <li><a href="">Teléfonos Útiles</a></li>
+              <li><a href="">Preguntas frecuentes</a></li>
+              <li><a href="">Política de privacidad</a></li>
+              <li><a href="">Solicitud de baja</a></li>
+            </ul>
+        </div>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <div class="col d-flex justify-content-center flex-column align-items-center">
+            <ul>
+              Servicios
+              <li><a href="">Cartilla</a></li>
+              <li><a href="">Laboratorios</a></li>
+              <li><a href="">Programas de prevencion</a></li>
+              <li><a href="">Calendario de charlas</a></li>
+            </ul>
+        </div>
+        </div>
+      </div>
+      <div class="row footer-3-row d-flex justify-content-center align-items-center">© Todos los derechos reservados 1954-2024</div>
+    </footer>
+</div>

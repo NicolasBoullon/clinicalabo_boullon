@@ -1,0 +1,66 @@
+<div class="container-fluid cont-primary">
+    <div class="row d-flex justify-content-evenly pt-3">
+        <!-- <div class="col-4 flex-column align-items-center justify-content-center col-btns" id="col-btn-agregar"> -->
+            <button class="btn-agregar-user" (click)="AbrirFormEspecialista()">
+                Agregar Especialista
+            </button>
+            <button class="btn-agregar-user" (click)="AbrirFormPaciente()">
+                Agregar Paciente
+            </button>
+            <button class="btn-agregar-user" (click)="AbrirFormAdministrador()">
+                Agregar Administrador
+            </button>   
+        <!-- </div> -->
+    </div>
+    <div class="row">
+            <h2>Especialistas</h2>
+            @for (especialista of especialistas; track $index) {
+                <article>
+                    <div class="card" style="width: 18rem; ">
+                        <img class="card-img-top" [src]="especialista.especialista.imagen" alt="Card image cap">
+                        <div class="card-body d-flex flex-column justify-content-evenly">
+                          <h5 class="card-title ">{{ especialista.especialista.nombre }} {{ especialista.especialista.apellido }}</h5>    
+                          <p class="card-text ">Edad: {{ especialista.especialista.edad}}</p>
+                          <p class="card-text ">Correo: <br>{{ especialista.especialista.correo}}</p>
+                          <label for="cuenta-activada-{{ $index }}" class="checkbox-label">
+                            <input type="checkbox" id="cuenta-activada-{{ $index }}" 
+                                   [(ngModel)]="especialista.especialista.aprobada"
+                                   (change)="ToggleActivado(especialista)">
+                            <span class="custom-checkbox-false"></span>
+                        </label>
+                        </div>
+                      </div>
+                </article>
+            }
+    </div>
+    <div class="row">
+            <h2>Pacientes</h2>
+            @for (paciente of pacientes; track $index) {
+                <article>
+                    <div class="card" style="width: 18rem; height: fit-content;">
+                        <img class="card-img-top" [src]="paciente.paciente.imagenUno" alt="Card image cap"> 
+                        <div class="card-body d-flex flex-column justify-content-evenly">
+                          <h5 class="card-title">{{ paciente.paciente.nombre }} {{ paciente.paciente.apellido }}</h5>    
+                          <p class="card-text">Edad: {{ paciente.paciente.edad}}</p>
+                          <p class="card-text">Correo: <br>{{ paciente.paciente.correo}}</p>
+                        </div>
+                      </div>
+                </article>
+            }
+    </div>
+    <div class="row">
+        <h2>Administradores</h2>
+        @for (administrador of administradores; track $index) {
+            <article>
+                <div class="card" style="width: 18rem; height: fit-content;">
+                    <img class="card-img-top" [src]="administrador.administrador.imagen" alt="Card image cap"> 
+                    <div class="card-body d-flex flex-column justify-content-evenly">
+                      <h5 class="card-title">{{ administrador.administrador.nombre }} {{ administrador.administrador.apellido }}</h5>    
+                      <p class="card-text">Edad: {{ administrador.administrador.edad}}</p>
+                      <p class="card-text">Correo: <br>{{ administrador.administrador.correo}}</p>
+                    </div>
+                  </div>
+            </article>
+        }
+</div>
+</div>

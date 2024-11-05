@@ -1,0 +1,62 @@
+<div class="container-fluid">
+    @if(showSpinner){
+        <app-spinner [tema]='"claro"'></app-spinner>
+    }@else {
+        <div class="row">
+            <div class="col col-esp">
+                    @if(especialidadesElegidasNuevas.length == 0){
+                        <h2 class="mb-2 mt-2">No hay especialidades elegidas todavia</h2>
+                        <p>Selecciona alguna especialidad</p>
+                    }@else {
+                            <h2 class="mb-2">Especialidades elegidas</h2>
+                            <div id="div-tabla-container">
+                            <table class="mb-3">
+                                <tbody>
+                                    @for (especialidad of especialidadesElegidasNuevas; track $index) {
+                                        <tr (click)="ElegirEspecialidad(especialidad)">
+                                            <td>{{ especialidad | titlecase }}</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                    </div>
+                    }
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-esp">
+                @if(this.especialidades.length == 0){
+                    <h2 class="mb-2 mt-2">No hay ninguna especialidad</h2>
+                    <p>Ingrese la primera especialidad</p>
+                }@else {
+                    <h2 class="mb-2">Especialidades para elegir</h2>
+                    <input type="text" placeholder=" Buscar especialidad" [(ngModel)]="BuscarEspecialidad" id="input-buscar-esp" class="mb-2" >
+                    <div id="div-tabla-container">
+                        <table class="mb-3">
+                            <tbody>
+                                    <tr (click)="ElegirEspecialidad(especialidad.Especialidad)" *ngFor="let especialidad of especialidades | buscarEspecialidad: BuscarEspecialidad" class="especialidades-creadas">
+                                        <td>{{ especialidad.Especialidad | titlecase }}</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+   
+    <div class="row d-flex justify-content-around align-items-center mt-2 mb-2">
+        <input type="text" 
+        placeholder="Agregar especialidad" 
+        id="input-agregar-esp" 
+        [(ngModel)]="EspecialidadParaAgregar" 
+        (keyup.enter)="AgregarEspecialidad()"
+        [disabled]="showSpinner">
+        <button id="btn-agregar" (click)="AgregarEspecialidad()" [disabled]="showSpinner">Agregar</button>
+    </div>
+    <div class="row d-flex justify-content-around align-items-center mb-2">
+        <button class="btn-esp btn-aceptar" (click)="EnviarModalAceptar()" [disabled]="showSpinner">Aceptar</button>
+        <button class="btn-esp btn-cancelar" (click)="CerrarModalCancelar()" [disabled]="showSpinner">Cancelar</button>
+    </div>
+</div>
