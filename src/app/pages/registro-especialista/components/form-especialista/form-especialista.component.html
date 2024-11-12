@@ -54,7 +54,7 @@
                         <mat-error>Campo requerido</mat-error>
                     }
                     @if(dni?.hasError("min") || dni?.hasError("max")){
-                        <mat-error>Debe contener entre 6 y 8 digitos</mat-error>
+                        <mat-error>Debe contener entre 8 digitos</mat-error>
                     }
                 </mat-form-field>
             </div>
@@ -114,7 +114,9 @@
                     } 
                 </div>
             </div>
-
+            <div class="row">
+                <re-captcha (resolved)="executeRecaptchaVisible($event)" [siteKey]=" key" ></re-captcha>
+            </div>
         </form>
         <button type="submit" form="reg-form-esp" id="btn-register" class="d-flex justify-content-center align-items-center mt-2 mb-3">Registrarme</button>
         </div>

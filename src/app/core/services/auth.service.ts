@@ -11,13 +11,13 @@ import { AdministradorService } from './administrador.service';
 import { Firestore ,doc,getDoc} from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerComponent } from '../../shared/spinner/spinner.component';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
   usuarioConectado!:Especialista|Paciente|Administrador|null;
-  passDeEspecialista!:string;
   constructor(private auth:Auth,
     private router:Router,
     private pacienteService:PacientesService,
@@ -37,10 +37,10 @@ export class AuthService {
       this.AbrirModal();
       signOut(this.auth).then(() => {
         setTimeout(() => {
-          this.CerraModal();
+          this.router.navigate(["Inicio"]);
           this.usuarioConectado = null;
           this.toastf.info('Atencion','Sesion cerrada con exito',{timeOut:2000})
-          this.router.navigate(["Inicio"]);
+          this.CerraModal();
         }, 2500);
       })
     }else{
@@ -67,6 +67,7 @@ export class AuthService {
     try {
       const res = await signInWithEmailAndPassword(this.auth, usuarioMail, usuarioPass);
       const user = res.user;
+      console.log(user);
       
       if(user.emailVerified){ //Aca ya tiene el email verificado
         //Hay que ver si es especialista y si tiene aprobada o no la acc.
@@ -86,10 +87,10 @@ export class AuthService {
       }else{
         const resp = await this.administradorService.EsAdmin(user.uid);
         if(!resp){
+          this.toastf.warning('Alerta!','Correo no verificado',{timeOut:2000})
           this.LogoutUser(false);
           return 'No existe';
         }else{
-          this.passDeEspecialista = usuarioPass;
           console.log('es admin claro');
           return true;
         }
@@ -149,8 +150,8 @@ export class AuthService {
         
         if (tipo === "paciente") {
           // Guardar usuario en la colección de pacientes
-          console.log('es paciente locura');
-          console.log(this.auth.currentUser);
+          // console.log('es paciente locura');
+          // console.log(this.auth.currentUser);
           
           await this.pacienteService.AddUserCompletoPaciente(res.user.uid, usuarioCompletoNuevo);
         } else if (tipo === "especialista") {
@@ -196,41 +197,41 @@ export class AuthService {
    * @param uid recibe uid del auth
    * @returns devuelve true|false
    */
-  async ObtenerUsuarioCompleto(uid:string){
-    const docRef = doc(this.firestore,'pacientes',uid);
-    const docSnap = await getDoc(docRef);
-    if(docSnap.exists()){
-      console.log(docSnap.data()['paciente']);
-      this.usuarioConectado = docSnap.data()['paciente'];
-      return true;
-    }else{
-      const docRef = doc(this.firestore,'especialistas',uid);
-      const docSnap = await getDoc(docRef);
-      if(docSnap.exists()){
-        console.log(docSnap.data()['especialista']);
-        if(docSnap.data()['especialista'].aprobada == true){
-          this.usuarioConectado = docSnap.data()['especialista'];
-        }else{
-          console.log('no tiene la cuenta aprobada');
-          return false;
+  async ObtenerUsuarioCompleto(uid: string): Promise<boolean> {
+    const docRefPaciente = doc(this.firestore, 'pacientes', uid);
+    const docSnapPaciente = await getDoc(docRefPaciente);
+
+    if (docSnapPaciente.exists()) {
+        this.usuarioConectado = docSnapPaciente.data()['usuario'];
+        return true;
+    }
+
+    const docRefEspecialista = doc(this.firestore, 'especialistas', uid);
+    const docSnapEspecialista = await getDoc(docRefEspecialista);
+
+    if (docSnapEspecialista.exists()) {
+        const especialista = docSnapEspecialista.data()['usuario'];
+        if (especialista.aprobada) {
+            this.usuarioConectado = especialista;
+        } else {
+            console.log('no tiene la cuenta aprobada');
+            return false;
         }
         return true;
-      }else{
-        const docRef = doc(this.firestore,'administradores',uid);
-        const docSnap = await getDoc(docRef);
-        console.log('A');
-      
-        if(docSnap.exists()){
-          console.log(docSnap.data()['administrador']);
-          this.usuarioConectado = docSnap.data()['administrador'];
-          return true;
-      }
-        return false;
-      }
     }
-  }
 
-  GetUserEmail(){
+    const docRefAdmin = doc(this.firestore, 'administradores', uid);
+    const docSnapAdmin = await getDoc(docRefAdmin);
+
+    if (docSnapAdmin.exists()) {
+        this.usuarioConectado = docSnapAdmin.data()['usuario'];
+        return true;
+    }
+
+    return false;
+    }
+
+   GetUserEmail(){
     return this.auth.currentUser?.email;
   }
 
@@ -242,11 +243,45 @@ export class AuthService {
     return null;
   }
 
+  async GetUserPerfilCompleto(){
+    if(this.auth.currentUser){
+      const docRef = doc(this.firestore,'pacientes',this.auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists()){
+        console.log('supuestamente paciente');
+        
+        return docSnap.data();
+      }else{
+        const docRef = doc(this.firestore,'especialistas',this.auth.currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        console.log('supuestamente espe');
+        if(docSnap.exists()){
+          console.log(docSnap.data());
+          
+          return docSnap.data();
+        }else{
+          const docRef = doc(this.firestore,'administradores',this.auth.currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          console.log('supuestamente admind');
+
+          if(docSnap.exists()){
+            return docSnap.data();
+          }else{
+          console.log('no se encontro el usuario');
+            return false;
+          }
+        }
+      }
+    }else{
+      console.log('no hay nadie conectado');
+      return false;
+    }
+  }
+
   async IniciarUsuario(){
     if(this.auth.currentUser){
       await this.ObtenerUsuarioCompleto(this.auth.currentUser.uid);
       console.log(this.usuarioConectado);
-      
       return true;
     }else{
       return false;

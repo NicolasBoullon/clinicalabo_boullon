@@ -13,11 +13,12 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { FotosService } from '../../../../core/services/fotos.service';
 import { SpinnerComponent } from '../../../../shared/spinner/spinner.component';
 import { Router } from '@angular/router';
+import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha-18";
 
 @Component({
   selector: 'app-form-especialista',
   standalone: true,
-  imports: [MatButtonModule,MatFormFieldModule,MatInputModule,MatIcon,ReactiveFormsModule],
+  imports: [MatButtonModule,MatFormFieldModule,MatInputModule,MatIcon,ReactiveFormsModule,RecaptchaFormsModule,RecaptchaModule],
   templateUrl: './form-especialista.component.html',
   styleUrl: './form-especialista.component.css'
 })
@@ -27,12 +28,14 @@ export class FormEspecialistaComponent implements OnInit,OnDestroy{
   form!:FormGroup;
   hide = true;
   especialista!:Especialista;
-  creadoPorUser:boolean = false;
+  creadoPorAdmin:boolean = false;
+  key = "6LekeSQqAAAAACDo_JYVNZ9ddEnyp-VKnlIedTxm";
+
   constructor(private _matDialog:MatDialog,private authService:AuthService,private fotosService:FotosService,private router:Router, @Optional() private matDialogRef:MatDialogRef<FormEspecialistaComponent>,
   @Inject(MAT_DIALOG_DATA)  @Optional() private data:any){
     if(data){ 
-      this.creadoPorUser = data.creadoUser;
-      console.log(this.creadoPorUser);
+      this.creadoPorAdmin = data.creadoUser;
+      console.log(this.creadoPorAdmin);
       
     }
   }
@@ -43,7 +46,7 @@ export class FormEspecialistaComponent implements OnInit,OnDestroy{
       nombre: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(50)]),
       apellido: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(50)]),
       edad: new FormControl("",[Validators.required,Validators.min(21),Validators.max(80)]),
-      dni: new FormControl("",[Validators.min(100000),Validators.max(99999999),Validators.required]),
+      dni: new FormControl("",[Validators.min(10000000),Validators.max(99999999),Validators.required]),
       especialidad: new FormControl([],[Validators.required,especialidadesElegidasValidator]),
       correo: new FormControl("",[Validators.required,Validators.email,Validators.maxLength(50)]),
       clave: new FormControl("",[Validators.required,Validators.minLength(6),Validators.maxLength(30)]),
@@ -60,19 +63,33 @@ export class FormEspecialistaComponent implements OnInit,OnDestroy{
       console.log(formValues);
       
       this.especialista = this.GetEspecialistaFormulario();
-      let urlImagen = await this.fotosService.UploadFoto(this.foto1,`${formValues.dni}-A`,"especialistas");
+      let urlImagen = await this.fotosService.UploadFoto(this.foto1,`${formValues.correo}-A`,"especialistas");
       this.especialista.imagen = urlImagen;
-      if(this.creadoPorUser) this.especialista.aprobada== true;
-      const resp = await this.authService.AltaUsuarioAuthentication(formValues.correo,formValues.clave,this.especialista,'especialista');
+      if(this.creadoPorAdmin){
+        this.especialista.aprobada = true;
+      }
 
+
+      const resp = await this.authService.AltaUsuarioAuthentication(formValues.correo,formValues.clave,this.especialista,'especialista');
+      console.log(this.creadoPorAdmin);
+      
        setTimeout(() => {
           this.cerrarSpinner();
           this.LimpiarFormulario(); 
-          !this.creadoPorUser ? this.router.navigate(['Inicio']) : '';
+          if (!this.creadoPorAdmin) {
+            this.authService.LogoutUser(false);
+            this.router.navigate(['login']);
+          }
        }, 2000); 
       
     }
   }
+
+  token:boolean = false;
+  executeRecaptchaVisible(token:any){
+    this.token = !this.token;
+  }
+
 
   LimpiarFormulario(){
     this.nombre = '';
@@ -100,6 +117,8 @@ export class FormEspecialistaComponent implements OnInit,OnDestroy{
         }
       }
     })
+
+
   }
   GetEspecialistaFormulario():Especialista{
     const formValues = this.form.value;
@@ -114,6 +133,35 @@ export class FormEspecialistaComponent implements OnInit,OnDestroy{
       correo: formValues.correo,
       imagen: '',
       aprobada: false,
+      lunes:{
+        dias:{especialidad:'Seleccione',hora:'30'},
+        horarios:{desde:'----',hasta:'----'}
+      },
+      martes:{        
+        dias:{especialidad:'Seleccione',hora:'30'},
+        horarios:{desde:'----',hasta:'----'}
+
+      },
+      miercoles:{
+        dias:{especialidad:'Seleccione',hora:'30'},
+        horarios:{desde:'----',hasta:'----'}
+
+      },
+      jueves:{
+        dias:{especialidad:'Seleccione',hora:'30'},
+        horarios:{desde:'----',hasta:'----'}
+
+      },
+      viernes:{
+        dias:{especialidad:'Seleccione',hora:'30'},
+        horarios:{desde:'----',hasta:'----'}
+
+      },
+      sabado:{  
+        dias:{especialidad:'Seleccione',hora:'30'},
+        horarios:{desde:'----',hasta:'----'}
+
+      },
     }
   }
 

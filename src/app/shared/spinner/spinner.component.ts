@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -10,8 +10,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrl: './spinner.component.css'
 })
 export class SpinnerComponent {
-  constructor(private matDialogRef:MatDialogRef<SpinnerComponent>,
-    @Inject(MAT_DIALOG_DATA) private data:any
+  constructor( @Optional() private matDialogRef:MatDialogRef<SpinnerComponent>,
+    @Inject(MAT_DIALOG_DATA)  @Optional() private data:any
   ){
     if(data){
       if(data.opcion == 'cerrarsesion'){
@@ -20,6 +20,7 @@ export class SpinnerComponent {
     }
   }
 
+  @Input() stroke!:string;
   @Input() background!:string;
-  @Input() tema:string = '';
+  @Input() tema!:string;
 }

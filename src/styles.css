@@ -11,9 +11,28 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: #F8F4E3;
   }
 
-  /* #D4AF37 dorado
-    #F8F4E3 fondo claro
-    #556B2F verde
-   */
+  :root {
+    /* Colores primarios */
+    --color-dorado: #D4AF37;
+    --color-fondo-claro: #F8F4E3;
+    --color-verde: #556B2F;
+    --color-rojo-oscuro: #8B0000;
+    --color-gris-oscuro: #1C1C1C;
+    --color-crema: #fff7d3;
 
-/* @import 'ngx-toastr/toastr-bs5-alert'; */
+    /* Variantes más claras */
+    --color-dorado-claro: #E3C276;      /* Versión más clara del dorado */
+    --color-fondo-muy-claro: #FFFFFF;    /* Fondo aún más claro que el fondo claro */
+    --color-verde-claro: #6B8F4F;        /* Verde más claro */
+    --color-rojo-medio: #A52A2A;         /* Rojo un poco más claro */
+    --color-gris-medio: #3B3B3B;         /* Gris más claro */
+    --color-crema-claro: #fff9e6;        /* Versión más clara del color crema */
+
+    /* Variantes más oscuras */
+    --color-dorado-oscuro: #B3872B;      /* Versión más oscura del dorado */
+    --color-fondo-medio: #E8E0C8;        /* Fondo más oscuro que el claro */
+    --color-verde-oscuro: #3A4F20;       /* Verde más oscuro */
+    --color-rojo-muy-oscuro: #5A0000;    /* Rojo muy oscuro */
+    --color-gris-muy-oscuro: #0E0E0E;    /* Gris más oscuro */
+    --color-crema-oscuro: #e6d5b8;       /* Versión más oscura del color crema */
+}

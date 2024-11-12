@@ -1,0 +1,125 @@
+<div class="container-fluid cont-primary">
+    <div class="row d-flex justify-content-evenly">
+        <h2 class="d-flex justify-content-center align-items-center">Solicitar turno</h2>
+        <div class="col-4 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialidad">
+            <h2 class="mb-2">Especialidades para elegir</h2>
+            <input type="text" placeholder=" Buscar especialidad" [(ngModel)]="BuscarEspecialidad" id="input-buscar-esp" class="mb-2" >
+            <div id="div-tabla-container">
+                <table class="mb-3">
+                    <tbody>
+                            <tr (click)="ElegirEspecialidad(especialidad.Especialidad)" *ngFor="let especialidad of especialidades | buscarEspecialidad: BuscarEspecialidad" class="especialidades-creadas" 
+                            appSeleccionoEspecialidad
+                            [especialidadSeleccionada]="especialidadSeleccionada"
+                            [especialidad]="especialidad.Especialidad">
+                                <td>{{ especialidad.Especialidad | titlecase }}</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-4 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialista">
+                <h2>Especialista para elegir</h2>
+                <input type="text" placeholder=" Buscar especialista" [(ngModel)]="BuscarEspecialista" id="input-buscar-esp" class="mb-2" >
+                <div id="div-tabla-container">
+                    <table class="mb-3">
+                        <tbody>
+                            @if(especialistasConEspecialidadSeleccionada.length > 0){
+                                <tr (click)="ElegirEspecialista(especialista)" *ngFor="let especialista of especialistasConEspecialidadSeleccionada | buscarEspecialidad: BuscarEspecialista" class="especialidades-creadas"
+                                appSeleccionoEspecialista
+                                [especialistaSeleccionado]="especialistaSeleccionado"
+                                [especialista]="especialista">
+                                    <td>{{ especialista.usuario.nombre | titlecase }} {{ especialista.usuario.apellido | titlecase }}</td>
+                                </tr>
+                            }@else if(especialidadSeleccionada){
+                                <tr>
+                                    <td>No hay especialistas disponibles</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <ng-container *ngIf="especialidadSeleccionada && especialistaSeleccionado">
+            <h2 class="d-flex justify-content-center">Seleccione Turno</h2>
+            <div class="d-flex justify-content-end">
+                <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="semanaUno">Siguiente semana</button>
+                <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="!semanaUno">Anterior semana</button>
+            </div>
+        </ng-container>
+        @if(semanaUno){
+
+            @if(especialidadSeleccionada && especialistaSeleccionado){
+                <div class="col d-flex flex-column align-items-center">
+                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[0] | date: 'dd/MM/yyyy'}}</h3>
+                    @for (turno of turnosLunes; track $index) {
+                        <button class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[0])" [disabled]="TurnoOcupado(turno,diasDeLasSemanas[0])"> {{ turno }}</button>
+                    }
+                </div>
+                <div class="col d-flex flex-column align-items-center">
+                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[1] | date: 'dd/MM/yyyy'}}</h3>
+                    @for (turno of turnosMartes; track $index) {
+                        @if(TurnoOcupado(turno,diasDeLasSemanas[1])){
+                            
+                        }
+                        <button *ngIf="TurnoOcupado(turno,diasDeLasSemanas[1])" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[1])"> {{ turno }}</button>
+                    }
+                </div>
+                <div class="col d-flex flex-column align-items-center">
+                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[2] | date: 'dd/MM/yyyy'}}</h3>
+                    @for (turno of turnosMiercoles; track $index) {
+                        @if(TurnoOcupado(turno,diasDeLasSemanas[2])){
+                            <button  class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[2])"> {{ turno }}</button>
+                        }
+                    }
+                </div>
+                <div class="col d-flex flex-column align-items-center">
+                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[3] | date: 'dd/MM/yyyy'}}</h3>
+                    <button *ngFor="let turno of turnosJueves; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[3])"> {{ turno }}</button>
+                </div>
+                <div class="col d-flex flex-column align-items-center">
+                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[4] | date: 'dd/MM/yyyy'}}</h3>
+                    <button *ngFor="let turno of turnosViernes; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[4])"> {{ turno }}</button>
+                </div>
+                <div class="col d-flex flex-column align-items-center">
+                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[5] | date: 'dd/MM/yyyy'}}</h3>
+                    <button *ngFor="let turno of turnosSabado; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[5])"> {{ turno }}</button>
+                </div>
+            }
+        }
+        @if(!semanaUno){
+            @if(especialidadSeleccionada && especialistaSeleccionado){
+                <ng-container>
+                    <div class="col d-flex flex-column align-items-center">
+                        <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[7] | date: 'dd/MM/yyyy'}}</h3>
+                        <button *ngFor="let turno of turnosLunes; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[7])"> {{ turno }}</button>
+                    </div>
+                    <div class="col d-flex flex-column align-items-center">
+                        <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[8] | date: 'dd/MM/yyyy'}}</h3>
+        
+                        <button *ngFor="let turno of turnosMartes; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[8])"> {{ turno }}</button>
+                    </div>
+                    <div class="col d-flex flex-column align-items-center">
+                        <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[9] | date: 'dd/MM/yyyy'}}</h3>
+        
+                        <button *ngFor="let turno of turnosMiercoles; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[9])"> {{ turno }}</button>
+                    </div>
+                    <div class="col d-flex flex-column align-items-center">
+                        <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[10] | date: 'dd/MM/yyyy'}}</h3>
+                        <button *ngFor="let turno of turnosJueves; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[10])"> {{ turno }}</button>
+                    </div>
+                    <div class="col d-flex flex-column align-items-center">
+                        <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[11] | date: 'dd/MM/yyyy'}}</h3>
+        
+                        <button *ngFor="let turno of turnosViernes; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[11])"> {{ turno }}</button>
+                    </div>
+                    <div class="col d-flex flex-column align-items-center">
+                        <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[12] | date: 'dd/MM/yyyy'}}</h3>
+                        <button *ngFor="let turno of turnosSabado; index as i;" class="btn-sacar-turno" (click)="SacarTurno(turno,diasDeLasSemanas[12])"> {{ turno }}</button>
+                    </div>
+                </ng-container>
+                }
+            }
+    </div>
+</div>

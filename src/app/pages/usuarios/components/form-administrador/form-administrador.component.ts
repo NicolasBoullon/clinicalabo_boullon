@@ -32,7 +32,7 @@ export class FormAdministradorComponent {
       nombre: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(50)]),
       apellido: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(50)]),
       edad: new FormControl("",[Validators.required,Validators.min(21),Validators.max(80)]),
-      dni: new FormControl("",[Validators.min(100000),Validators.max(99999999),Validators.required]),
+      dni: new FormControl("",[Validators.min(10000000),Validators.max(99999999),Validators.required]),
       correo: new FormControl("",[Validators.required,Validators.email,Validators.maxLength(50)]),
       clave: new FormControl("",[Validators.required,Validators.minLength(6),Validators.maxLength(30)]),
       file1: new FormControl("",[Validators.required]), //Validators de JPG

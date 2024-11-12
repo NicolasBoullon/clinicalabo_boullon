@@ -18,14 +18,23 @@ export class AppComponent implements OnInit{
   /**
    *
    */
-  constructor(private authService:AuthService) {
+  constructor(private authService:AuthService,private _matDialog:MatDialog) {
     
   }
 
   ngOnInit(): void {
+    this.abrirSpinner();
     setTimeout(async () => {
       await this.authService.IniciarUsuario();
+      this.cerrarSpinner();
     }, 1000);
+  }
+
+  abrirSpinner(){
+    this._matDialog.open(SpinnerComponent);
+  }
+  cerrarSpinner(){
+    this._matDialog.closeAll();
   }
 
 }

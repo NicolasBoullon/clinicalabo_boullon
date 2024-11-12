@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { collection, collectionData, doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
 export class AdministradorService {
 
-  constructor(private firestore:Firestore) { }
+  constructor(private firestore:Firestore,private toastr:ToastrService) { }
 
 
   async AddUserCompletoAdministrador(uid: string, administrador: any):Promise<boolean> {
@@ -14,10 +15,11 @@ export class AdministradorService {
     setDoc(docRef, {
         fecha: new Date(),
         uid:uid,
-        administrador: administrador
+        usuario: administrador
     })
     .then(() => {
         console.log("Administrador agregado con UID:", uid);
+        this.toastr.info('Aviso!','Se ha enviado un correo de verificacion',{timeOut:3000})
         return true;
     })
     .catch((error) => {

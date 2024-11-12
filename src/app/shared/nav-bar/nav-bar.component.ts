@@ -7,8 +7,6 @@ import { SpinnerComponent } from "../spinner/spinner.component";
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { Administrador } from '../../core/models/Administrador';
-
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
@@ -20,17 +18,12 @@ export class NavBarComponent implements OnInit{
 
   constructor(private router:Router,private scroll:ScrollpageService,private authService:AuthService,private _matDialog:MatDialog){}
   mostrarNavBar:boolean = true;
-  perfil!:any;
+  perfil:any = '';
   showButton:boolean = true;
   ngOnInit(): void {
-    this.abrirSpinner();
-    setTimeout(async () => {
-      // await this.CheckPerfil();
-      this.perfil = await this.authService.GetUserPerfil();
-      console.log(this.perfil);
-      
-    this.cerrarSpinner();
-    }, 2500);
+      setTimeout(() => {
+        this.GetUser()
+      }, 1000);
   }
 
   GoTo(path:string){
@@ -44,18 +37,39 @@ export class NavBarComponent implements OnInit{
     });
   }
 
-  CrearAdmin(){  
-    let administrador:Administrador = {
-      nombre:'Sudo',
-      apellido:'Admin',
-      correo: 'adminutnclinica@yopmail.com',
-      dni:202020220,
-      edad: 45,
-      imagen: '',
-      rol: 'Administrador'
-    };
-    this.authService.AltaUsuarioAuthentication("adminutnclinica@yopmail.com",'admin123',administrador,'administrador');
+  async GetUser(){
+    // this.perfil = this.authService.usuarioConectado;
+    this.authService.GetUserPerfilCompleto()
+    .then(resp=>{
+      if(resp){
+        this.perfil = resp['usuario'].rol;
+        this.mostrarNavBar = false;
+      }else{
+        console.log(resp);
+        this.mostrarNavBar = false;
+      }
+      // this.cerrarSpinner();
+    })
+    .catch(err=>{
+        this.mostrarNavBar = false;
+        console.log(err);
+      
+    })
+    // this.cerrarSpinner();
   }
+
+  // CrearAdmin(){  
+  //   let administrador:Administrador = {
+  //     nombre:'Sudo',
+  //     apellido:'Admin',
+  //     correo: 'adminutnclinica@yopmail.com',
+  //     dni:202020220,
+  //     edad: 45,
+  //     imagen: '',
+  //     rol: 'Administrador'
+  //   };
+  //   this.authService.AltaUsuarioAuthentication("adminutnclinica@yopmail.com",'admin123',administrador,'administrador');
+  // }
 
   UsuarioLogeado(){
     return this.authService.GetUserEmail();

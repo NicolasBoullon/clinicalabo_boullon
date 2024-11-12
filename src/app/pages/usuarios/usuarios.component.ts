@@ -11,11 +11,13 @@ import { FormSocioComponent } from '../registro-socio/components/form-socio/form
 import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 import { FormAdministradorComponent } from './components/form-administrador/form-administrador.component';
 import { AdministradorService } from '../../core/services/administrador.service';
+import { AprobadoPipe } from '../../core/pipes/aprobado.pipe';
+import { EstaAprobadoDirective } from '../../core/directives/esta-aprobado.directive';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [FormsModule, SpinnerComponent],
+  imports: [FormsModule, SpinnerComponent,AprobadoPipe,EstaAprobadoDirective],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
 })
@@ -67,9 +69,9 @@ export class UsuariosComponent implements OnInit,OnDestroy{
   }
 
   ToggleActivado(especialista: any) {    
-    const activado = especialista.especialista.aprobada;
-    console.log(`Activado: ${activado}`);
     console.log(especialista);
+    
+    const activado = especialista.usuario.aprobada;
     
     this.especialistasService.ActivarEspecialista(especialista, activado);
   }

@@ -17,16 +17,21 @@
             @for (especialista of especialistas; track $index) {
                 <article>
                     <div class="card" style="width: 18rem; ">
-                        <img class="card-img-top" [src]="especialista.especialista.imagen" alt="Card image cap">
+                        <img class="card-img-top" [src]="especialista.usuario.imagen" alt="Card image cap">
                         <div class="card-body d-flex flex-column justify-content-evenly">
-                          <h5 class="card-title ">{{ especialista.especialista.nombre }} {{ especialista.especialista.apellido }}</h5>    
-                          <p class="card-text ">Edad: {{ especialista.especialista.edad}}</p>
-                          <p class="card-text ">Correo: <br>{{ especialista.especialista.correo}}</p>
-                          <label for="cuenta-activada-{{ $index }}" class="checkbox-label">
+                          <h5 class="card-title ">{{ especialista.usuario.nombre }} {{ especialista.usuario.apellido }}</h5>    
+                          <p class="card-text ">Edad: {{ especialista.usuario.edad}}</p>
+                          <p class="card-text ">Correo: <br>{{ especialista.usuario.correo}}</p>
+                          <label for="cuenta-activada-{{ $index }}" class="checkbox-label" [estaAprobado]="especialista.usuario.aprobada">
                             <input type="checkbox" id="cuenta-activada-{{ $index }}" 
-                                   [(ngModel)]="especialista.especialista.aprobada"
-                                   (change)="ToggleActivado(especialista)">
-                            <span class="custom-checkbox-false"></span>
+                            (change)="ToggleActivado(especialista)"
+                            [(ngModel)]="especialista.usuario.aprobada"
+                            >{{ especialista.usuario.aprobada | aprobado }} 
+                            <!-- <span class="custom-checkbox-false"></span> -->
+                            <!-- <input type="checkbox" id="cuenta-activada-{{ $index }}" 
+                            [(ngModel)]="especialista.usuario.aprobada"
+                            (change)="ToggleActivado(especialista)">{{ especialista.usuario.aprobada | aprobado }} 
+                            <span class="custom-checkbox-false"></span> -->
                         </label>
                         </div>
                       </div>
@@ -38,11 +43,11 @@
             @for (paciente of pacientes; track $index) {
                 <article>
                     <div class="card" style="width: 18rem; height: fit-content;">
-                        <img class="card-img-top" [src]="paciente.paciente.imagenUno" alt="Card image cap"> 
+                        <img class="card-img-top" [src]="paciente.usuario.imagenUno" alt="Card image cap"> 
                         <div class="card-body d-flex flex-column justify-content-evenly">
-                          <h5 class="card-title">{{ paciente.paciente.nombre }} {{ paciente.paciente.apellido }}</h5>    
-                          <p class="card-text">Edad: {{ paciente.paciente.edad}}</p>
-                          <p class="card-text">Correo: <br>{{ paciente.paciente.correo}}</p>
+                          <h5 class="card-title">{{ paciente.usuario.nombre }} {{ paciente.usuario.apellido }}</h5>    
+                          <p class="card-text">Edad: {{ paciente.usuario.edad}}</p>
+                          <p class="card-text">Correo: <br>{{ paciente.usuario.correo}}</p>
                         </div>
                       </div>
                 </article>
@@ -53,11 +58,11 @@
         @for (administrador of administradores; track $index) {
             <article>
                 <div class="card" style="width: 18rem; height: fit-content;">
-                    <img class="card-img-top" [src]="administrador.administrador.imagen" alt="Card image cap"> 
+                    <img class="card-img-top" [src]="administrador.usuario.imagen" alt="Card image cap"> 
                     <div class="card-body d-flex flex-column justify-content-evenly">
-                      <h5 class="card-title">{{ administrador.administrador.nombre }} {{ administrador.administrador.apellido }}</h5>    
-                      <p class="card-text">Edad: {{ administrador.administrador.edad}}</p>
-                      <p class="card-text">Correo: <br>{{ administrador.administrador.correo}}</p>
+                      <h5 class="card-title">{{ administrador.usuario.nombre }} {{ administrador.usuario.apellido }}</h5>    
+                      <p class="card-text">Edad: {{ administrador.usuario.edad}}</p>
+                      <p class="card-text">Correo: <br>{{ administrador.usuario.correo}}</p>
                     </div>
                   </div>
             </article>

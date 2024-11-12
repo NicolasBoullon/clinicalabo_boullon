@@ -46,14 +46,12 @@ export class LoginComponent implements OnInit{
       const res = await this.authService.LoginUser(this.form.get('correo')?.value,this.form.get('clave')?.value)
 
         if(res === true){
-          console.log('aaaaaa');
-          
-          // const resp = await this.especialistaService.CuentaAprobada(res.uid);
+
           setTimeout(() => {
             this.authService.IniciarUsuario();
             // console.log('esta aprobada');
-            this.router.navigate(['Inicio']);
             this.CerraModal();
+            this.router.navigate(['Inicio']);
             // this.LimpiarFormulario();
           }, 2000);
         }else if(res === 'No verificado'){
@@ -65,11 +63,8 @@ export class LoginComponent implements OnInit{
             this.LimpiarFormulario();
             this.toastr.info('Importante','Correo no verificado',{timeOut:2000})
           }, 2000);
-        }else if(res === false){
-          console.log('erroneo');
-            
+        }else if(res === false){            
           setTimeout(() => {
-            console.log('No log');
             
             this.CerraModal();
             this.LimpiarFormulario();
@@ -99,17 +94,17 @@ export class LoginComponent implements OnInit{
   AutoCompletar(usuario:string){
     switch(usuario){
       case 'administrador':
-        this.correo = 'adminsudoclinic@yopmail.com';
+        this.correo = 'adminsudoclinica@yopmail.com';
         this.clave = 'admin123';
       break;
 
       case 'especialista':
-        this.correo = 'drhousygreg@yopmail.com';
+        this.correo = 'alvathomased@yopmail.com';
         this.clave = 'hola123';
       break;
 
       case 'paciente':
-        this.correo = 'teitumchanin@yopmail.com';
+        this.correo = 'mirtitalegrand@yopmail.com';
         this.clave = 'hola123';
       break;
     }

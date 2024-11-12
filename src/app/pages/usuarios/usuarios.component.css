@@ -12,37 +12,38 @@
 
 .checkbox-label input{
     display: none;
+    /* width: fit-content; */
 }
 
 .checkbox-label{
     height: 1.4rem;
-    width: 100%;
+    width: fit-content;
+    border-radius: 4%;
+    padding: 0px 4px;
     /* background-color: salmon; */
 }
-.checkbox-label span{
-    width: 100%;
-}
 
-.checkbox-label .custom-checkbox-false::after {
-    position: relative;
+/* .checkbox-label .custom-checkbox-false::after { */
+    /* position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #8B0000;
     width: 50%;
     height: 100%;
-    border-radius: 4%;
-    content: 'Desactivado';
-    color: white;
-    transition: all 1s cubic-bezier(0.50, -0.40, 1, 1);
-    transform: translateX(0); /* Posición inicial */
-}
+    border-radius: 4%; */
+    /* color: white; */
+    /* transition: all 1s cubic-bezier(0.50, -0.40, 1, 1); */
+    /* transform: translateX(0);  */
+    /* content: 'Desactivado'; */
+/* } */
 
-.checkbox-label input:checked + .custom-checkbox-false::after {
-    background-color: #556B2F;
-    content: 'Activado';
-    transform: translateX(100%); /* Mueve el elemento a la derecha */
-}
+/* .checkbox-label input:checked + .custom-checkbox-false::after { */
+    /* background-color: #556B2F; */
+    /* transform: translateX(100%);  */
+    /* content: 'Activado'; */
+/* } */
+
 .card{
     min-height: 33rem;
 }
@@ -70,6 +71,7 @@ article{
     padding: 0.8rem;
     width: fit-content;
     font-size: 150%;
+    color: snow;
     background-color: #556B2F;
 }
 

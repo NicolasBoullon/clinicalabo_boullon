@@ -10,12 +10,12 @@ import { SpinnerComponent } from '../../../../shared/spinner/spinner.component';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Paciente } from '../../../../core/models/Paciente';
 import { FotosService } from '../../../../core/services/fotos.service';
-
+import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha-18";
 @Component({
   selector: 'app-form-socio',
   standalone: true,
   imports: [ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule,
-    MatIconModule, MatButtonModule],
+    MatIconModule, MatButtonModule,RecaptchaFormsModule,RecaptchaModule],
   templateUrl: './form-socio.component.html',
   styleUrl: './form-socio.component.css'
 })
@@ -26,7 +26,7 @@ export class FormSocioComponent implements OnInit{
   foto2!:any;
   Paciente!:Paciente;
   creadoPorUser:boolean = false;
-
+  key = "6LekeSQqAAAAACDo_JYVNZ9ddEnyp-VKnlIedTxm";
   constructor(private router:Router,private _matDialog:MatDialog,private authService:AuthService,private fotosService:FotosService, @Optional() private matDialogRef:MatDialogRef<FormSocioComponent>,
     @Inject(MAT_DIALOG_DATA)  @Optional() private data:any
   ){
@@ -42,7 +42,7 @@ export class FormSocioComponent implements OnInit{
       nombre: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(50)]),
       apellido: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(50)]),
       edad: new FormControl("",[Validators.required,Validators.min(0),Validators.max(100)]),
-      dni: new FormControl("",[Validators.required,Validators.pattern('^[0-9]+$'),Validators.min(100000),Validators.max(99999999)]),
+      dni: new FormControl("",[Validators.required,Validators.pattern('^[0-9]+$'),Validators.min(10000000),Validators.max(99999999)]),
       obraSocial: new FormControl("",[Validators.required,Validators.pattern('^[a-zA-Z ]+$'),Validators.maxLength(30)]),
       correo: new FormControl("",[Validators.required,Validators.email,Validators.maxLength(50)]),
       clave: new FormControl("",[Validators.required,Validators.minLength(6),Validators.maxLength(30)]),
@@ -55,7 +55,7 @@ export class FormSocioComponent implements OnInit{
    * Envia las imagenes a storage, ademas de crear el usuario en auth y firestore
    */
    async EnviarForm(){
-    if(this.form.invalid){
+    if(this.form.invalid || !this.token){
 
     }else{
       const formValues = this.form.value;
@@ -65,9 +65,9 @@ export class FormSocioComponent implements OnInit{
       
       this.abrirSpinner();
 
-      let url1 = await this.fotosService.UploadFoto(this.foto1,`${formValues.dni}-A`,"pacientes");
+      let url1 = await this.fotosService.UploadFoto(this.foto1,`${formValues.correo}-A`,"pacientes");
       
-      let url2 = await this.fotosService.UploadFoto(this.foto2,`${formValues.dni}-B`,"pacientes");
+      let url2 = await this.fotosService.UploadFoto(this.foto2,`${formValues.correo}-B`,"pacientes");
       this.Paciente.imagenUno = url1;
       this.Paciente.imagenDos = url2;
 
@@ -99,8 +99,10 @@ export class FormSocioComponent implements OnInit{
       
     }
   }
-
-
+  token:boolean = false;
+  executeRecaptchaVisible(token:any){
+    this.token = !this.token;
+  }
 
   clickEvent(event: MouseEvent) {
     this.hide = !this.hide;

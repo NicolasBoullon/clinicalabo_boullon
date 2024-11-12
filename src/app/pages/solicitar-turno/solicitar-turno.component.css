@@ -1,0 +1,49 @@
+#div-tabla-container{
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.container-fluid{
+    height: 93vh;
+    min-height: fit-content;
+}
+
+#col-elegir-especialidad,#col-elegir-especialista{
+    background-color: var(--color-crema-oscuro);
+    border: solid 2px var(--color-dorado);
+    td{
+        text-align: center;
+    }
+    input{
+        text-align: center;
+        background-color: none;
+        border: solid 1px var(--color-dorado);
+        background: none;
+    }
+    table{
+        td,th{
+            padding: 0px 10px;
+            cursor: pointer;
+        }
+    }
+}
+#col-elegir-especialista{
+
+}
+#col-elegir-especialidad{}
+
+.btn-sacar-turno{
+    border: none;
+    border-radius: 8px;
+    background-color: var(--color-rojo-medio);
+    color: var(--color-dorado);
+    margin: 5px 5px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.btn-sacar-turno:disabled{
+    background-color: gray;
+}

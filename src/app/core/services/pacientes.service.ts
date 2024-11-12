@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { collection, collectionData, doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
 export class PacientesService {
 
-  constructor(private firestore:Firestore) { }
+  constructor(private firestore:Firestore,private toastr:ToastrService) { }
 
 
   /**
@@ -23,10 +24,12 @@ export class PacientesService {
     setDoc(docRef, {
         fecha: new Date(),
         uid:uid,
-        paciente: paciente
+        usuario: paciente
     })
     .then(() => {
         console.log("Usuario agregado con UID:", uid);
+        this.toastr.info('Aviso!','Se ha enviado un correo de verificacion',{timeOut:3000})
+
     })
     .catch((error) => {
         console.error("Error al agregar el usuario:", error);

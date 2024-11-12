@@ -53,7 +53,7 @@
                             <mat-error>Campo requerido</mat-error>
                         }
                         @if(dni?.hasError("min") || dni?.hasError("max")){
-                            <mat-error>Debe contener entre 6 y 8 dígitos</mat-error>
+                            <mat-error>Debe contener entre 8 dígitos</mat-error>
                         }
                         @if(dni?.hasError("pattern")) {
                             <mat-error>Solo números</mat-error>
@@ -62,16 +62,16 @@
                 </div>
     
                 <div class="row d-flex justify-content-center row-input-form">
-                        <mat-form-field appearance="outline" id="control-obrasocial">
-                            <mat-label>Obra Social</mat-label>  <!--      -----------------OBRA SOCIAL---------------------    -->
-                            <input matInput placeholder="Ingresar" formControlName="obraSocial" maxlength="30">
-                            @if(obraSocial?.hasError('required')){
-                                <mat-error>Campo requerido</mat-error>
-                            }
-                            @if(obraSocial?.hasError('maxlength')){
-                                <mat-error>Máximo 30 caracteres</mat-error>
-                            }
-                        </mat-form-field>
+                    <mat-form-field appearance="outline" id="control-obrasocial">
+                        <mat-label>Obra Social</mat-label>  <!--      -----------------OBRA SOCIAL---------------------    -->
+                        <input matInput placeholder="Ingresar" formControlName="obraSocial" maxlength="30">
+                        @if(obraSocial?.hasError('required')){
+                            <mat-error>Campo requerido</mat-error>
+                        }
+                        @if(obraSocial?.hasError('maxlength')){
+                            <mat-error>Máximo 30 caracteres</mat-error>
+                        }
+                    </mat-form-field>
                 </div>
     
                 <div class="row d-flex justify-content-center row-input-form">
@@ -99,39 +99,42 @@
                 </div>
 
                 <div class="row d-flex justify-content-center row-input-form">
-                        <div class="col d-flex flex-column">
-                                <input class="mb-2 mt-2"  
-                                placeholder="Ingresar" 
-                                formControlName="file1" 
-                                type="file" 
-                                (change)="uploadFile1($event)" 
-                                id="file1">
-                                @if(file1?.value){
-                                    <label for="file1" class="subir-archivo d-flex justify-content-center align-items-center">Cambiar Archivo 1</label>
-                                }@else {
-                                    <label for="file1" class="subir-archivo d-flex justify-content-center align-items-center">Subir Archivo 1</label>
-                                }
-                                @if(file1?.hasError('required')){
-                                    <mat-error>Imagen requerida</mat-error>
-                                } 
-                        </div>
+                    <div class="col d-flex flex-column">
+                            <input class="mb-2 mt-2"  
+                            placeholder="Ingresar" 
+                            formControlName="file1" 
+                            type="file" 
+                            (change)="uploadFile1($event)" 
+                            id="file1">
+                            @if(file1?.value){
+                                <label for="file1" class="subir-archivo d-flex justify-content-center align-items-center">Cambiar Archivo 1</label>
+                            }@else {
+                                <label for="file1" class="subir-archivo d-flex justify-content-center align-items-center">Subir Archivo 1</label>
+                            }
+                            @if(file1?.hasError('required')){
+                                <mat-error>Imagen requerida</mat-error>
+                            } 
+                    </div>
 
-                        <div class="col d-flex flex-column">
-                                <input class="mb-2 mt-2"  
-                                placeholder="Ingresar" 
-                                formControlName="file2" 
-                                type="file" 
-                                (change)="uploadFile2($event)" 
-                                id="file2">
-                                @if(file2?.value){
-                                    <label for="file2" class="subir-archivo d-flex align-items-center justify-content-center" >Cambiar Archivo 2</label>
-                                }@else {
-                                    <label for="file2" class="subir-archivo d-flex align-items-center justify-content-center" >Subir Archivo 2</label>
-                                }
-                                @if(file2?.hasError('required')){
-                                    <mat-error>Imagen requerida</mat-error>
-                                } 
-                        </div>
+                    <div class="col d-flex flex-column">
+                            <input class="mb-2 mt-2"  
+                            placeholder="Ingresar" 
+                            formControlName="file2" 
+                            type="file" 
+                            (change)="uploadFile2($event)" 
+                            id="file2">
+                            @if(file2?.value){
+                                <label for="file2" class="subir-archivo d-flex align-items-center justify-content-center" >Cambiar Archivo 2</label>
+                            }@else {
+                                <label for="file2" class="subir-archivo d-flex align-items-center justify-content-center" >Subir Archivo 2</label>
+                            }
+                            @if(file2?.hasError('required')){
+                                <mat-error>Imagen requerida</mat-error>
+                            } 
+                    </div>
+                </div>
+                <div class="row">
+                    <re-captcha (resolved)="executeRecaptchaVisible($event)" [siteKey]=" key" ></re-captcha>
                 </div>
             </form>
             <button type="submit" form="reg-form-soc" id="btn-register" class="d-flex justify-content-center align-items-center mb-3 mt-3">Registrarme</button>

@@ -1,12 +1,14 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { Auth } from '@angular/fire/auth';
+import { CanActivateFn, Router } from '@angular/router';
 
 export const registroGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  if(!authService.GetUserEmail()){
+  const router = inject(Router);
+  const auth = inject(Auth)
+  if(!auth.currentUser){
     return true;
-  }else{
+  }else{  
+    router.navigate(['Inicio']);
     return false;
   }
 };
