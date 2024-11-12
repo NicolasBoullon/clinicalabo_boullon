@@ -103,7 +103,22 @@ export class LoginComponent implements OnInit{
         this.clave = 'hola123';
       break;
 
+      case 'especialistaDos':
+        this.correo = 'renefavalorinho@yopmail.com';
+        this.clave = 'hola123';
+      break;
+
       case 'paciente':
+        this.correo = 'mirtitalegrand@yopmail.com';
+        this.clave = 'hola123';
+      break;
+
+      case 'pacienteDos':
+        this.correo = 'rodridepol@yopmail.com';
+        this.clave = 'hola123';
+      break;
+
+      case 'pacienteTres':
         this.correo = 'mirtitalegrand@yopmail.com';
         this.clave = 'hola123';
       break;

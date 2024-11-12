@@ -18,6 +18,7 @@
             </div>
                 @if(perfil == 'Administrador'){
                         <ul>
+                        <li><button (click)="GoTo('solicitar-turno')">Solicitar Turno</button></li>
                             <li><button (click)="GoTo('usuarios')">Usuarios</button></li>
                             <li><button (click)="GoToSection('planes')">Planes</button></li>
                             <li><button (click)="GoToSection('galeria')">Galeria</button></li>

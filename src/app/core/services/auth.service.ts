@@ -57,6 +57,15 @@ export class AuthService {
   CerraModal(){
     this._matDialog.closeAll();
   }
+
+  GetUserRol(){
+    if(this.usuarioConectado?.rol){
+      return this.usuarioConectado?.rol
+    }else{
+      return false;
+    }
+
+  }
   /**
    * Funcion para loguearse con auth
    * @param usuarioMail correo de la persona para loguearse
