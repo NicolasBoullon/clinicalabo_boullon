@@ -1,5 +1,10 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEsAr from '@angular/common/locales/es-AR';
+
+registerLocaleData(localeEsAr, 'es-AR');
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -15,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     scrollPositionRestoration: 'enabled',
   }),), provideAnimationsAsync(),
   provideAnimations(),
+  { provide: LOCALE_ID, useValue: 'es-AR' },
    provideFirebaseApp(() => initializeApp({
     "projectId":"clinicaboullon",
     "appId":"1:299995371834:web:8cca614c8b97a1f11cd803",

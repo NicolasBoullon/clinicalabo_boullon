@@ -10,7 +10,6 @@
     </nav>
 }@else {
     @if(CheckUserLog()){
-
         <nav>
             <div class="d-flex img-title" (click)="GoTo('Inicio')">
                 <img src="../../../assets/imperiologdor.png" alt="">
@@ -30,7 +29,7 @@
                         </ul>
                 }@else if(perfil == 'Especialista'){
                     <ul>
-                        <li><button >Planes</button></li>
+                        <li><button (click)="GoTo('turnos-especialista')">Mis turnos</button></li>
                         <li><button (click)="GoToSection('planes')">Planes</button></li>
                         <li><button (click)="GoToSection('galeria')">Galeria</button></li>
                         <li><button id="btn-mi-imperio" mat-button [matMenuTriggerFor]="menu">Cuenta</button></li>
@@ -61,19 +60,19 @@
                 }
         </nav>
     }@else {
-    <nav>
-        <div class="d-flex img-title" (click)="GoTo('Inicio')">
-            <img src="../../../assets/imperiologdor.png" alt="">
-            <h1 class="h1 d-flex align-items-center" (click)="GoToSection('queres-asc')">Clínica Imperio</h1>
-            
-        </div>
-        <ul>
-            <li><button (click)="GoTo('registro')">Quiero ser parte</button></li>
-            <li><button (click)="GoToSection('planes')">Planes</button></li>
-            <li><button (click)="GoToSection('galeria')">Galeria</button></li>
-            <li><button id="btn-mi-imperio" (click)="GoTo('login')">Iniciar Sesión</button></li>
-        </ul>
-    </nav>
+        <nav>
+            <div class="d-flex img-title" (click)="GoTo('Inicio')">
+                <img src="../../../assets/imperiologdor.png" alt="">
+                <h1 class="h1 d-flex align-items-center" (click)="GoToSection('queres-asc')">Clínica Imperio</h1>
+                
+            </div>
+            <ul>
+                <li><button (click)="GoTo('registro')">Quiero ser parte</button></li>
+                <li><button (click)="GoToSection('planes')">Planes</button></li>
+                <li><button (click)="GoToSection('galeria')">Galeria</button></li>
+                <li><button id="btn-mi-imperio" (click)="GoTo('login')">Iniciar Sesión</button></li>
+            </ul>
+        </nav>
     }
 }
 

@@ -8,7 +8,7 @@
     min-height: fit-content;
 }
 
-#col-elegir-especialidad,#col-elegir-especialista{
+#col-elegir-especialidad,#col-elegir-especialista,#col-elegir-paciente{
     background-color: var(--color-crema-oscuro);
     border: solid 2px var(--color-dorado);
     td{

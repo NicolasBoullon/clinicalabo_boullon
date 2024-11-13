@@ -1,0 +1,17 @@
+.container-fluid{
+    height: 93vh;
+    min-height: fit-content;
+}
+
+.row{
+    height: 100%;
+}
+.table-mis-horarios{
+    width: 80%;
+    background-color: var(--color-crema-oscuro);
+    border-collapse: collapse;
+    td,th{
+        text-align: center;
+        border: 1px solid black;
+    }
+}

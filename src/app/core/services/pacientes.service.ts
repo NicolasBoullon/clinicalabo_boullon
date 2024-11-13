@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { collection, collectionData, doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -36,7 +37,7 @@ export class PacientesService {
     });
   }
 
-  GetTodosPacientes(){
+  GetTodosPacientes(): Observable<any[]> {
     const col = collection(this.firestore, 'pacientes');
     return collectionData(col);
   }

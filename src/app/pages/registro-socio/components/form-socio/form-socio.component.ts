@@ -25,14 +25,14 @@ export class FormSocioComponent implements OnInit{
   foto1!:any;
   foto2!:any;
   Paciente!:Paciente;
-  creadoPorUser:boolean = false;
+  creadoPorAdmin:boolean = false;
   key = "6LekeSQqAAAAACDo_JYVNZ9ddEnyp-VKnlIedTxm";
   constructor(private router:Router,private _matDialog:MatDialog,private authService:AuthService,private fotosService:FotosService, @Optional() private matDialogRef:MatDialogRef<FormSocioComponent>,
     @Inject(MAT_DIALOG_DATA)  @Optional() private data:any
   ){
     if(data){ 
-      this.creadoPorUser = data.creadoUser;
-      console.log(this.creadoPorUser);
+      this.creadoPorAdmin = data.creadoUser;
+      console.log(this.creadoPorAdmin);
       
     }
   }
@@ -72,31 +72,17 @@ export class FormSocioComponent implements OnInit{
       this.Paciente.imagenDos = url2;
 
       //Envio al servicio toda la informacion para po der hacer el registro.
-      const resp = await this.authService.AltaUsuarioAuthentication(formValues.correo,formValues.clave,this.Paciente,'paciente',this.creadoPorUser);
+      const resp = await this.authService.AltaUsuarioAuthentication(formValues.correo,formValues.clave,this.Paciente,'paciente',this.creadoPorAdmin);
 
 
       setTimeout(() => {
         this.cerrarSpinner();
         this.LimpiarFormulario();
-        !this.creadoPorUser ? this.router.navigate(['Inicio']) : '';
-     }, 2000); 
-      // if(!this.creadoPorUser){
-      //   console.log('no esta creado por admin');
-        
-      //   setTimeout(() => {
-      //     this.cerrarSpinner();
-      //     this.LimpiarFormulario();
-      //     // this.authService.LogoutUser(false);
-      //     this.router.navigate(['Inicio']);
-      //   }, 2000);
-      // }else{
-      //   console.log('esta creado por user');
-      //   setTimeout(() => {
-      //     this.cerrarSpinner();
-      //     this.LimpiarFormulario();
-      //   }, 2000);
-      // }
-      
+        if (!this.creadoPorAdmin) {
+          this.authService.LogoutUser(false);
+          this.router.navigate(['login']);
+        }
+     }, 1500); 
     }
   }
   token:boolean = false;

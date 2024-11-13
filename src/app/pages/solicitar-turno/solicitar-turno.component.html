@@ -6,14 +6,24 @@
         <!-- </div> -->
         @if(ConstultarAdmin() ){
             <!-- <div  *ngIf="ConstultarAdmin()"> -->
-                @if(ConstultarAdmin()){
-                    <div class="col-4 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'">
-                        <p *ngIf="this.rol == 'Administrador'">soy admin</p>
-                    </div>
-                }
+            @if(ConstultarAdmin()){
+                <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'" id="col-elegir-paciente">
+                    <h2 class="mb-2">Pacientes para elegir</h2>
+                    <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
+                    <div id="div-tabla-container">
+                    <table class="mb-3">
+                    <tbody>
+                        <tr (click)="ElegirEspecialidad(paciente.Especialidad)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
+                            <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            }
             <!-- </div> -->
         }
-        <div class="col-4 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialidad">
+        <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialidad">
             <h2 class="mb-2">Especialidades para elegir</h2>
             <input type="text" placeholder=" Buscar especialidad" [(ngModel)]="BuscarEspecialidad" id="input-buscar-esp" class="mb-2" >
             <div id="div-tabla-container">
@@ -29,7 +39,7 @@
                 </table>
             </div>
         </div>
-        <div class="col-4 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialista">
+        <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialista">
                 <h2>Especialista para elegir</h2>
                 <input type="text" placeholder=" Buscar especialista" [(ngModel)]="BuscarEspecialista" id="input-buscar-esp" class="mb-2" >
                 <div id="div-tabla-container">

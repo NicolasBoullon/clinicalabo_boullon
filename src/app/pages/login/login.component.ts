@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit{
       break;
 
       case 'pacienteTres':
-        this.correo = 'mirtitalegrand@yopmail.com';
+        this.correo = 'martingarris@yopmail.com';
         this.clave = 'hola123';
       break;
     }

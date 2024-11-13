@@ -1,5 +1,25 @@
-<div class="container-fluid">
-    <div class="row">
-        
+<div class="container-fluid cont-primary">
+    <div class="row d-flex justify-content-center align-items-center">
+        <table class="table-mis-horarios">
+            <thead>
+                <th>Especialista</th>
+                <th>Dia</th>
+                <th>Especialidad</th>
+                <th>Horario </th>
+                <th>Estado</th>
+            </thead>
+            <tbody>
+                @for (turno of turnos; track $index) {
+                    <tr>
+                        <!-- <td>{{ turno.dia * 1000 | date :'dd/MM/yyyy' }}</td> -->
+                        <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
+                        <td>{{formatDate(turno.dia) }}</td>
+                        <td>{{ turno.especialidad }}</td>
+                        <td>{{ turno.horario }}  </td>
+                        <td>{{ turno.estado }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

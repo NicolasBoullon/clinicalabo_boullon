@@ -158,10 +158,6 @@ export class AuthService {
         console.log(usuarioCompletoNuevo);
         
         if (tipo === "paciente") {
-          // Guardar usuario en la colección de pacientes
-          // console.log('es paciente locura');
-          // console.log(this.auth.currentUser);
-          
           await this.pacienteService.AddUserCompletoPaciente(res.user.uid, usuarioCompletoNuevo);
         } else if (tipo === "especialista") {
           // Guardar usuario en la colección de especialistas

@@ -9,21 +9,26 @@ import { SeleccionoEspecialistaDirective } from '../../core/directives/seleccion
 import { TurnosService } from '../../core/services/turnos.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
+import { PacientesService } from '../../core/services/pacientes.service';
+import { BuscarPacientePipe } from '../../core/pipes/buscar-paciente.pipe';
+import { BuscarEspecialistaPipe } from '../../core/pipes/buscar-especialista.pipe';
 
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [FormsModule,CommonModule,BuscarEspecialidadPipe,DatePipe,SeleccionoEspecialidadDirective,SeleccionoEspecialistaDirective],
+  imports: [FormsModule,CommonModule,BuscarEspecialidadPipe,DatePipe,SeleccionoEspecialidadDirective,SeleccionoEspecialistaDirective,BuscarPacientePipe,BuscarEspecialistaPipe],
   templateUrl: './solicitar-turno.component.html',
   styleUrl: './solicitar-turno.component.css'
 })
 export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
 
   especialidades:any;
+  pacientes:any[] = []
   especialistas:any[] = [];
   especialistasConEspecialidadSeleccionada:any = [];
   BuscarEspecialidad:string = '';
   BuscarEspecialista:string = '';
+  BuscarPaciente:string = '';
   especialidadSeleccionada:string|null = '';
   especialistaSeleccionado:string|null|any = '';
   turnos30 = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30',
@@ -48,13 +53,16 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   sub!:Subscription;
   subEsp!:Subscription;
   subEspecialistas!:Subscription;
+  subPacientes!:Subscription;
   turnos:any = [];
-  constructor(private especialidadesService:EspecialidadesService,private especialistasService:EspecialistasService,private turnosService:TurnosService,private authService:AuthService){}
+  constructor(private especialidadesService:EspecialidadesService,private pacientesService:PacientesService,
+    private especialistasService:EspecialistasService,private turnosService:TurnosService,private authService:AuthService){}
 
 
   ngOnInit(): void {
     this.IniciarEspecialidades();
     this.IniciarEspecialistas();
+    this.IniciarPacientes();
     this.GetDiasDosSemanas();
     setTimeout(() => {
       this.ConstultarAdmin();
@@ -239,6 +247,17 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
     })
   }
 
+  async IniciarPacientes(){
+    this.subPacientes = this.pacientesService.GetTodosPacientes().subscribe({
+      next:(value)=>{
+        if(value.length == 0){
+          console.log('no hay pacientes');
+        }else{
+          this.pacientes = value;
+        }
+      }
+    })
+  }
   async IniciarEspecialistas(){
     this.subEspecialistas = this.especialistasService.GetTodosEspecialistas().subscribe({
       next:(value)=>{

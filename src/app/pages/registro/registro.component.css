@@ -16,11 +16,11 @@ button{
     margin: 0px;
     padding: 0px;
     border: solid 1px #D4AF37;
-    border-radius: 8px;
+    border-radius: 50px;
     font-size: 2rem;
     color: #D4AF37;
     img{
-        border-radius: 8px;
+        border-radius: 50px;
         height: 100%;
         width: 100%;
     }

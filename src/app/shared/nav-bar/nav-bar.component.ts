@@ -17,13 +17,13 @@ import { MatDialog } from '@angular/material/dialog';
 export class NavBarComponent implements OnInit{
 
   constructor(private router:Router,private scroll:ScrollpageService,private authService:AuthService,private _matDialog:MatDialog){}
-  mostrarNavBar:boolean = true;
+  mostrarNavBar:boolean = false;
   perfil:any = '';
   showButton:boolean = true;
   ngOnInit(): void {
       setTimeout(() => {
         this.GetUser()
-      }, 1000);
+      }, 2000);
   }
 
   GoTo(path:string){
@@ -39,6 +39,8 @@ export class NavBarComponent implements OnInit{
 
   async GetUser(){
     // this.perfil = this.authService.usuarioConectado;
+    console.log('get user');
+    
     this.authService.GetUserPerfilCompleto()
     .then(resp=>{
       if(resp){
@@ -53,7 +55,7 @@ export class NavBarComponent implements OnInit{
     .catch(err=>{
         this.mostrarNavBar = false;
         console.log(err);
-      
+
     })
     // this.cerrarSpinner();
   }
