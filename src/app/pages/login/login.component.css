@@ -39,7 +39,7 @@ form{
 .btn-acceso-rapido{
     margin-top: 5px;
     border: solid 1px black;
-    width: 250px; 
+    width: fit-content; 
     height: fit-content;
     font-size: 1rem;
     font: lighter 1.5rem system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
