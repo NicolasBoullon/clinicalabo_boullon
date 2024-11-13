@@ -1,27 +1,25 @@
-# Clinicalabo
+# Clinica Imperial
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.1.
+## Logo
+![Logo](src/assets/imperiologdor.png)
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Pagina de bienvenida
+![Logo](src/assets/readme/landingUno.png)
+![Logo](src/assets/readme/landingDos.png)
+![Logo](src/assets/readme/landingTres.png)
+![Logo](src/assets/readme/landingCuatro.png)
 
-## Code scaffolding
+### Quiero ser parte
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+![Logo](src/assets/readme/quieroSerParte.png)
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Registro Cliente
 
-## Running unit tests
+![Logo](src/assets/readme/registroCliente.png)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Registro Especialista
 
-## Running end-to-end tests
+![Logo](src/assets/readme/registroEspecialista.png)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
