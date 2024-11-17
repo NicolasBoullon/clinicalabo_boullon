@@ -1,144 +1,98 @@
 <div class="container-fluid cont-primary">
-    <div class="row d-flex justify-content-evenly">
-        <h2 class="d-flex justify-content-center align-items-center">Solicitar turno</h2>
-        <!-- <div class="col-4 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="rol.Administrador"> -->
-            <!-- <p>soy admin</p> -->
-        <!-- </div> -->
-        @if(ConstultarAdmin() ){
-            <!-- <div  *ngIf="ConstultarAdmin()"> -->
-            @if(ConstultarAdmin()){
-                <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'" id="col-elegir-paciente">
-                    <h2 class="mb-2">Pacientes para elegir</h2>
-                    <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
-                    <div id="div-tabla-container">
-                    <table class="mb-3">
-                    <tbody>
-                        <tr (click)="ElegirEspecialidad(paciente.Especialidad)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
-                            <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
-                        </tr>
-                    </tbody>
-                    </table>
+    <h2 class="d-flex justify-content-center align-items-center h2-solicitar-turno">Solicitar turno</h2>
+    <div class="row row-cont d-flex justify-content-center cont-primary">
+             @if(esAdmin| async){
+                 <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'" id="col-elegir-paciente">
+                     <h2 class="mb-2">Pacientes para elegir</h2>
+                     <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
+                     <div id="div-tabla-container">
+                         <table class="mb-3">
+                         <tbody>
+                             <tr (click)="ElegirEspecialidad(paciente.Especialidad)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
+                                 <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
+                             </tr>
+                         </tbody>
+                         </table>
+                     </div>
+                 </div>
+             }
+        @if(!this.especialidadSeleccionada)
+        {
+            <div class="col-8 d-flex justify-content-center align-items-center" id="col-elegir-especialidad">
+                <div class="d-flex justify-content-center align-items-center" id="div-especialidades">
+                    <div style="background-color: white;" *ngFor="let especialidad of especialidades;" class="div-una-especialidad" (click)="ElegirEspecialidad(especialidad.Especialidad)">
+                        <img *ngIf="especialidadIncluida(especialidad.Especialidad)"    
+                             [src]="'../../../assets/especialidades/'+ especialidad.Especialidad.toLowerCase() + '.png'">
+                        <img *ngIf="!especialidadIncluida(especialidad.Especialidad)" 
+                             src="../../../assets/especialidades/indefinido.png">
+                    </div>                 
                 </div>
-                </div>
-            }
-            <!-- </div> -->
-        }
-        <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialidad">
-            <h2 class="mb-2">Especialidades para elegir</h2>
-            <input type="text" placeholder=" Buscar especialidad" [(ngModel)]="BuscarEspecialidad" id="input-buscar-esp" class="mb-2" >
-            <div id="div-tabla-container">
-                <table class="mb-3">
-                    <tbody>
-                            <tr (click)="ElegirEspecialidad(especialidad.Especialidad)" *ngFor="let especialidad of especialidades | buscarEspecialidad: BuscarEspecialidad" class="especialidades-creadas" 
-                            appSeleccionoEspecialidad
-                            [especialidadSeleccionada]="especialidadSeleccionada"
-                            [especialidad]="especialidad.Especialidad">
-                                <td>{{ especialidad.Especialidad | titlecase }}</td>
-                            </tr>
-                    </tbody>
-                </table>
             </div>
-        </div>
-        <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-especialista">
-                <h2>Especialista para elegir</h2>
-                <input type="text" placeholder=" Buscar especialista" [(ngModel)]="BuscarEspecialista" id="input-buscar-esp" class="mb-2" >
-                <div id="div-tabla-container">
-                    <table class="mb-3">
-                        <tbody>
-                            @if(especialistasConEspecialidadSeleccionada.length > 0){
-                                <tr (click)="ElegirEspecialista(especialista)" *ngFor="let especialista of especialistasConEspecialidadSeleccionada | buscarEspecialidad: BuscarEspecialista" class="especialidades-creadas"
-                                appSeleccionoEspecialista
-                                [especialistaSeleccionado]="especialistaSeleccionado"
-                                [especialista]="especialista">
-                                    <td>{{ especialista.usuario.nombre | titlecase }} {{ especialista.usuario.apellido | titlecase }}</td>
-                                </tr>
-                            }@else if(especialidadSeleccionada){
-                                <tr>
-                                    <td>No hay especialistas disponibles</td>
-                                </tr>
+        }
+        @if(especialidadSeleccionada && !especialistaSeleccionado)
+        {
+            <div class="col-10 d-flex justify-content-center align-items-center" id="col-elegir-especialista">
+                <div class="d-flex justify-content-center align-items-center" id="div-especialistas">
+                    <div  *ngFor="let especialista of especialistas;" class="div-un-especialista d-flex flex-column" (click)="ElegirEspecialista(especialista)">
+                        <p>{{ especialista.usuario.nombre }} {{ especialista.usuario.apellido }}</p>
+                        <img [src]="especialista.usuario.imagen" alt="">
+                    </div>                 
+                </div>
+            </div>
+        }
+        @if(especialidadSeleccionada && especialistaSeleccionado){
+        <div class="row d-flex flex-column align-items-center justify-content-center">
+            <div id="cont-turnos">
+
+                <h2 class="d-flex justify-content-center" style="font-weight: lighter;">Seleccione Turno</h2>
+                <div>
+                    <button (click)="Reiniciar()">X</button>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="semanaUno" class="btn-semanas">Siguiente semana</button>
+                    <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="!semanaUno" class="btn-semanas">Anterior semana</button>
+                </div>
+                <!-- </ng-container> -->
+
+                <div *ngIf="semanaUno">
+                    <div *ngIf="especialidadSeleccionada && especialistaSeleccionado" class="d-flex">
+                        <div *ngFor="let turnosDia of turnosSemanaActual; let i = index" class="col d-flex flex-column align-items-center">
+                            <!-- <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[i] | date: 'dd/MM/yyyy' }}</h3> -->
+                            @if(turnosDia.length > 0)
+                            {
+                                <button *ngFor="let turno of turnosDia;"
+                                        class="btn-sacar-turno"
+                                        (click)="SacarTurno(turno, diasDeLasSemanas[i])"
+                                        [disabled]="TurnoOcupado(turno, diasDeLasSemanas[i])">
+                                        {{ diasDeLasSemanas[i] | date: 'dd/MM' }} {{ turno }}
+                                </button>
+                            }@else{
+                                <p>No hay turnos habilitados</p>
                             }
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
-        </div>
-    </div>
-    <div class="row d-flex flex-column align-items-center">
-        <div id="cont-turnos">
-
-        <ng-container *ngIf="especialidadSeleccionada && especialistaSeleccionado">
-            <h2 class="d-flex justify-content-center" style="font-weight: lighter;">Seleccione Turno</h2>
-            <div class="d-flex justify-content-end">
-                <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="semanaUno" class="btn-semanas">Siguiente semana</button>
-                <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="!semanaUno" class="btn-semanas">Anterior semana</button>
-            </div>
-        </ng-container>
-
-        <div *ngIf="semanaUno">
-            <div *ngIf="especialidadSeleccionada && especialistaSeleccionado" class="d-flex">
-                <div *ngFor="let turnosDia of turnosSemanaActual; let i = index" class="col d-flex flex-column align-items-center">
-                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[i] | date: 'dd/MM/yyyy' }}</h3>
-                    @if(turnosDia.length > 0)
-                    {
-                        <button *ngFor="let turno of turnosDia;"
+                
+                <div *ngIf="!semanaUno">
+                    <div *ngIf="especialidadSeleccionada && especialistaSeleccionado" class="d-flex">
+                        <div *ngFor="let turnosDia of turnosSemanaSiguiente; let i = index" class="col d-flex flex-column align-items-center">
+                            <!-- <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[i + 6] | date: 'dd/MM/yyyy' }}</h3> -->
+                            @if(turnosDia.length > 0)
+                            {
+                                <button *ngFor="let turno of turnosDia;"
                                 class="btn-sacar-turno"
-                                (click)="SacarTurno(turno, diasDeLasSemanas[i])"
-                                [disabled]="TurnoOcupado(turno, diasDeLasSemanas[i])">
-                            {{ turno }}
-                        </button>
-                    }@else{
-                        <p>No hay turnos habilitados</p>
-                    }
+                                (click)="SacarTurno(turno, diasDeLasSemanas[i + 6])"
+                                [disabled]="TurnoOcupado(turno, diasDeLasSemanas[i + 6])">
+                                {{ diasDeLasSemanas[i + 6] | date: 'dd/MM' }} {{ turno }}
+                            </button>
+                            }@else {
+                                <p>No hay turnos habilitados</p>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <div *ngIf="!semanaUno">
-            <div *ngIf="especialidadSeleccionada && especialistaSeleccionado" class="d-flex">
-                <div *ngFor="let turnosDia of turnosSemanaSiguiente; let i = index" class="col d-flex flex-column align-items-center">
-                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[i + 6] | date: 'dd/MM/yyyy' }}</h3>
-                    @if(turnosDia.length > 0)
-                    {
-                        <button *ngFor="let turno of turnosDia;"
-                        class="btn-sacar-turno"
-                        (click)="SacarTurno(turno, diasDeLasSemanas[i + 6])"
-                        [disabled]="TurnoOcupado(turno, diasDeLasSemanas[i + 6])">
-                    {{ turno }}
-                </button>
-                    }@else {
-                        <p>No hay turnos habilitados</p>
-
-                    }
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-        <!-- @if(semanaUno){
-            @if(especialidadSeleccionada && especialistaSeleccionado){
-                <div *ngFor="let turnosDia of turnosOrdenados; let i = index" class="col d-flex flex-column align-items-center">
-                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[i] | date: 'dd/MM/yyyy' }}</h3>
-                    <button *ngFor="let turno of turnosDia; trackBy: trackByIndex"
-                            class="btn-sacar-turno"
-                            (click)="SacarTurno(turno, diasDeLasSemanas[i])"
-                            [disabled]="TurnoOcupado(turno, diasDeLasSemanas[i])">
-                        {{ turno }}
-                    </button>
-                </div>
-            }
         }
-        @if(!semanaUno){
-            @if(especialidadSeleccionada && especialistaSeleccionado){
-                <div *ngFor="let turnosDia of turnosOrdenados; let i = index" class="col d-flex flex-column align-items-center">
-                    <h3 class="d-flex justify-content-center">{{ diasDeLasSemanas[i] | date: 'dd/MM/yyyy' }}</h3>
-                    <button *ngFor="let turno of turnosDia; trackBy: trackByIndex"
-                            class="btn-sacar-turno"
-                            (click)="SacarTurno(turno, diasDeLasSemanas[i])"
-                            [disabled]="TurnoOcupado(turno, diasDeLasSemanas[i])">
-                        {{ turno }}
-                    </button>
-                </div>
-            }
-        } -->
     </div>
 </div>

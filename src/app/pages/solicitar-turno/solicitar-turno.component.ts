@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { PacientesService } from '../../core/services/pacientes.service';
 import { BuscarPacientePipe } from '../../core/pipes/buscar-paciente.pipe';
 import { BuscarEspecialistaPipe } from '../../core/pipes/buscar-especialista.pipe';
+import { especialidadesImages } from '../../shared/especialidades';
 
 @Component({
   selector: 'app-solicitar-turno',
@@ -55,6 +56,12 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   subEspecialistas!:Subscription;
   subPacientes!:Subscription;
   turnos:any = [];
+
+  wait!:Promise<boolean>;
+  esAdmin!:Promise<boolean>;
+  turnosSemanaActual!:any;
+  turnosSemanaSiguiente!:any;
+  especialidadesArray:string[] = especialidadesImages;
   constructor(private especialidadesService:EspecialidadesService,private pacientesService:PacientesService,
     private especialistasService:EspecialistasService,private turnosService:TurnosService,private authService:AuthService){}
 
@@ -69,9 +76,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
     }, 1000);
     this.sub = this.turnosService.GetTurnos().subscribe({
       next: ((resp)=>{
-        this.turnos = resp;
-        console.log(this.turnos);
-        
+        this.turnos = resp;        
       }),
       error:((err)=>{
         console.log(err);
@@ -93,28 +98,37 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   //   }
   // }
   // const dias = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado']
-  turnosSemanaActual!:any;
-  turnosSemanaSiguiente!:any;
+
   SetearDias(especialista:any){
     const turnosSemana: any = Array(15).fill([]); // Creamos un array de 15 días
-
+    console.log(turnosSemana);
+    
+    console.log(this.especialidadSeleccionada);
+    
 
     // Configuración de los turnos para cada día (del 0 al 14), evitando los domingos
     this.diasDeLasSemanas.forEach((fecha:any, index:any) => {
         const dia = fecha.getDay(); // Obtenemos el día de la semana (0 = Domingo, 1 = Lunes, etc.)
+        console.log(dia);
+        console.log(this.turnos30);
+        console.log(this.turnos60);
         
         switch (dia) {
           case 1: // Lunes
               if (especialista.usuario.lunes.horarios.desde !== '----' && especialista.usuario.lunes.dias.especialidad === this.especialidadSeleccionada) {
-                  turnosSemana[index] = especialista.usuario.lunes.dias.hora === 30 ? this.turnos30 : this.turnos60;
+                console.log('tiene');
+                
+                  turnosSemana[index] = especialista.usuario.lunes.dias.hora == 30 ? this.turnos30 : this.turnos60;
                   let desde = turnosSemana[index].indexOf(especialista.usuario.lunes.horarios.desde);
                   let hasta = turnosSemana[index].indexOf(especialista.usuario.lunes.horarios.hasta);
                   turnosSemana[index] = turnosSemana[index].slice(desde, hasta + 1);
+                  console.log(turnosSemana[index]);
+                  
               }
               break;
           case 2: // Martes
               if (especialista.usuario.martes.horarios.desde !== '----' && especialista.usuario.martes.dias.especialidad === this.especialidadSeleccionada) {
-                  turnosSemana[index] = especialista.usuario.martes.dias.hora === 30 ? this.turnos30 : this.turnos60;
+                  turnosSemana[index] = especialista.usuario.martes.dias.hora == 30 ? this.turnos30 : this.turnos60;
                   let desde = turnosSemana[index].indexOf(especialista.usuario.martes.horarios.desde);
                   let hasta = turnosSemana[index].indexOf(especialista.usuario.martes.horarios.hasta);
                   turnosSemana[index] = turnosSemana[index].slice(desde, hasta + 1);
@@ -122,7 +136,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
               break;
           case 3: // Miércoles
               if (especialista.usuario.miercoles.horarios.desde !== '----' && especialista.usuario.miercoles.dias.especialidad === this.especialidadSeleccionada) {
-                  turnosSemana[index] = especialista.usuario.miercoles.dias.hora === 30 ? this.turnos30 : this.turnos60;
+                  turnosSemana[index] = especialista.usuario.miercoles.dias.hora == 30 ? this.turnos30 : this.turnos60;
                   let desde = turnosSemana[index].indexOf(especialista.usuario.miercoles.horarios.desde);
                   let hasta = turnosSemana[index].indexOf(especialista.usuario.miercoles.horarios.hasta);
                   turnosSemana[index] = turnosSemana[index].slice(desde, hasta + 1);
@@ -130,7 +144,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
               break;
           case 4: // Jueves
               if (especialista.usuario.jueves.horarios.desde !== '----' && especialista.usuario.jueves.dias.especialidad === this.especialidadSeleccionada) {
-                  turnosSemana[index] = especialista.usuario.jueves.dias.hora === 30 ? this.turnos30 : this.turnos60;
+                  turnosSemana[index] = especialista.usuario.jueves.dias.hora == 30 ? this.turnos30 : this.turnos60;
                   let desde = turnosSemana[index].indexOf(especialista.usuario.jueves.horarios.desde);
                   let hasta = turnosSemana[index].indexOf(especialista.usuario.jueves.horarios.hasta);
                   turnosSemana[index] = turnosSemana[index].slice(desde, hasta + 1);
@@ -138,7 +152,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
               break;
           case 5: // Viernes
               if (especialista.usuario.viernes.horarios.desde !== '----' && especialista.usuario.viernes.dias.especialidad === this.especialidadSeleccionada) {
-                  turnosSemana[index] = especialista.usuario.viernes.dias.hora === 30 ? this.turnos30 : this.turnos60;
+                  turnosSemana[index] = especialista.usuario.viernes.dias.hora == 30 ? this.turnos30 : this.turnos60;
                   let desde = turnosSemana[index].indexOf(especialista.usuario.viernes.horarios.desde);
                   let hasta = turnosSemana[index].indexOf(especialista.usuario.viernes.horarios.hasta);
                   turnosSemana[index] = turnosSemana[index].slice(desde, hasta + 1);
@@ -146,7 +160,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
               break;
           case 6: // Sábado
               if (especialista.usuario.sabado.horarios.desde !== '----' && especialista.usuario.sabado.dias.especialidad === this.especialidadSeleccionada) {
-                  turnosSemana[index] = especialista.usuario.sabado.dias.hora === 30 ? this.turnos30sabado : this.turno60sabado;
+                  turnosSemana[index] = especialista.usuario.sabado.dias.hora == 30 ? this.turnos30sabado : this.turno60sabado;
                   let desde = turnosSemana[index].indexOf(especialista.usuario.sabado.horarios.desde);
                   let hasta = turnosSemana[index].indexOf(especialista.usuario.sabado.horarios.hasta);
                   turnosSemana[index] = turnosSemana[index].slice(desde, hasta + 1);
@@ -156,16 +170,20 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
       
     });
 
+    console.log(turnosSemana);
+    
     // Dividir turnosSemana en dos semanas
     this.turnosSemanaActual = turnosSemana.slice(0, 6);
+    console.log(this.turnosSemanaActual);
+    
     this.turnosSemanaSiguiente = turnosSemana.slice(6, 12);
   }
 
   SacarTurno(turno:any,dia:any){
-    console.log(turno,dia);
-    console.log(this.authService.usuarioConectado);
-    console.log(this.especialistaSeleccionado.usuario);
-    console.log(this.especialidadSeleccionada);
+    // console.log(turno,dia);
+    // console.log(this.authService.usuarioConectado);
+    // console.log(this.especialistaSeleccionado.usuario);
+    // console.log(this.especialidadSeleccionada);
     this.turnosService.AgendarTurno(this.authService.usuarioConectado,this.especialistaSeleccionado.usuario,this.especialidadSeleccionada,dia,turno,'pendiente');
   }
 
@@ -179,12 +197,12 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
         // Dividimos la fecha y extraemos los componentes que queremos comparar
         const fechaTurno = timestampMs.split(' ').slice(0, 3).join(' '); // Ejemplo: "Tue Nov 12"
         const fechaDia = diaActual.split(' ').slice(0, 3).join(' ');      // Ejemplo: "Tue Nov 12"
-        console.log(fechaTurno);
-        console.log(fechaDia);
+        // console.log(fechaTurno);
+        // console.log(fechaDia);
         
         // Comprobamos si el día y el horario coinciden
         if (fechaTurno === fechaDia && turno === this.turnos[i].horario && this.especialistaSeleccionado.usuario.correo == this.turnos[i].especialista.correo) {
-          console.log('Turno',this.turnos[i].horario);
+          // console.log('Turno',this.turnos[i].horario);
             console.log('desactivado',turno);
             return true;
         }
@@ -214,38 +232,54 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
       daysAdded++;
     }
     this.diasDeLasSemanas = arrayDeDias;
-    console.log(arrayDeDias);
   }
 
-  ElegirEspecialidad(especialidadSeleccionada:string){
-    console.log(especialidadSeleccionada);
-    
+  ElegirEspecialidad(especialidadSeleccionada:string)
+  {
     this.especialidadSeleccionada = especialidadSeleccionada;
+    console.log(this.especialidadSeleccionada);
+    
     this.especialistasConEspecialidadSeleccionada = this.especialistas.filter(esp => esp.usuario.especialidades.includes(especialidadSeleccionada));
-    this.especialistaSeleccionado = null;
+    console.log(this.especialistasConEspecialidadSeleccionada);
 
+    this.especialistaSeleccionado = null;
   }
 
   ElegirEspecialista(especialistaSeleccionado:any){
-    console.log(especialistaSeleccionado);
-    
     this.especialistaSeleccionado = especialistaSeleccionado;
-    console.log(especialistaSeleccionado);
     this.SetearDias(especialistaSeleccionado);
+  }
+
+  Reiniciar()
+  {
+    this.especialidadSeleccionada = null;
+    this.especialistaSeleccionado = null;
+    this.semanaUno = true;
   }
 
   async IniciarEspecialidades(){
     this.subEsp = this.especialidadesService.GetEspecialidades().subscribe({
-      next:(value)=>{
+      next:async(value)=>{
         console.log(value);
         if(value.length == 0){
           console.log('no hay especialidades creadas');
-        }else{
+        }else{  
           this.especialidades = value;
+          // setTimeout(() => {
+          // await  this.IniciarArrayEspecialidades(this.especialidades);
+          this.wait = Promise.resolve(false)
+          // }, 2000);
         }
       }
     })
   }
+  especialidadIncluida(especialidad: string): boolean {
+    return this.especialidadesArray.includes(especialidad.toLowerCase());
+  }
+  // async IniciarArrayEspecialidades(especialidades:any){
+  //   console.log(especialidades);
+  //   this.especialidadesArray = especialidades.map((esp:any) => esp.Especialidad.toLowerCase());
+  // }
 
   async IniciarPacientes(){
     this.subPacientes = this.pacientesService.GetTodosPacientes().subscribe({
@@ -285,8 +319,23 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   //       return false;
   //     }
   //   }
-      this.rol = this.authService.GetUserRol();
-        return  this.authService.GetUserRol();
+    this.rol = this.authService.GetUserRol();
+    if(this.rol == 'Administrador'){
+      this.esAdmin = Promise.resolve(true);
     }
+      // return  this.authService.GetUserRol();
+  }
+  
+
+  buscarImagen(especialidad:string){
+    // console.log(especialidad.toLowerCase());
+    console.log('ahora lee');
+    console.log(especialidad.toLowerCase());
     
+    if(this.especialidadesArray.includes(especialidad.toLowerCase())){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
