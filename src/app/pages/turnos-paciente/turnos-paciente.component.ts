@@ -3,12 +3,13 @@ import { AuthService } from '../../core/services/auth.service';
 import { PacientesService } from '../../core/services/pacientes.service';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
-import { DatePipe, formatDate } from '@angular/common';
+import { CommonModule, DatePipe, formatDate } from '@angular/common';
+import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 
 @Component({
   selector: 'app-turnos-paciente',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe,CommonModule,StyleButtonDirective],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.css'
 })
@@ -25,7 +26,7 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
   }
 
   async GetTurnos(){
-   this.subTurnos= this.firestore.getCollection('turnos')
+   this.subTurnos= this.firestore.getCollectionOrderedByDate('turnos','dia')
     .subscribe({
       next: (turnos=>{
         console.log(turnos);
@@ -42,6 +43,9 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
     })
   }
 
+  CancelarTurno(turno:any){
+    
+  }
 
   TurnosFiltrados(arrayTurnos:Array<any>){
     return arrayTurnos.filter(turno=> turno.paciente.correo == this.authService.usuarioConectado?.correo)

@@ -5,8 +5,8 @@
 
 .container-fluid{
     height: 93vh;
-    min-height: fit-content;
 }
+
 .row-cont{
     height: 86%;
 }
@@ -138,4 +138,15 @@
 .div-un-especialista img{
     height: 200px;
     width: 200px;
+}
+
+
+.x-button{
+    background-color: var(--color-crema-oscuro);
+    border: none;
+    color: #636363;
+    font-size: 1.5rem;
+}
+.x-button:hover{
+    color: #484848;
 }

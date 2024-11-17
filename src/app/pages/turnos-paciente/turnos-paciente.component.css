@@ -13,5 +13,6 @@
     td,th{
         text-align: center;
         border: 1px solid black;
+        font-size: x-large;
     }
 }

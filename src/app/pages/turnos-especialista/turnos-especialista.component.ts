@@ -24,10 +24,10 @@ export class TurnosEspecialistaComponent {
   }
 
   async GetTurnos(){
-   this.subTurnos= this.firestore.getCollection('turnos')
+   this.subTurnos= this.firestore.getCollectionOrderedByDate('turnos','dia')
     .subscribe({
       next: (turnos=>{
-        console.log(turnos);
+        console.log(turnos,'turnos ordenados');
         if(turnos.length == 0){
                 
         }else{

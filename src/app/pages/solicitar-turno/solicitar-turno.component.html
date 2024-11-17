@@ -1,21 +1,21 @@
 <div class="container-fluid cont-primary">
     <h2 class="d-flex justify-content-center align-items-center h2-solicitar-turno">Solicitar turno</h2>
     <div class="row row-cont d-flex justify-content-center cont-primary">
-             @if(esAdmin| async){
-                 <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'" id="col-elegir-paciente">
-                     <h2 class="mb-2">Pacientes para elegir</h2>
-                     <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
-                     <div id="div-tabla-container">
-                         <table class="mb-3">
-                         <tbody>
-                             <tr (click)="ElegirEspecialidad(paciente.Especialidad)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
-                                 <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
-                             </tr>
-                         </tbody>
-                         </table>
-                     </div>
-                 </div>
-             }
+        @if(esAdmin| async){
+            <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'" id="col-elegir-paciente">
+                <h2 class="mb-2">Pacientes para elegir</h2>
+                <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
+                <div id="div-tabla-container">
+                    <table class="mb-3">
+                    <tbody>
+                        <tr (click)="ElegirEspecialidad(paciente.Especialidad)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
+                            <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        }
         @if(!this.especialidadSeleccionada)
         {
             <div class="col-8 d-flex justify-content-center align-items-center" id="col-elegir-especialidad">
@@ -41,12 +41,12 @@
             </div>
         }
         @if(especialidadSeleccionada && especialistaSeleccionado){
-        <div class="row d-flex flex-column align-items-center justify-content-center">
+        <div class="row d-flex flex-column align-items-center justify-content-center cont-primary">
             <div id="cont-turnos">
 
                 <h2 class="d-flex justify-content-center" style="font-weight: lighter;">Seleccione Turno</h2>
                 <div>
-                    <button (click)="Reiniciar()">X</button>
+                    <button (click)="Reiniciar()" class="x-button">Volver</button>
                 </div>
                 <div class="d-flex justify-content-end">
                     <button (click)="cambiarSemana()" style="width: 200px;" *ngIf="semanaUno" class="btn-semanas">Siguiente semana</button>

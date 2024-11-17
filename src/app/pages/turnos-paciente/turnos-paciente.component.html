@@ -14,9 +14,10 @@
                         <!-- <td>{{ turno.dia * 1000 | date :'dd/MM/yyyy' }}</td> -->
                         <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
                         <td>{{formatDate(turno.dia) }}</td>
-                        <td>{{ turno.especialidad }}</td>
+                        <td>{{ turno.especialidad | titlecase}}</td>
                         <td>{{ turno.horario }}  </td>
-                        <td>{{ turno.estado }}</td>
+                        <!-- <td>{{ turno.estado }}</td> -->
+                        <td><button *ngIf="turno.estado == 'pendiente'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button></td>
                     </tr>
                 }
             </tbody>
