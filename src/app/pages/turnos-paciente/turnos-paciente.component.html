@@ -22,7 +22,7 @@
                             <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button>
                             <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
                             <button *ngIf="turno.estado == 'finalizado'" (click)="VerResenia(turno)" StyleButtonCommon>Realizar Encuesta</button>
-                            <button *ngIf="turno.estado == 'finalizado'" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button>
+                            <button *ngIf="turno.estado == 'finalizado' && !turno['calificacion-atencion']" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button>
                         </td>
                     </tr>
                 }

@@ -1,18 +1,35 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { StyleButtonDirective } from '../../../../core/directives/style-button.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-calificar-atencion',
   standalone: true,
-  imports: [],
+  imports: [FormsModule,CommonModule,StyleButtonDirective],
   templateUrl: './calificar-atencion.component.html',
   styleUrl: './calificar-atencion.component.css'
 })
 export class CalificarAtencionComponent {
 
-  constructor(private _matDialogRef:MatDialogRef<CalificarAtencionComponent>){}
+  constructor(private _matDialogRef:MatDialogRef<CalificarAtencionComponent>,private toastf:ToastrService){}
 
+  comentario:string = '';
+  valor:number = 0;
   Calcular(valor:number){
-    this._matDialogRef.close(valor);
+    this.valor = valor;
+  }
+  
+  Enviar()
+  {
+    if(this.comentario.trim() === '' || this.comentario === '' || this.valor == 0){
+      this.toastf.error('Tiene que completar todos los campos','Cuidado!',{timeOut:2000})
+    }else{
+      this._matDialogRef.close();
+      this._matDialogRef.close({comentario:this.comentario,estrellas:this.valor});
+      this.toastf.success('Calificacion enviada','Gracias!',{timeOut:2000})
+    }
   }
 }

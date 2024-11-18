@@ -67,7 +67,7 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
     estrellas.afterClosed().subscribe({
       next:(value=>{
         console.log(value);
-        this.firestore.updateDocumentField('turnos',turno.id,'calificacion',value);
+        this.firestore.updateDocumentField('turnos',turno.id,'calificacion-atencion',value);
       })
     })
   }

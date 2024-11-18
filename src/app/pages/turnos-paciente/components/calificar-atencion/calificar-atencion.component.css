@@ -26,3 +26,14 @@
     transition: color 0.3s;
   }
   
+
+  #comentario{
+    width: 100%;
+    border: none;
+    background-color: var(--color-crema-oscuro);
+    height: 100px;
+  }
+
+  textarea{
+    resize: none;
+  }

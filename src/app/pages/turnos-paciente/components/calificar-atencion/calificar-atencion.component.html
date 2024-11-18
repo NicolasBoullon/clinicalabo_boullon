@@ -1,7 +1,11 @@
 <div class="container-fluid cont-primary">
     <div class="row">
         <div class="col d-flex align-items-center flex-column">
-            <h2>Califique la atencion del especialista</h2>
+            <h2>Califique la atención del especialista</h2>
+            <div class="d-flex flex-column align-items-start justify-content-center"  style="width: 80%;">
+                <label for="comentario">¿Qué le parecio el turno? Cuentenos...</label>
+                <textarea type="text" name="comentario" id="comentario" [(ngModel)]="comentario" ></textarea>
+            </div>
             <div class="rating">
                 <input value="5" name="rating" id="star5" type="radio" (click)="Calcular(5)">
                 <label for="star5"></label>
@@ -13,7 +17,10 @@
                 <label for="star2"></label>
                 <input value="1" name="rating" id="star1" type="radio" (click)="Calcular(1)">
                 <label for="star1"></label>
-              </div>
+            </div>
+            <div class="mb-2">
+                <button StyleButtonCommon (click)="Enviar()">Enviar</button>
+            </div>
         </div>
     </div>
 </div>
