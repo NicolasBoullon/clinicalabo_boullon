@@ -71,9 +71,9 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
     this.IniciarEspecialistas();
     this.IniciarPacientes();
     this.GetDiasDosSemanas();
-    setTimeout(() => {
+    // setTimeout(() => {
       this.ConstultarAdmin();
-    }, 1000);
+    // }, 1000);
     this.sub = this.turnosService.GetTurnos().subscribe({
       next: ((resp)=>{
         this.turnos = resp;        
@@ -311,19 +311,10 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   }
 
    ConstultarAdmin(){
-  //   if(this.authService.usuarioConectado?.rol){
-  //     this.rol = this.authService.usuarioConectado?.rol;
-  //     if(this.rol== 'Administrador'){
-  //       return true;
-  //     }else{
-  //       return false;
-  //     }
-  //   }
     this.rol = this.authService.GetUserRol();
     if(this.rol == 'Administrador'){
       this.esAdmin = Promise.resolve(true);
     }
-      // return  this.authService.GetUserRol();
   }
   
 

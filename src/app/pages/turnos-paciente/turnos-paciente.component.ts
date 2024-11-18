@@ -5,17 +5,22 @@ import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
 import { CommonModule, DatePipe, formatDate } from '@angular/common';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { CancelarTurnoComponent } from './components/cancelar-turno/cancelar-turno.component';
+import { VerComentarioComponent } from './components/ver-comentario/ver-comentario.component';
+import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
+import { CalificarAtencionComponent } from './components/calificar-atencion/calificar-atencion.component';
 
 @Component({
   selector: 'app-turnos-paciente',
   standalone: true,
-  imports: [DatePipe,CommonModule,StyleButtonDirective],
+  imports: [DatePipe,CommonModule,StyleButtonDirective,EstadoTurnoColorDirective],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.css'
 })
 export class TurnosPacienteComponent implements OnInit,OnDestroy{
 
-  constructor(private authService:AuthService,private pacientesService:PacientesService,private firestore:FirestoreService){}
+  constructor(private authService:AuthService,private pacientesService:PacientesService,private firestore:FirestoreService,private _matDialog:MatDialog){}
 
 
   turnos:any = [];
@@ -43,9 +48,50 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
     })
   }
 
-  CancelarTurno(turno:any){
+  VerResenia(turno:any){
+    this._matDialog.open(VerComentarioComponent,{
+      data:turno.diagnostico
+    });
+  }
+
+  async CancelarTurno(turno:any){
+    await this.AbrirCajaDeComentario(turno);
+  }
+
+  CalificarAtencion(turno:any)
+  {
+    const estrellas = this._matDialog.open(CalificarAtencionComponent,{
+      disableClose:true,
+    });
+
+    estrellas.afterClosed().subscribe({
+      next:(value=>{
+        console.log(value);
+        this.firestore.updateDocumentField('turnos',turno.id,'calificacion',value);
+      })
+    })
+  }
+  async AbrirCajaDeComentario(turno:any){
+    const dialogRef = this._matDialog.open(CancelarTurnoComponent,{
+      width:'600px',
+      disableClose:true,
+      data:turno.comentario
+    })
+
+    dialogRef.afterClosed()
+    .subscribe({
+      next:(comentario)=>{
+        if(comentario) {
+          console.log(comentario);
+           this.firestore.updateDocumentField('turnos',turno.id,'comentarioCancelarTurno',comentario);
+           this.firestore.updateDocumentField('turnos',turno.id,'estado','cancelado');
+        }
+      }
+    })
     
   }
+
+
 
   TurnosFiltrados(arrayTurnos:Array<any>){
     return arrayTurnos.filter(turno=> turno.paciente.correo == this.authService.usuarioConectado?.correo)

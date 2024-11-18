@@ -1,0 +1,10 @@
+<div class="container-fluid cont-primary">
+    <div class="row">
+        <div class="col d-flex justify-content-between align-items-center flex-column">
+            <h4>¿Quéres rechazar/cancelar el turno?<br></h4>
+            <p> Dejanos un comentarios del por qué</p>
+            <textarea type="text" placeholder="Deja un comentario..." id="input-comentario" [(ngModel)]="comentario" maxlength="200"></textarea>
+            <button (click)="EnviarComentario()" StyleButtonCommon>Aceptar</button>
+        </div>
+    </div>
+</div>

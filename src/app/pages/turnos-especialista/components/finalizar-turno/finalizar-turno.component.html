@@ -1,0 +1,11 @@
+<div class="container-fluid cont-primary">
+    <div class="row">
+        <div class="col d-flex justify-content-between align-items-center flex-column">
+            <h4>Finalizar turno<br></h4>
+
+            <p> Dejanos un diagnostico del paciente</p>
+            <textarea type="text" placeholder="Deja el diagnostico..." id="input-comentario" [(ngModel)]="diagnostico" maxlength="200"></textarea>
+            <button (click)="EnviarComentario()" StyleButtonCommon>Aceptar</button>
+        </div>
+    </div>
+</div>

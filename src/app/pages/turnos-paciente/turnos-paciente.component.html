@@ -7,6 +7,7 @@
                 <th>Especialidad</th>
                 <th>Horario </th>
                 <th>Estado</th>
+                <th>Accion</th>
             </thead>
             <tbody>
                 @for (turno of turnos; track $index) {
@@ -16,8 +17,13 @@
                         <td>{{formatDate(turno.dia) }}</td>
                         <td>{{ turno.especialidad | titlecase}}</td>
                         <td>{{ turno.horario }}  </td>
-                        <!-- <td>{{ turno.estado }}</td> -->
-                        <td><button *ngIf="turno.estado == 'pendiente'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button></td>
+                        <td [EstadoTurnoColor]="turno.estado">{{ turno.estado | titlecase }}</td>
+                        <td>
+                            <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button>
+                            <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
+                            <button *ngIf="turno.estado == 'finalizado'" (click)="VerResenia(turno)" StyleButtonCommon>Realizar Encuesta</button>
+                            <button *ngIf="turno.estado == 'finalizado'" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button>
+                        </td>
                     </tr>
                 }
             </tbody>

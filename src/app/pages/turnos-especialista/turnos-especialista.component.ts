@@ -3,17 +3,24 @@ import { EspecialistasService } from '../../core/services/especialistas.service'
 import { FirestoreService } from '../../core/services/firestore.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
-import { formatDate } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
+import { CancelarTurnoComponent } from '../turnos-paciente/components/cancelar-turno/cancelar-turno.component';
+import { VerComentarioComponent } from '../turnos-paciente/components/ver-comentario/ver-comentario.component';
+import { MatDialog } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { StyleButtonDirective } from '../../core/directives/style-button.directive';
+import { FinalizarTurnoComponent } from './components/finalizar-turno/finalizar-turno.component';
+import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
 
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,FormsModule,VerComentarioComponent,CancelarTurnoComponent,StyleButtonDirective,EstadoTurnoColorDirective],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.css'
 })
 export class TurnosEspecialistaComponent {
-  constructor(private authService:AuthService,private especialistaService:EspecialistasService,private firestore:FirestoreService){}
+  constructor(private authService:AuthService,private especialistaService:EspecialistasService,private firestore:FirestoreService,private _matDialog:MatDialog){}
 
 
   turnos:any = [];
@@ -41,6 +48,72 @@ export class TurnosEspecialistaComponent {
     })
   }
 
+  SelectChange(turno:any,evento:Event){
+    
+    const select = (evento.target as HTMLSelectElement).value;
+    switch(select){
+      case 'cancelado':
+        this.CancelarTurno(turno);
+      break;
+
+      case 'rechazado':
+        this.AbrirCajaDeComentario(turno,'rechazado');
+      break;
+
+      case 'aceptado':
+        this.firestore.updateDocumentField('turnos',turno.id,'estado','aceptado');
+      break;
+    }
+    console.log(select);
+    
+  }
+  FinalizarTUrno(turno:any){
+    const dialogRef = this._matDialog.open(FinalizarTurnoComponent,{
+      disableClose:true
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next:(values)=>{
+        console.log(values);
+        if(values){
+          // this.firestore.updateDocumentField('turnos',turno.id,'comentario',values.comentario);
+          this.firestore.updateDocumentField('turnos',turno.id,'diagnostico',values);
+          this.firestore.updateDocumentField('turnos',turno.id,'estado','finalizado');
+        }
+      }
+    })
+  }
+
+  VerResenia(turno:any){
+    this._matDialog.open(VerComentarioComponent,{
+      data:turno.diagnostico
+    });
+  }
+
+  async CancelarTurno(turno:any){
+    await this.AbrirCajaDeComentario(turno,'cancelado');
+  }
+
+
+  async AbrirCajaDeComentario(turno:any,accion: 'cancelado' | 'rechazado'){
+    const dialogRef = this._matDialog.open(CancelarTurnoComponent,{
+      width:'600px',
+      disableClose:true,
+      data:turno.comentario
+    })
+
+    dialogRef.afterClosed()
+    .subscribe({
+      next:(comentario)=>{
+        if(comentario) {
+          console.log(comentario);
+           this.firestore.updateDocumentField('turnos',turno.id,'comentarioCancelado',comentario);
+           this.firestore.updateDocumentField('turnos',turno.id,'estado',accion);
+        }
+      }
+    })
+    
+  }
 
   TurnosFiltrados(arrayTurnos:Array<any>){
     return arrayTurnos.filter(turno=> turno.especialista.correo == this.authService.usuarioConectado?.correo)

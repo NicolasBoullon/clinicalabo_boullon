@@ -1,0 +1,12 @@
+.container-fluid{
+    border: 2px solid black;
+}
+textarea{
+    resize: none;
+    width: 90%;
+    background-color: bisque;
+}
+p{
+    padding: 0px;
+    margin: 0px;
+}
