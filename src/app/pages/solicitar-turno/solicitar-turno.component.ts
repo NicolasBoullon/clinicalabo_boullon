@@ -14,6 +14,7 @@ import { BuscarPacientePipe } from '../../core/pipes/buscar-paciente.pipe';
 import { BuscarEspecialistaPipe } from '../../core/pipes/buscar-especialista.pipe';
 import { especialidadesImages } from '../../shared/especialidades';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-solicitar-turno',
@@ -65,7 +66,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   especialidadesArray:string[] = especialidadesImages;
   pacienteSeleccionado:any;
   constructor(private especialidadesService:EspecialidadesService,private pacientesService:PacientesService,
-    private especialistasService:EspecialistasService,private turnosService:TurnosService,private authService:AuthService){}
+    private especialistasService:EspecialistasService,private turnosService:TurnosService,private authService:AuthService,private toastr:ToastrService){}
 
 
   ngOnInit(): void {
@@ -176,15 +177,12 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   }
 
   SacarTurno(turno:any,dia:any){
-    // console.log(turno,dia);
-    // console.log(this.authService.usuarioConectado);
-    // console.log(this.especialistaSeleccionado.usuario);
-    // console.log(this.especialidadSeleccionada);
     if(this.pacienteSeleccionado){
       this.turnosService.AgendarTurno(this.pacienteSeleccionado.usuario,this.especialistaSeleccionado.usuario,this.especialidadSeleccionada,dia,turno,'pendiente');
     }else{
       this.turnosService.AgendarTurno(this.authService.usuarioConectado,this.especialistaSeleccionado.usuario,this.especialidadSeleccionada,dia,turno,'pendiente');
     }
+    this.toastr.success("Turno Agendando Correctamente.",'Perfecto!',{timeOut:2000});
   }
 
   TurnoOcupado(turno:any,dia:any){

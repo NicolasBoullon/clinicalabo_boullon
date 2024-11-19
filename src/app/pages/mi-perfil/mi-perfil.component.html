@@ -16,7 +16,7 @@
                         <p>Dni: {{ perfil.usuario.dni }}</p>
                         <p>Correo: {{ perfil.usuario.correo }}</p>
                         <p>Edad: {{ perfil.usuario.edad }}</p>
-                        <button (click)="GenerarPdf()" StyleButtomCommon>Descargar Historial Clinico</button>
+                        <button (click)="GenerarPdf()" StyleButtomCommon *ngIf="perfil.usuario.rol == 'Paciente'">Descargar Historial Clinico</button>
                         <div class="d-flex" *ngIf="perfil.usuario.rol == 'Especialista'">
                             <table>
                                 <tbody>

@@ -4,7 +4,7 @@
 }
 
 .row-input{
-    height: 10%;
+    height: 15%;
     input{
         border: 1px solid grey;
         background-color: bisque;
@@ -12,7 +12,7 @@
     }
 }
 .row-table{
-    height: 90%;
+    height: 80%;
 }
 
 .table-mis-horarios{

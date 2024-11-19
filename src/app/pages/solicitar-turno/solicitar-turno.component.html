@@ -4,9 +4,9 @@
         @if(esAdmin| async ){
             @if(!this.pacienteSeleccionado){
 
-                <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'">
-                    <h2 class="mb-2">Pacientes para elegir</h2>
-                    <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
+                <div class="col-6 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'">
+                    <h2 class="mb-2 h2-pacientes-elegir">Pacientes para elegir</h2>
+                    <!-- <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" > -->
                     <div id="div-tabla-container">
                         <table class="mb-3 tabla-buscar-paciente">
                         <tbody>

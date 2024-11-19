@@ -32,6 +32,6 @@
     align-items: center;
     font-size: 2rem;
     color: var(--color-dorado);
-    text-shadow: 0 0 3px var(--color-rojo-oscuro);
+    text-shadow: 0 2px 3px var(--color-rojo-oscuro);
     height: 5%;
 }
