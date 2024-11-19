@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { SpinnerComponent } from '../../../../shared/spinner/spinner.component';
 import { CommonModule } from '@angular/common';
 import { StyleButtonDirective } from '../../../../core/directives/style-button.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-historia-clinica',
@@ -26,7 +27,7 @@ import { StyleButtonDirective } from '../../../../core/directives/style-button.d
 })
 export class HistoriaClinicaComponent implements OnInit {
   
-  constructor(private _matDialogRef:MatDialogRef<HistoriaClinicaComponent>){}
+  constructor(private _matDialogRef:MatDialogRef<HistoriaClinicaComponent>,private toastr:ToastrService){}
 
   form!: FormGroup; 
   keyDinamico1:string = '';
@@ -64,11 +65,11 @@ export class HistoriaClinicaComponent implements OnInit {
       //aca enviar el form
       this.ConstruirDinamicos();
       // console.log(this.form.value);
+      this.toastr.success("Historia enviada con exito!",'Gracias!',{timeOut:2000})
       this._matDialogRef.close(this.form.value);
       
     } else {
-      console.error('Formulario inválido:', this.form.errors);
-      alert('Por favor, corrige los errores del formulario.');
+      this.toastr.warning("Complete toda la historia clinica!",'Atencion!',{timeOut:2000})
     }
   }
 
