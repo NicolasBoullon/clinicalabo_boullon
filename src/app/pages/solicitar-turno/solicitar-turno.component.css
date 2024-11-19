@@ -36,10 +36,12 @@
     }
 }
 
-
+#col-elegir-paciente{
+    height: 100%;
+}
 .btn-sacar-turno{
     border: none;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     background-color: var(--color-rojo-medio);
     color: var(--color-dorado);
     margin: 5px 5px;
@@ -47,6 +49,12 @@
     display: flex;
     justify-content: center;
 
+}
+
+.tabla-buscar-paciente{
+    tbody>tr:hover{
+        background-color: burlywood;
+    }
 }
 
 .btn-sacar-turno:disabled{
@@ -88,12 +96,9 @@
     max-height: 100%;
 }
 
-.div-una-especialidad img:hover{
-    border: solid 1px black;
-}
 
 .div-una-especialidad{
-    width: 125px;
+    width: 170px;
     height: 125px;
     display: flex;
     justify-content: center;
@@ -122,7 +127,16 @@
 
     }
 }
+.btn-especialidades{
 
+    height: fit-content;
+    width: 170px;
+    border: none;
+    background-color: rgb(218, 169, 78);
+
+}.btn-especialidades:hover{
+    border: solid 1px black;
+}
 .div-un-especialista{
     width: fit-content;
     height: fit-content;
@@ -132,9 +146,7 @@
     margin: 20px;
     background-color: var(--color-dorado-claro);
 }
-.div-un-especialista:hover{
-    border: solid 1px black;
-}
+
 .div-un-especialista img{
     height: 200px;
     width: 200px;

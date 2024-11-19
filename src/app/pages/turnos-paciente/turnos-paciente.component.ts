@@ -10,11 +10,14 @@ import { CancelarTurnoComponent } from './components/cancelar-turno/cancelar-tur
 import { VerComentarioComponent } from './components/ver-comentario/ver-comentario.component';
 import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
 import { CalificarAtencionComponent } from './components/calificar-atencion/calificar-atencion.component';
+import { RealizarEncuestaComponent } from './components/realizar-encuesta/realizar-encuesta.component';
+import { FormsModule } from '@angular/forms';
+import { BuscarEspecialistaEspecialidadPipe } from '../../core/pipes/buscar-especialista-especialidad.pipe';
 
 @Component({
   selector: 'app-turnos-paciente',
   standalone: true,
-  imports: [DatePipe,CommonModule,StyleButtonDirective,EstadoTurnoColorDirective],
+  imports: [DatePipe,CommonModule,StyleButtonDirective,EstadoTurnoColorDirective,FormsModule,BuscarEspecialistaEspecialidadPipe],
   templateUrl: './turnos-paciente.component.html',
   styleUrl: './turnos-paciente.component.css'
 })
@@ -22,7 +25,7 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
 
   constructor(private authService:AuthService,private pacientesService:PacientesService,private firestore:FirestoreService,private _matDialog:MatDialog){}
 
-
+  BuscarEspecialistaEspecialidad:string  = '';
   turnos:any = [];
   subTurnos!:Subscription;
   ngOnInit(): void {
@@ -67,7 +70,13 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
     estrellas.afterClosed().subscribe({
       next:(value=>{
         console.log(value);
-        this.firestore.updateDocumentField('turnos',turno.id,'calificacion-atencion',value);
+        if(value == null){
+          console.log('es nulo');
+          
+        }else{
+          console.log('no es nulo');
+          // this.firestore.updateDocumentField('turnos',turno.id,'calificacion-atencion',value);
+        }
       })
     })
   }
@@ -88,10 +97,25 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
         }
       }
     })
-    
   }
 
+  RealizarEncuesta(turno:any){
+    const encuesta = this._matDialog.open(RealizarEncuestaComponent,{
+      disableClose:true,
+    })
 
+    encuesta.afterClosed().subscribe({
+      next:((value)=>{
+        console.log(value);
+        if(value){
+          this.firestore.updateDocumentField('turnos',turno.id,'encuesta',value)
+        }else{
+          console.log('cancelo');
+          
+        }
+      })
+    })
+  }
 
   TurnosFiltrados(arrayTurnos:Array<any>){
     return arrayTurnos.filter(turno=> turno.paciente.correo == this.authService.usuarioConectado?.correo)

@@ -1,5 +1,8 @@
 <div class="container-fluid cont-primary">
-    <div class="row d-flex justify-content-center align-items-center">
+    <div class="row d-flex justify-content-center align-items-center row-input">
+        <input type="text" placeholder=" Buscar especialista o especialidad" [(ngModel)]="BuscarEspecialistaEspecialidad" id="input-buscar-esp" class="mb-2"  style="width: 30%;">
+    </div>
+    <div class="row d-flex justify-content-center align-items-start row-table">
         <table class="table-mis-horarios">
             <thead>
                 <th>Especialista</th>
@@ -10,8 +13,8 @@
                 <th>Accion</th>
             </thead>
             <tbody>
-                @for (turno of turnos; track $index) {
-                    <tr>
+                <!-- @for (turno of turnos; track $index) { -->
+                    <tr *ngFor="let turno of turnos | buscarEspecialistaEspecialidad : BuscarEspecialistaEspecialidad" >
                         <!-- <td>{{ turno.dia * 1000 | date :'dd/MM/yyyy' }}</td> -->
                         <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
                         <td>{{formatDate(turno.dia) }}</td>
@@ -21,11 +24,11 @@
                         <td>
                             <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button>
                             <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
-                            <button *ngIf="turno.estado == 'finalizado'" (click)="VerResenia(turno)" StyleButtonCommon>Realizar Encuesta</button>
+                            <button *ngIf="turno.estado == 'finalizado'  && !turno.encuesta" (click)="RealizarEncuesta(turno)" StyleButtonCommon>Realizar Encuesta</button>
                             <button *ngIf="turno.estado == 'finalizado' && !turno['calificacion-atencion']" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button>
                         </td>
                     </tr>
-                }
+                <!-- } -->
             </tbody>
         </table>
     </div>

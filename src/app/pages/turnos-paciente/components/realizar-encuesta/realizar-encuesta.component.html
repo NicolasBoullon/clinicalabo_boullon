@@ -1,5 +1,70 @@
-<div class="container-fluid">
-    <div class="row">
-        <form ></form>
+<div class="container-fluid d-flex justify-content-center">
+    <div class="row row-cont">
+        <div class="col col-cont d-flex align-items-center flex-column justify-content-center">
+            <h1>Encuesta</h1>
+            <form [formGroup]="form" id="reg-form-soc" (submit)="EnviarForm()">
+                    <div class="row d-flex justify-content-center pt-3 contenedores-inputs"  ><!--      -----------------Atencion en recepcion---------------------    -->
+                        <mat-label>Califica la atencion de la recepcion</mat-label>  
+                        <mat-radio-group 
+                            formControlName="atencionRecepcion"
+                            class="d-flex justify-content-around">
+                            <mat-radio-button value="Muy mala">Muy mala</mat-radio-button>
+                            <mat-radio-button value="Mala">Mala</mat-radio-button>
+                            <mat-radio-button value="Normal">Normal</mat-radio-button>
+                            <mat-radio-button value="Buena">Buena</mat-radio-button>
+                            <mat-radio-button value="Muy buena">Muy buena</mat-radio-button>
+                        </mat-radio-group>
+                          @if(atencionRecepcion?.hasError('required')){
+                            <mat-error class="px-5">Seleccione una opcion</mat-error>
+                          }
+                    </div>
+                <div class="row d-flex justify-content-center row-input-form mt-3 contenedores-inputs" >
+                        <div class="d-flex flex-column justify-content-center">
+                            <mat-label>Cuanto fue el tiempo de espera?</mat-label><!--      -----------------------Tiempo de espera---------------------    -->
+                            <input placeholder="Ingresar" 
+                            formControlName="tiempoEspera" 
+                            maxlength="50" 
+                            type="range" 
+                            min="5" 
+                            max="120"
+                            [(ngModel)]="tiempoDeEspera" style="width: 70%;">
+                            <p *ngIf="tiempoDeEspera > 0">{{ tiempoDeEspera }} minutos</p>
+                            @if(tiempoEspera?.hasError("required")){ 
+                                <mat-error>Campo requerido</mat-error>
+                            }
+                        </div>
+                    </div>
+    
+                    <div class="row d-flex justify-content-center row-input-form mt-3 contenedores-inputs" >
+                        <div class="d-flex flex-column justify-content-center mb-3">
+                            <mat-label>Le fue facil orientarse?</mat-label>  <!--      -----------------Facil orientarse---------------------    -->
+                            <label for="facilOrientarse" class="toggle-label">
+                                <input
+                                  id="facilOrientarse"
+                                  formControlName="facilOrientarse"
+                                  type="checkbox"
+                                  name="facilOrientarse"
+                                  class="toggle-input"
+                                />
+                                <span class="toggle-text"></span>
+                              </label>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center row-input-form mt-3 contenedores-inputs ">
+                    <div class="d-flex flex-column justify-content-center mb-3">
+                        <mat-label>Comentario General</mat-label><!--      -----------------------Comentario general---------------------    -->
+                        <textarea  name="" id="" formControlName="comentarioGeneral" placeholder="Comentario..."></textarea>
+                        @if(comentarioGeneral?.hasError("required")) {
+                            <mat-error>Campo requerido</mat-error>
+                        }
+                    </div>
+                </div>
+    
+            </form>
+            <div class="d-flex justify-content-evenly">
+                <button type="submit" form="reg-form-soc" StyleButtonCommon class="d-flex justify-content-center align-items-center mb-3 mt-3" style="font-size: 2rem;">Enviar Encuesta</button>
+                <button type="button" StyleButtonCommon class="d-flex justify-content-center align-items-center mb-3 mt-3" style="font-size: 2rem;" (click)="Cancelar()">Cancelar</button>
+            </div>
+        </div>
     </div>
 </div>

@@ -11,11 +11,12 @@ import { FormsModule } from '@angular/forms';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 import { FinalizarTurnoComponent } from './components/finalizar-turno/finalizar-turno.component';
 import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
+import { BuscarPacienteEspecialidadPipe } from '../../core/pipes/buscar-paciente-especialidad.pipe';
 
 @Component({
   selector: 'app-turnos-especialista',
   standalone: true,
-  imports: [CommonModule,FormsModule,VerComentarioComponent,CancelarTurnoComponent,StyleButtonDirective,EstadoTurnoColorDirective],
+  imports: [CommonModule,FormsModule,VerComentarioComponent,CancelarTurnoComponent,StyleButtonDirective,EstadoTurnoColorDirective,BuscarPacienteEspecialidadPipe],
   templateUrl: './turnos-especialista.component.html',
   styleUrl: './turnos-especialista.component.css'
 })
@@ -25,6 +26,7 @@ export class TurnosEspecialistaComponent {
 
   turnos:any = [];
   subTurnos!:Subscription;
+  BuscarPacienteEspecialidad:string = '';
   ngOnInit(): void {
       console.log(this.authService.usuarioConectado);
       this.GetTurnos();
@@ -94,6 +96,9 @@ export class TurnosEspecialistaComponent {
     await this.AbrirCajaDeComentario(turno,'cancelado');
   }
 
+  CargarHistorialClinico(turno:any){
+
+  }
 
   async AbrirCajaDeComentario(turno:any,accion: 'cancelado' | 'rechazado'){
     const dialogRef = this._matDialog.open(CancelarTurnoComponent,{

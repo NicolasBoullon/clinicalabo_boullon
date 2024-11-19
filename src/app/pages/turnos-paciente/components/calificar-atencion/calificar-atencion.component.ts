@@ -25,11 +25,14 @@ export class CalificarAtencionComponent {
   Enviar()
   {
     if(this.comentario.trim() === '' || this.comentario === '' || this.valor == 0){
-      this.toastf.error('Tiene que completar todos los campos','Cuidado!',{timeOut:2000})
+      this.toastf.warning('Tiene que completar todos los campos','Atencion!',{timeOut:2000})
     }else{
-      this._matDialogRef.close();
       this._matDialogRef.close({comentario:this.comentario,estrellas:this.valor});
       this.toastf.success('Calificacion enviada','Gracias!',{timeOut:2000})
     }
+  }
+
+  Cancelar(){
+    this._matDialogRef.close(null);
   }
 }

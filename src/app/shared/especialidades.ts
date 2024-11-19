@@ -1,3 +1,3 @@
 export const especialidadesImages = [
-    'cardiologia','dermatologia','ginecologia','hematologia','kinseiologia','neurologia','oftalmologia','otorrinolaringologia','urologia','indefinidoneg','clinico'
+    'cardiologia','dermatologia','ginecologia','hematologia','kinesiologia','neurologia','oftalmologia','otorrinolaringologia','urologia','indefinidoneg','clinico'
 ]

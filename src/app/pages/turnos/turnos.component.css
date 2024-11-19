@@ -1,0 +1,37 @@
+.container-fluid{
+    height: 93vh;
+    min-height: fit-content;
+}
+
+.table-mis-horarios{
+    width: 80%;
+    background-color: var(--color-crema-oscuro);
+    border-collapse: collapse;
+    td,th{
+        text-align: center;
+        border: 1px solid black;
+        font-size: x-large;
+    }
+}
+
+.row-table{
+    height: 85%;
+}
+.row-input{
+    height: 5%;
+    input{
+        border: 1px solid grey;
+        background-color: bisque;
+        font-size: 1.5rem;
+    }
+}
+
+.h2-turnos-clinica{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: var(--color-dorado);
+    text-shadow: 0 0 3px var(--color-rojo-oscuro);
+    height: 5%;
+}

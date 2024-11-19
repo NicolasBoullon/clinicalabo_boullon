@@ -13,11 +13,12 @@ import { PacientesService } from '../../core/services/pacientes.service';
 import { BuscarPacientePipe } from '../../core/pipes/buscar-paciente.pipe';
 import { BuscarEspecialistaPipe } from '../../core/pipes/buscar-especialista.pipe';
 import { especialidadesImages } from '../../shared/especialidades';
+import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [FormsModule,CommonModule,BuscarEspecialidadPipe,DatePipe,SeleccionoEspecialidadDirective,SeleccionoEspecialistaDirective,BuscarPacientePipe,BuscarEspecialistaPipe],
+  imports: [FormsModule,CommonModule,BuscarEspecialidadPipe,DatePipe,SeleccionoEspecialidadDirective,SeleccionoEspecialistaDirective,BuscarPacientePipe,BuscarEspecialistaPipe,StyleButtonDirective],
   templateUrl: './solicitar-turno.component.html',
   styleUrl: './solicitar-turno.component.css'
 })
@@ -62,6 +63,7 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   turnosSemanaActual!:any;
   turnosSemanaSiguiente!:any;
   especialidadesArray:string[] = especialidadesImages;
+  pacienteSeleccionado:any;
   constructor(private especialidadesService:EspecialidadesService,private pacientesService:PacientesService,
     private especialistasService:EspecialistasService,private turnosService:TurnosService,private authService:AuthService){}
 
@@ -89,15 +91,9 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
   }
 
 
-  // for (let i = 0; i < dias.length; i++) {
-  //   if (especialista.usuario.lunes.horarios.desde !== '----' && especialista.usuario.lunes.dias.especialidad === this.especialidadSeleccionada) {
-  //     especialista.usuario.lunes.dias.hora == 30 ? this.turnosLunes = this.turnos30 : this.turnosLunes = this.turnos60;
-  //   } else {
-      
-  //     this.turnosLunes = [];
-  //   }
-  // }
-  // const dias = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado']
+  ElegirPaciente(paciente:any){
+    this.pacienteSeleccionado = paciente;
+  }
 
   SetearDias(especialista:any){
     const turnosSemana: any = Array(15).fill([]); // Creamos un array de 15 días
@@ -184,7 +180,11 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
     // console.log(this.authService.usuarioConectado);
     // console.log(this.especialistaSeleccionado.usuario);
     // console.log(this.especialidadSeleccionada);
-    this.turnosService.AgendarTurno(this.authService.usuarioConectado,this.especialistaSeleccionado.usuario,this.especialidadSeleccionada,dia,turno,'pendiente');
+    if(this.pacienteSeleccionado){
+      this.turnosService.AgendarTurno(this.pacienteSeleccionado.usuario,this.especialistaSeleccionado.usuario,this.especialidadSeleccionada,dia,turno,'pendiente');
+    }else{
+      this.turnosService.AgendarTurno(this.authService.usuarioConectado,this.especialistaSeleccionado.usuario,this.especialidadSeleccionada,dia,turno,'pendiente');
+    }
   }
 
   TurnoOcupado(turno:any,dia:any){
@@ -328,5 +328,23 @@ export class SolicitarTurnoComponent implements OnInit ,OnDestroy{
     }else{
       return false;
     }
+  }
+
+
+  EsEspecialistaConEspecialidad(especialista:any){
+    if(especialista.usuario.especialidades.includes(this.especialidadSeleccionada)){
+      return true;
+    }
+    return false;
+  }
+
+  HayAlgunEspecialistaConEspecialidadSeleccionada(){
+    for (let index = 0; index < this.especialistas.length; index++) {
+  
+      if(this.especialistas[index].usuario.especialidades.includes(this.especialidadSeleccionada)){
+        return true;
+      }
+    }
+    return false;
   }
 }

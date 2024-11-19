@@ -14,6 +14,7 @@ export const routes: Routes = [
     {path:'turnos-paciente',loadComponent:()=> import('./pages/turnos-paciente/turnos-paciente.component').then((c)=> c.TurnosPacienteComponent),canActivate: [estaLogGuard]},
     {path:'turnos-especialista',loadComponent:()=> import('./pages/turnos-especialista/turnos-especialista.component').then((c)=> c.TurnosEspecialistaComponent),canActivate: [estaLogGuard]},
     {path:'solicitar-turno',loadComponent:()=> import('./pages/solicitar-turno/solicitar-turno.component').then((c)=> c.SolicitarTurnoComponent),canActivate: [estaLogGuard]},
+    {path:'turnos',loadComponent:()=> import('./pages/turnos/turnos.component').then((c)=> c.TurnosComponent),canActivate: [estaLogGuard]},
     // {path:'login',loadComponent:()=> import('./pages/login/login.component').then((c)=> c.LoginComponent)},
     {path:'**',redirectTo:'Inicio',pathMatch:'full'},
 ];

@@ -3,8 +3,16 @@
     min-height: fit-content;
 }
 
-.row{
-    height: 100%;
+.row-table{
+    height: 90%;
+}
+.row-input{
+    height: 10%;
+    input{
+        border: 1px solid grey;
+        background-color: bisque;
+        font-size: 1.5rem;
+    }
 }
 .table-mis-horarios{
     width: 80%;

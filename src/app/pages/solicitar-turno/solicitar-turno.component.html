@@ -1,42 +1,73 @@
 <div class="container-fluid cont-primary">
     <h2 class="d-flex justify-content-center align-items-center h2-solicitar-turno">Solicitar turno</h2>
-    <div class="row row-cont d-flex justify-content-center cont-primary">
-        @if(esAdmin| async){
-            <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'" id="col-elegir-paciente">
-                <h2 class="mb-2">Pacientes para elegir</h2>
-                <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
-                <div id="div-tabla-container">
-                    <table class="mb-3">
-                    <tbody>
-                        <tr (click)="ElegirEspecialidad(paciente.Especialidad)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
-                            <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
-                        </tr>
-                    </tbody>
-                    </table>
+    <div class="row row-cont d-flex justify-content-center cont-primary ">
+        @if(esAdmin| async ){
+            @if(!this.pacienteSeleccionado){
+
+                <div class="col-3 flex-column  justify-content-start align-items-center d-flex" id="col-elegir-paciente" *ngIf="this.rol == 'Administrador'">
+                    <h2 class="mb-2">Pacientes para elegir</h2>
+                    <input type="text" placeholder=" Buscar paciente" [(ngModel)]="BuscarPaciente" id="input-buscar-esp" class="mb-2" >
+                    <div id="div-tabla-container">
+                        <table class="mb-3 tabla-buscar-paciente">
+                        <tbody>
+                            <tr (click)="ElegirPaciente(paciente)" *ngFor="let paciente of pacientes | buscarPaciente: BuscarPaciente" class="especialidades-creadas" >
+                                <td>{{ paciente.usuario.nombre | titlecase }} {{ paciente.usuario.apellido | titlecase }}</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        }
-        @if(!this.especialidadSeleccionada)
-        {
-            <div class="col-8 d-flex justify-content-center align-items-center" id="col-elegir-especialidad">
-                <div class="d-flex justify-content-center align-items-center" id="div-especialidades">
-                    <div style="background-color: white;" *ngFor="let especialidad of especialidades;" class="div-una-especialidad" (click)="ElegirEspecialidad(especialidad.Especialidad)">
-                        <img *ngIf="especialidadIncluida(especialidad.Especialidad)"    
-                             [src]="'../../../assets/especialidades/'+ especialidad.Especialidad.toLowerCase() + '.png'">
-                        <img *ngIf="!especialidadIncluida(especialidad.Especialidad)" 
-                             src="../../../assets/especialidades/indefinido.png">
-                    </div>                 
+            }
+            @if(!this.especialidadSeleccionada && this.pacienteSeleccionado)
+            {
+                <div class="col-8 d-flex justify-content-center align-items-center" id="col-elegir-especialidad">
+                    <div class="d-flex justify-content-center align-items-center" id="div-especialidades">
+                        <div *ngFor="let especialidad of especialidades;" class="div-una-especialidad" (click)="ElegirEspecialidad(especialidad.Especialidad)">
+                            <button class="btn-especialidades">
+                                <img *ngIf="especialidadIncluida(especialidad.Especialidad)"    
+                                     [src]="'../../../assets/especialidades/'+ especialidad.Especialidad.toLowerCase() + '.png'">
+                                <img *ngIf="!especialidadIncluida(especialidad.Especialidad)" 
+                                     src="../../../assets/especialidades/indefinido.png">
+                            </button>
+                        </div>                 
+                    </div>
                 </div>
-            </div>
+            }
+        }@else {
+            @if(!this.especialidadSeleccionada)
+            {
+                <div class="col-8 d-flex justify-content-center align-items-center" id="col-elegir-especialidad">
+                    <div class="d-flex justify-content-center align-items-center" id="div-especialidades">
+                        <div *ngFor="let especialidad of especialidades;" class="div-una-especialidad" (click)="ElegirEspecialidad(especialidad.Especialidad)">
+                            <button class="btn-especialidades">
+                                <img *ngIf="especialidadIncluida(especialidad.Especialidad)"    
+                                     [src]="'../../../assets/especialidades/'+ especialidad.Especialidad.toLowerCase() + '.png'">
+                                <img *ngIf="!especialidadIncluida(especialidad.Especialidad)" 
+                                     src="../../../assets/especialidades/indefinido.png">
+                            </button>
+                        </div>                 
+                    </div>
+                </div>
+            }
         }
         @if(especialidadSeleccionada && !especialistaSeleccionado)
         {
-            <div class="col-10 d-flex justify-content-center align-items-center" id="col-elegir-especialista">
+            <div class="col-10 d-flex justify-content-center align-items-center flex-column"id="col-elegir-especialista">
+                <div class="mb-2"><button (click)="Reiniciar()" StyleButtonCommon style="font-size: 1.5rem;">Volver</button></div>
                 <div class="d-flex justify-content-center align-items-center" id="div-especialistas">
-                    <div  *ngFor="let especialista of especialistas;" class="div-un-especialista d-flex flex-column" (click)="ElegirEspecialista(especialista)">
-                        <p>{{ especialista.usuario.nombre }} {{ especialista.usuario.apellido }}</p>
-                        <img [src]="especialista.usuario.imagen" alt="">
-                    </div>                 
+                @if(HayAlgunEspecialistaConEspecialidadSeleccionada()){
+                    @for (especialista of especialistas; track $index) {
+                        @if(EsEspecialistaConEspecialidad(especialista)){
+                            <div   class="div-un-especialista d-flex flex-column" (click)="ElegirEspecialista(especialista)">
+                                <p>{{ especialista.usuario.nombre }} {{ especialista.usuario.apellido }}</p>
+                                <img [src]="especialista.usuario.imagen" alt="">
+                            </div>   
+                            
+                        }
+                    }
+                }@else {
+                    <div><h3>No hay ningun especialista con esa especialidad. Lo siento.</h3></div>
+                }
                 </div>
             </div>
         }

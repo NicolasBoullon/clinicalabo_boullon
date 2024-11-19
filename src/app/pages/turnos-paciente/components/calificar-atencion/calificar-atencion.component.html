@@ -18,8 +18,9 @@
                 <input value="1" name="rating" id="star1" type="radio" (click)="Calcular(1)">
                 <label for="star1"></label>
             </div>
-            <div class="mb-2">
-                <button StyleButtonCommon (click)="Enviar()">Enviar</button>
+            <div class="mb-2 d-flex justify-content-evenly">
+                <button StyleButtonCommon style="font-size: 2rem;"  (click)="Enviar()">Enviar</button>
+                <button StyleButtonCommon  style="font-size: 2rem;" (click)="Cancelar()">Cancelar</button>
             </div>
         </div>
     </div>
