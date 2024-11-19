@@ -38,6 +38,8 @@ export class HistoriaClinicaComponent implements OnInit {
   valueDinamico3:any = '';
   ngOnInit(): void {
     this.form = new FormGroup({
+      fecha: new FormControl(),
+      especialista: new FormControl(),
       altura: new FormControl('', [
         Validators.min(0),
         Validators.max(300) 
@@ -62,9 +64,9 @@ export class HistoriaClinicaComponent implements OnInit {
 
   EnviarForm(): void {
     if (this.form.valid) {
-      //aca enviar el form
+      this.form.get("fecha")?.setValue(new Date());
       this.ConstruirDinamicos();
-      // console.log(this.form.value);
+      console.log(this.form.value);
       this.toastr.success("Historia enviada con exito!",'Gracias!',{timeOut:2000})
       this._matDialogRef.close(this.form.value);
       

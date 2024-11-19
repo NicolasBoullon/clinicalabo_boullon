@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerComponent } from '../../shared/spinner/spinner.component';
@@ -9,14 +9,20 @@ import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
 import { jsPDF} from 'jspdf';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
+import { ObjectKeyValuePipe } from '../../core/pipes/object-key-value.pipe';
+import { PdfHistoriaClinicaComponent } from '../../shared/pdf-historia-clinica/pdf-historia-clinica.component';
+
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [SpinnerComponent,CommonModule,StyleButtonDirective],
+  imports: [SpinnerComponent,CommonModule,StyleButtonDirective,ObjectKeyValuePipe,PdfHistoriaClinicaComponent],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
 export class MiPerfilComponent implements OnInit,OnDestroy{
+
+  @ViewChild('pdfContainer', { read: ViewContainerRef }) pdfContainer!: ViewContainerRef;
+  private pdfComponentRef!: ComponentRef<PdfHistoriaClinicaComponent>;
 
   showSpinner:boolean = true;
   perfil!:any;
@@ -64,9 +70,10 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
 
   GenerarPdf(){
     const doc = new jsPDF();
-
+    const fecha = new Date().toDateString();
+    const imgLogo = 'assets/imperiologodor.png';
     doc.text('Clinica Boullon',20,50);
-
+    // doc.addImage(imgLogo,'JPEG',)
     doc.save('historial_clinica.pdf');
   }
 
@@ -398,31 +405,6 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
     console.log(horariosSeleccionados);
     return horariosSeleccionados;
   }
-
-  // CambiarHasta(dia:string,evento:Event){
-  //   const selectedValue = (evento.target as HTMLSelectElement).value;
-  //   if(dia == 'lunes'){
-  //     console.log(selectedValue);
-      
-  //     console.log(this.turnosLunes);
-  //   }
-  //   if(dia == 'martes'){
-  //     console.log(this.turnosMartes);
-  //   }
-  //   if(dia == 'miercoles'){
-  //     console.log(this.turnosMiercoles);
-  //   }
-  //   if(dia == 'jueves'){
-  //     console.log(this.turnosJueves);
-  //   }
-  //   if(dia == 'viernes'){
-  //     console.log(this.turnosViernes);
-  //   }
-  //   if(dia == 'sabado'){
-  //     console.log(this.turnosSabado);
-  //   }
-
-  // }
 
 
   ngOnDestroy(): void {

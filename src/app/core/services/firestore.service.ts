@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, collectionData, doc, docData, Firestore, getDoc, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { arrayUnion, collection, collectionData, doc, docData, Firestore, getDoc, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,6 +18,11 @@ export class FirestoreService {
       const colRef = collection(this.firestore, path);
       const q = query(colRef, orderBy(field, 'desc'));
       return collectionData(q, { idField: 'id' }) as Observable<any[]>;
+    }
+
+    public addElementArrayField(collectionPath: string, documentId: string, field: string, value: any):Promise<void>{
+      const docRef = doc(this.firestore, `${collectionPath}/${documentId}`);
+      return updateDoc(docRef, { [field]: arrayUnion(value) });
     }
     
     public getCollectionFilteredByDate(path: string, field: string, startDate: Date, endDate: Date): Observable<any[]> {

@@ -16,7 +16,10 @@
                         <p>Dni: {{ perfil.usuario.dni }}</p>
                         <p>Correo: {{ perfil.usuario.correo }}</p>
                         <p>Edad: {{ perfil.usuario.edad }}</p>
-                        <button (click)="GenerarPdf()" StyleButtomCommon *ngIf="perfil.usuario.rol == 'Paciente'">Descargar Historial Clinico</button>
+                        <!-- <button (click)="GenerarPdf()" StyleButtonCommon *ngIf="perfil.usuario.rol == 'Paciente'">Descargar Historial Clinico</button> -->
+                         <div>
+                            <app-pdf-historia-clinica [paciente]="perfil"></app-pdf-historia-clinica>
+                         </div>
                         <div class="d-flex" *ngIf="perfil.usuario.rol == 'Especialista'">
                             <table>
                                 <tbody>
@@ -39,15 +42,7 @@
                                     }
                                 </tbody>
                             </table>
-                            <!-- @for (esp of perfil.usuario.especialidades; track $index) {
-                                <p>{{ esp }}</p>
-                                <select name="slc-horarios" id="horarios">
-                                    <option value="30">30 Minutos</option>
-                                    <option value="60">60 Minutos</option>
-                                </select>
-                            } -->
                         </div>
-                        <!-- <button *ngIf="perfil.usuario.rol == 'Especialista'">Mis Turnos</button> -->
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-center align-items-center mx-2" *ngIf="perfil.usuario.rol == 'Especialista'">
@@ -222,6 +217,62 @@
                     <button (click)="GuardarCambios()" class="btn-guardar-cambios" [disabled]="!huboCambios" *ngIf="perfil.usuario.rol == 'Especialista'">Guardar cambios</button>
                 </div>
             </article>
+        </div>
+
+        <div *ngIf="perfil.usuario.rol == 'Paciente'" class="div-historia-clinica">
+            <h2>Historia Clinica</h2>
+            <table>
+                <thead>
+                    <th>
+                        Altura (cm)
+                    </th>
+                    <th>
+                        Peso (kg)
+                    </th>
+                    <th>
+                        Presion
+                    </th>
+                    <th>
+                        Temperatura
+                    </th>
+                    <th>
+                        Dato Extra
+                    </th>
+                    <th>
+                        Dato Extra
+                    </th>
+                    <th>
+                        Dato Extra
+                    </th>
+                </thead>
+                <tbody>
+                    @for (historial of perfil.usuario.historialClinico; track $index) {
+                        <tr>
+                            <td>
+                                {{ historial.altura }}
+                            </td>
+                            <td>
+                                {{ historial.peso }}
+                            </td>
+                            <td>
+                                {{ historial.presion }}
+                            </td>
+                            <td>
+                                {{ historial.temperatura }}
+                            </td>
+                            <td>
+                                {{ historial.campoDinamicoUno | objectKeyValue}}
+                            </td>
+                            <td>
+                                {{ historial.campoDinamicoDos | objectKeyValue}}
+                            </td>
+                            <td>
+                                {{ historial.campoDinamicoTres | objectKeyValue}}
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
         }
     </div>

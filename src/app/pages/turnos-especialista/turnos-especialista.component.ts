@@ -7,12 +7,13 @@ import { CommonModule, formatDate } from '@angular/common';
 import { CancelarTurnoComponent } from '../turnos-paciente/components/cancelar-turno/cancelar-turno.component';
 import { VerComentarioComponent } from '../turnos-paciente/components/ver-comentario/ver-comentario.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 import { FinalizarTurnoComponent } from './components/finalizar-turno/finalizar-turno.component';
 import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
 import { BuscarPacienteEspecialidadPipe } from '../../core/pipes/buscar-paciente-especialidad.pipe';
 import { HistoriaClinicaComponent } from './components/historia-clinica/historia-clinica.component';
+import { PacientesService } from '../../core/services/pacientes.service';
 
 @Component({
   selector: 'app-turnos-especialista',
@@ -22,15 +23,18 @@ import { HistoriaClinicaComponent } from './components/historia-clinica/historia
   styleUrl: './turnos-especialista.component.css'
 })
 export class TurnosEspecialistaComponent {
-  constructor(private authService:AuthService,private especialistaService:EspecialistasService,private firestore:FirestoreService,private _matDialog:MatDialog){}
+  constructor(private authService:AuthService,private especialistaService:EspecialistasService,private firestore:FirestoreService,private _matDialog:MatDialog,private pacientesService:PacientesService){}
 
 
   turnos:any = [];
   subTurnos!:Subscription;
+  subPacientes:any;
+  pacientes:any[] = [];
   BuscarPacienteEspecialidad:string = '';
   ngOnInit(): void {
       console.log(this.authService.usuarioConectado);
       this.GetTurnos();
+      this.GetPacientes();
   }
 
   async GetTurnos(){
@@ -47,6 +51,16 @@ export class TurnosEspecialistaComponent {
           
           
         }
+      })
+    })
+  }
+
+  async GetPacientes(){
+    this.subPacientes = this.pacientesService.GetTodosPacientes()
+    .subscribe({
+      next:((value)=>{
+        console.log(value);
+        this.pacientes = value;
       })
     })
   }
@@ -98,6 +112,12 @@ export class TurnosEspecialistaComponent {
   }
 
   CargarHistorialClinico(turno:any){
+    console.log(this.pacientes);
+    // console.log(this.pacientes);
+    
+    const pacienteCompleto:any = this.pacientes.filter((paciente)=> paciente.usuario.correo == turno.paciente.correo);
+    // console.log(pacienteCompleto);
+    
     const refHistorial = this._matDialog.open(HistoriaClinicaComponent,{
       disableClose:true,
       width: '900px',
@@ -105,10 +125,13 @@ export class TurnosEspecialistaComponent {
     });
 
     refHistorial.afterClosed().subscribe({
-      next:((value)=>{
+      next:(async (value)=>{
         console.log(value);
         if(value){
-          this.firestore.updateDocumentField('turnos',turno.id,'historialClinico',value);
+          value['especialista'] = `${turno.especialista.nombre} ${turno.especialista.apellido}`;
+          await this.firestore.updateDocumentField('turnos',turno.id,'historialClinico',value);
+          
+          this.firestore.addElementArrayField('pacientes',pacienteCompleto[0].uid,`usuario.historialClinico`,value);
         }
       })
     })
