@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { EspecialistasService } from '../../core/services/especialistas.service';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
-
+import { jsPDF} from 'jspdf';
+import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [SpinnerComponent,CommonModule],
+  imports: [SpinnerComponent,CommonModule,StyleButtonDirective],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
@@ -61,6 +62,13 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
     }, 1000);
   }
 
+  GenerarPdf(){
+    const doc = new jsPDF();
+
+    doc.text('Clinica Boullon',20,50);
+
+    doc.save('historial_clinica.pdf');
+  }
 
   async GetUser(){
     // this.perfil = this.authService.usuarioConectado;

@@ -30,7 +30,7 @@
                              </select>
                             <button *ngIf="turno.estado == 'aceptado'" StyleButtonCommon (click)="FinalizarTUrno(turno)">Finalizar Turno</button>
                             <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
-                            <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="CargarHistorialClinico(turno)" StyleButtonCommon>Cargar Historial Clinico</button>
+                            <button *ngIf="turno.estado == 'finalizado' && !turno.historialClinico" (click)="CargarHistorialClinico(turno)" StyleButtonCommon>Cargar Historial Clinico</button>
                         </td>
                     </tr>
             </tbody>

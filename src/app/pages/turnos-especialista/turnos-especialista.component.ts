@@ -12,6 +12,7 @@ import { StyleButtonDirective } from '../../core/directives/style-button.directi
 import { FinalizarTurnoComponent } from './components/finalizar-turno/finalizar-turno.component';
 import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
 import { BuscarPacienteEspecialidadPipe } from '../../core/pipes/buscar-paciente-especialidad.pipe';
+import { HistoriaClinicaComponent } from './components/historia-clinica/historia-clinica.component';
 
 @Component({
   selector: 'app-turnos-especialista',
@@ -97,6 +98,20 @@ export class TurnosEspecialistaComponent {
   }
 
   CargarHistorialClinico(turno:any){
+    const refHistorial = this._matDialog.open(HistoriaClinicaComponent,{
+      disableClose:true,
+      width: '900px',
+      height: '900px'
+    });
+
+    refHistorial.afterClosed().subscribe({
+      next:((value)=>{
+        console.log(value);
+        if(value){
+          this.firestore.updateDocumentField('turnos',turno.id,'historialClinico',value);
+        }
+      })
+    })
 
   }
 

@@ -1,0 +1,35 @@
+mat-error{
+    color: red;
+}
+
+.container-fluid{
+    background-color: bisque;
+    height: 100%;
+    border: solid 1px black;
+}
+
+.row-cont,.col-cont{
+    height: 100%;
+}
+form{
+    height: 80%;
+    width: 100%;
+    mat-label{
+        font-size: 1.2rem;
+    }
+    /* input{
+        padding: 10px 0px;
+        background-color: var(--color-crema-claro);
+        border: 1solid px grey;
+        font-size: 1.1rem;
+    }     */
+}
+
+.contenedores-input{
+    height: calc(fit-content + 50px);
+}
+
+h1{
+    color: var(--color-dorado);
+    text-shadow: 0 0 3px black;
+}
