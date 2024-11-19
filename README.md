@@ -58,4 +58,11 @@ El administrador puede sacar un turno pero deberá seleccionar primero al pacien
 El administrador tambien tiene una sección Turnos de la cual ve todos los turnos de la clínica y puede cancelar los turnos que esten en el estado Pendiente.
 ![Logo](src/assets/readme/turnosAdmin.png)
 
+### Mi Perfil   
+En la sección Mi Perfil podremos ver nuestros datos principales.
+![Logo](src/assets/readme/miPerfil.png)   
+
+Y como especialista en nuestro perfil podremos colocar todos nuestros horarios personalizados como querramos. Primero deberemos que especialidad queremos según el dia de la semana, luego los horarios y guardamos los cambios. De ser necesario podemos cambiar nuestros turnos de cada especialidad de 30 minutos a 60 minutos. Y luego volvemos a seleccionar los dias y horarios.
+![Logo](src/assets/readme/miPerfilEspecialista.png)   
+
 
