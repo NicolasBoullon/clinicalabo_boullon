@@ -13,10 +13,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { VerComentarioComponent } from '../turnos-paciente/components/ver-comentario/ver-comentario.component';
 import { EstadoTurnoColorDirective } from '../../core/directives/estado-turno-color.directive';
 import { FormatTimeStampPipe } from '../../core/pipes/format-time-stamp.pipe';
+import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 @Component({
   selector: 'app-pacientes',
   standalone: true,
-  imports: [FormsModule,CommonModule,MatIconModule,MatDividerModule,MatButtonModule,MatMenuModule,ObjectKeyValuePipe,EstadoTurnoColorDirective,FormatTimeStampPipe],
+  imports: [FormsModule,CommonModule,MatIconModule,MatDividerModule,MatButtonModule,MatMenuModule,ObjectKeyValuePipe,EstadoTurnoColorDirective,FormatTimeStampPipe,StyleButtonDirective],
   templateUrl: './pacientes.component.html',
   styleUrl: './pacientes.component.css'
 })

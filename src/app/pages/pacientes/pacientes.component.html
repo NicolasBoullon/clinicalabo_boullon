@@ -33,9 +33,9 @@
             }
         </div>
         <div class="col-11">
-          <div class="row" style="height: 50%;">
-            @if(seleccionoPaciente){
-              <div *ngIf="seleccionoPaciente.usuario.rol == 'Paciente'" class="div-historia-clinica cont-primary">
+            <div class="row" style="height: 50%;">
+                @if(seleccionoPaciente){
+              <div *ngIf="seleccionoPaciente.usuario.rol == 'Paciente' && seleccionoPaciente.usuario.historialClinico" class="div-historia-clinica cont-primary">
                 <h2>Historia Clinica</h2>
                 <table>
                     <thead>
@@ -94,6 +94,7 @@
           </div>
             @if(seleccionoPaciente){
               <div class="row row-turnos " style="height: 50%;" >
+                <h2 style="text-align: center;">Turnos del paciente</h2>
                 <table class="table-mis-horarios ">
                   <thead>
                       <th>Paciente</th>
