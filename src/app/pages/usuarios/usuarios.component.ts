@@ -13,11 +13,14 @@ import { FormAdministradorComponent } from './components/form-administrador/form
 import { AdministradorService } from '../../core/services/administrador.service';
 import { AprobadoPipe } from '../../core/pipes/aprobado.pipe';
 import { EstaAprobadoDirective } from '../../core/directives/esta-aprobado.directive';
+import { VerHistoriaClinicaComponent } from '../../shared/ver-historia-clinica/ver-historia-clinica.component';
+import { StyleButtonDirective } from '../../core/directives/style-button.directive';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [FormsModule, SpinnerComponent,AprobadoPipe,EstaAprobadoDirective],
+  imports: [FormsModule, SpinnerComponent,AprobadoPipe,EstaAprobadoDirective,StyleButtonDirective,FormsModule,CommonModule],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
 })
@@ -102,5 +105,16 @@ export class UsuariosComponent implements OnInit,OnDestroy{
     this.subAdministradores.unsubscribe();
     this.subEspecialistas.unsubscribe();
     this.subPacientes.unsubscribe();
+  }
+
+  VerHistoriaClinica(paciente:any){
+    this._matDialog.open(VerHistoriaClinicaComponent,{
+      data: paciente,
+      width: 'fit-content',
+      height: 'fit-content',
+      maxWidth:'none',
+      maxHeight: '1200px',
+
+    })
   }
 }

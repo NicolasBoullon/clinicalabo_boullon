@@ -30,6 +30,7 @@
                         </ul>
                 }@else if(perfil == 'Especialista'){
                     <ul>
+                        <li><button (click)="GoTo('pacientes')">Pacientes</button></li>
                         <li><button (click)="GoTo('turnos-especialista')">Mis turnos</button></li>
                         <li><button (click)="GoToSection('planes')">Planes</button></li>
                         <li><button (click)="GoToSection('galeria')">Galeria</button></li>

@@ -39,21 +39,19 @@ export class PdfHistoriaClinicaComponent implements OnChanges{
     logo.src = '../../../assets/imperiologdor.png';
     
     logo.onload = () => {
-      // Calcular posición para centrar la imagen
-      const logoWidth = 100;  // Ancho de la imagen
-      const logoHeight = 50;  // Alto de la imagen
-      const xPos = (width - logoWidth) / 2;  // Posición en X para centrar
-      const yPos = 10;  // Espacio desde la parte superior de la página
+   
+      const logoWidth = 100; 
+      const logoHeight = 50; 
+      const xPos = (width - logoWidth) / 2;  
+      const yPos = 10;  
 
-      // Agregar la imagen centrada en la página
       doc.addImage(logo, 'PNG', xPos, yPos, logoWidth, logoHeight);
 
-      // Título
       const title = 'Historia Clínica';
       doc.setFontSize(18);
-      const titleWidth = doc.getTextWidth(title); // Obtén el ancho del título
-      const titleXPos = (width - titleWidth) / 2; // Calcular la posición en X para centrar el texto
-      const titleYPos = yPos + logoHeight + 10;  // Justo debajo de la imagen
+      const titleWidth = doc.getTextWidth(title); 
+      const titleXPos = (width - titleWidth) / 2; 
+      const titleYPos = yPos + logoHeight + 10;  
       doc.text(title, titleXPos, titleYPos);
 
       // Datos del paciente

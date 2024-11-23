@@ -240,6 +240,10 @@ export class AuthService {
     return this.auth.currentUser?.email;
   }
 
+  async GetUserEmailAsync(){
+    return this.auth.currentUser?.email;
+  }
+
   async GetUserPerfil(){
     // console.log(this.usuarioConectado.rol);
     if(this.usuarioConectado){

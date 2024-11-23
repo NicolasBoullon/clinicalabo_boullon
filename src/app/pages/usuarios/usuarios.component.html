@@ -27,11 +27,6 @@
                             (change)="ToggleActivado(especialista)"
                             [(ngModel)]="especialista.usuario.aprobada"
                             >{{ especialista.usuario.aprobada | aprobado }} 
-                            <!-- <span class="custom-checkbox-false"></span> -->
-                            <!-- <input type="checkbox" id="cuenta-activada-{{ $index }}" 
-                            [(ngModel)]="especialista.usuario.aprobada"
-                            (change)="ToggleActivado(especialista)">{{ especialista.usuario.aprobada | aprobado }} 
-                            <span class="custom-checkbox-false"></span> -->
                         </label>
                         </div>
                       </div>
@@ -41,13 +36,14 @@
     <div class="row">
             <h2>Pacientes</h2>
             @for (paciente of pacientes; track $index) {
-                <article>
+                <article >
                     <div class="card" style="width: 18rem; height: fit-content;">
                         <img class="card-img-top" [src]="paciente.usuario.imagenUno" alt="Card image cap"> 
                         <div class="card-body d-flex flex-column justify-content-evenly">
                           <h5 class="card-title">{{ paciente.usuario.nombre }} {{ paciente.usuario.apellido }}</h5>    
                           <p class="card-text">Edad: {{ paciente.usuario.edad}}</p>
                           <p class="card-text">Correo: <br>{{ paciente.usuario.correo}}</p>
+                          <p (click)="VerHistoriaClinica(paciente)" StyleButtonCommon *ngIf="paciente.usuario.historialClinico">Ver Historia Clinica</p>
                         </div>
                       </div>
                 </article>

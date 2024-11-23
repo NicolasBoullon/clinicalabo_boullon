@@ -1,0 +1,129 @@
+<div class="container-fluid cont-primary">
+    <div class="row">
+        <div class="col-1">
+            @if(yaInicio | async){
+                <div class="lista-usuarios">
+                    @for (paciente of pacientesFiltradosAtendio; track $index) {
+                      <div class="d-flex align-items-center">
+                        
+                        <button mat-icon-button (click)="SeleccionoPaciente(paciente)" aria-label="Example icon-button with a menu" style="height: 100px; width: 100px; background-color: white;" >
+                          <!-- <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" style="height: 100px; width: 100px; background-color: white;" > -->
+                          <mat-icon style="height: 100%; width: 100%;  display: flex; justify-content: center; align-items: center;">
+                            <img [src]="paciente.usuario.imagenUno" alt="" style="height: 90px; width: 90px; border-radius: 50%;">
+                          </mat-icon>
+                        </button>
+                        <p>{{ paciente.usuario.nombre }} {{ paciente.usuario.apellido }}</p>
+                      </div>
+                          <!-- <mat-menu #menu="matMenu">
+                            <button mat-menu-item>
+                              <mat-icon>dialpad</mat-icon>
+                              <span>Redial</span>
+                            </button>
+                            <button mat-menu-item disabled>
+                              <mat-icon>voicemail</mat-icon>
+                              <span>Check voice mail</span>
+                            </button>
+                            <button mat-menu-item>
+                              <mat-icon>notifications_off</mat-icon>
+                              <span>Disable alerts</span>
+                            </button>
+                          </mat-menu> -->
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-11">
+          <div class="row" style="height: 50%;">
+            @if(seleccionoPaciente){
+              <div *ngIf="seleccionoPaciente.usuario.rol == 'Paciente'" class="div-historia-clinica cont-primary">
+                <h2>Historia Clinica</h2>
+                <table>
+                    <thead>
+                        <th>
+                            Altura (cm)
+                        </th>
+                        <th>
+                            Peso (kg)
+                        </th>
+                        <th>
+                            Presion
+                        </th>
+                        <th>
+                            Temperatura
+                        </th>
+                        <th>
+                            Dato Extra
+                        </th>
+                        <th>
+                            Dato Extra
+                        </th>
+                        <th>
+                            Dato Extra
+                        </th>
+                    </thead>
+                    <tbody>
+                        @for (historial of seleccionoPaciente.usuario.historialClinico; track $index) {
+                            <tr>
+                                <td>
+                                    {{ historial.altura }}
+                                </td>
+                                <td>
+                                    {{ historial.peso }}
+                                </td>
+                                <td>
+                                    {{ historial.presion }}
+                                </td>
+                                <td>
+                                    {{ historial.temperatura }}
+                                </td>
+                                <td>
+                                    {{ historial.campoDinamicoUno | objectKeyValue}}
+                                </td>
+                                <td>
+                                    {{ historial.campoDinamicoDos | objectKeyValue}}
+                                </td>
+                                <td>
+                                    {{ historial.campoDinamicoTres | objectKeyValue}}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+          </div>
+            @if(seleccionoPaciente){
+              <div class="row row-turnos " style="height: 50%;" >
+                <table class="table-mis-horarios ">
+                  <thead>
+                      <th>Paciente</th>
+                      <th>Dia</th>
+                      <th>Especialidad</th>
+                      <th>Horario </th>
+                      <th>Estado</th>
+                      <th>Accion</th>
+                  </thead>
+                  <tbody>
+                      @for (turno of turnos; track $index) {
+                          <tr *ngIf="(turno.paciente.correo === seleccionoPaciente.usuario.correo) && (turno.especialista.correo === emailDelEspecialista)">
+                              <!-- <td>{{ turno.dia * 1000 | date :'dd/MM/yyyy' }}</td> -->
+                              <td>{{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</td>
+                              <td>{{turno.dia | formatTimeStamp : 'dd MMMM yyyy'}}</td>
+                              <td>{{ turno.especialidad | titlecase}}</td>
+                              <td>{{ turno.horario }}  </td>
+                              <td [EstadoTurnoColor]="turno.estado">{{ turno.estado | titlecase }}</td>
+                              <td>
+                                  <!-- <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button> -->
+                                  <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
+                                  <!-- <button *ngIf="turno.estado == 'finalizado'  && !turno.encuesta" (click)="RealizarEncuesta(turno)" StyleButtonCommon>Realizar Encuesta</button> -->
+                                  <!-- <button *ngIf="turno.estado == 'finalizado' && !turno['calificacion-atencion']" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button> -->
+                              </td>
+                          </tr>
+                      }
+                  </tbody>
+              </table>
+              </div>
+            }
+        </div>
+    </div>
+</div>
