@@ -76,15 +76,6 @@ export class LoginComponent implements OnInit{
             this.LimpiarFormulario();
           }, 2000);
         }
-
-      // .catch(()=>{
-      //   setTimeout(() => {
-      //     console.log('No verificado');
-          
-      //     this.CerraModal();
-      //     this.LimpiarFormulario();
-      //   }, 2000);
-      // })
     }else{
       console.log('error');
       

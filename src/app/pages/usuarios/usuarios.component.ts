@@ -15,13 +15,18 @@ import { AprobadoPipe } from '../../core/pipes/aprobado.pipe';
 import { EstaAprobadoDirective } from '../../core/directives/esta-aprobado.directive';
 import { VerHistoriaClinicaComponent } from '../../shared/ver-historia-clinica/ver-historia-clinica.component';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import * as XLSX from 'xlsx';
+import { TurnosService } from '../../core/services/turnos.service';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+import { PdfHistoriaClinicaComponent } from "../../shared/pdf-historia-clinica/pdf-historia-clinica.component";
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [FormsModule, SpinnerComponent,AprobadoPipe,EstaAprobadoDirective,StyleButtonDirective,FormsModule,CommonModule],
+  imports: [FormsModule, SpinnerComponent, AprobadoPipe, EstaAprobadoDirective, StyleButtonDirective, FormsModule, CommonModule, MatIconModule, MatMenuModule, MatButtonModule, PdfHistoriaClinicaComponent],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.css'
 })
@@ -31,12 +36,15 @@ export class UsuariosComponent implements OnInit,OnDestroy{
   subEspecialistas!:Subscription;
   subPacientes!:Subscription;
   subAdministradores!:Subscription;
+  subTurnos!:Subscription;
   especialistas:any;
   pacientes:any;
   administradores:any;
+  turnos:any;
   constructor(private especialistasService:EspecialistasService
     ,private pacientesService:PacientesService,
     private administradoresService:AdministradorService,
+    private turnosService:TurnosService,
     private _matDialog:MatDialog){}
 
   ngOnInit(): void {
@@ -69,6 +77,11 @@ export class UsuariosComponent implements OnInit,OnDestroy{
       next: (respuesta:any)=>{
         this.administradores = respuesta;
       }
+    })
+    this.subTurnos = this.turnosService.GetTurnos().subscribe({
+      next:((value)=>{
+        this.turnos = value;
+      })
     })
   }
 
@@ -125,17 +138,13 @@ export class UsuariosComponent implements OnInit,OnDestroy{
       XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
       XLSX.writeFile(wb, `${tipo}.xlsx`);
     } else {
-      // Combinar todos los usuarios en un solo Excel con títulos
       const data: any[] = [];
   
-      // Añadir encabezado para los datos (los títulos de las columnas)
+      data.push(['Especialistas']);
       data.push([
         'Nombre', 'Apellido', 'Correo', 'DNI', 'Edad', 'Rol', 'Imagen', 'Especialidades'
       ]);
-  
-      // Añadir especialistas con título
-      data.push(['Especialistas']);
-      this.especialistas.forEach((especialista: any) => {
+        this.especialistas.forEach((especialista: any) => {
         data.push([
           especialista.usuario.nombre,
           especialista.usuario.apellido,
@@ -144,16 +153,15 @@ export class UsuariosComponent implements OnInit,OnDestroy{
           especialista.usuario.edad,
           especialista.usuario.rol,
           especialista.usuario.imagen,
-          especialista.usuario.especialidades.join(', '), // Especialidades como texto separado por comas
+          especialista.usuario.especialidades.join(', '), 
         ]);
       });
       data.push([]);
   
-      // Añadir pacientes con título
+      data.push(['Pacientes']);
       data.push([
         'Nombre', 'Apellido', 'Correo', 'DNI', 'Edad', 'Rol', 'ImagenUno', 'ImagenDos', 'ObraSocial'
       ]);
-      data.push(['Pacientes']);
       this.pacientes.forEach((paciente: any) => {
         data.push([
           paciente.usuario.nombre,
@@ -169,11 +177,10 @@ export class UsuariosComponent implements OnInit,OnDestroy{
       });
       data.push([]);
   
-      // Añadir administradores con título
+      data.push(['Administradores']);
       data.push([
         'Nombre', 'Apellido', 'Correo', 'DNI', 'Edad', 'Rol', 'Imagen'
       ]);
-      data.push(['Administradores']);
       this.administradores.forEach((administrador: any) => {
         data.push([
           administrador.usuario.nombre,
@@ -186,15 +193,49 @@ export class UsuariosComponent implements OnInit,OnDestroy{
         ]);
       });
   
-      // Crear hoja de cálculo
-      const ws = XLSX.utils.aoa_to_sheet(data); // Usamos aoa_to_sheet para manejar títulos y datos
+      const ws = XLSX.utils.aoa_to_sheet(data); 
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
       XLSX.writeFile(wb, `TodosLosUsuarios.xlsx`);
     }
   }
+
+  DescargarHistorialTurnos(paciente:any){
+    if(paciente){
+      let turnosDelPaciente = this.turnos.filter((turno:any)=> turno.paciente.correo === paciente.usuario.correo);
+
+      const data:any[] = [];
+      // const fecha = new Date(turno.dia.seconds * 1000);
+      // const fechaFormateada = formatDate(fecha, 'dd MMMM yyyy', 'es-AR');
+      data.push(['Turnos tomados por el paciente']);
+      data.push([`${paciente.usuario.nombre} ${paciente.usuario.apellido}`]);
+      data.push([]);
+      data.push(['Especialista','Especialidad','Fecha','Horario','Estado','Diagnostico']);
+      turnosDelPaciente.forEach((turno:any) => {
+        data.push([
+          `${turno.especialista.nombre} ${turno.especialista.apellido}`,
+          turno.especialidad.charAt(0).toUpperCase() + turno.especialidad.slice(1).toLowerCase(),
+          this.formatDate(turno.dia),
+          turno.horario,
+          turno.estado,
+          turno.diagnostico,
+        ])
+      });
+
+      const ws = XLSX.utils.aoa_to_sheet(data); 
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'TurnosDelPaciente');
+      XLSX.writeFile(wb, `TurnosPaciente${paciente.usuario.nombre}${paciente.usuario.apellido}.xlsx`);
+    }
+  }
   
   
+  formatDate(timestamp: { seconds: number, nanoseconds: number }): string {
+    const date = new Date(timestamp.seconds * 1000); 
+    
+    return formatDate(date, 'dd MMMM yyyy', 'es-AR');
+    // return formatDate(date, 'dd MMM yyyy, h:mm a', 'en-US');
+  }
   
 
   AbrirFormEspecialista(){

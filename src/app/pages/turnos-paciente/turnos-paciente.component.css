@@ -25,3 +25,11 @@
         font-size: x-large;
     }
 }
+
+.p-sin-turnos{
+    font-size: 4rem;
+    text-shadow: 0px 5px 5px var(--color-rojo-medio);
+    font-weight: 600;
+    /* color: var(--color-rojo-medio); */
+    color: black;
+}

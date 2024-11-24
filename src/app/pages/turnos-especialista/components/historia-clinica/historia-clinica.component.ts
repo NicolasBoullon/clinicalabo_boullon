@@ -41,18 +41,22 @@ export class HistoriaClinicaComponent implements OnInit {
       fecha: new FormControl(),
       especialista: new FormControl(),
       altura: new FormControl('', [
+        Validators.required,
         Validators.min(0),
         Validators.max(300) 
       ]),
       peso: new FormControl('', [
+        Validators.required,
         Validators.min(0),
         Validators.max(400) 
       ]),
       temperatura: new FormControl('', [
+        Validators.required,
         Validators.min(35),
         Validators.max(42) 
       ]),
       presion: new FormControl('', [
+        Validators.required,
         Validators.pattern(/^\d{2,3}\/\d{2,3}$/) 
       ]),
       campoDinamicoUno: new FormControl(''),
@@ -64,7 +68,7 @@ export class HistoriaClinicaComponent implements OnInit {
 
   EnviarForm(): void {
     if (this.form.valid) {
-      this.form.get("fecha")?.setValue(new Date());
+      this.form.get("fecha")?.setValue(new Date()); 
       this.ConstruirDinamicos();
       console.log(this.form.value);
       this.toastr.success("Historia enviada con exito!",'Gracias!',{timeOut:2000})
@@ -76,13 +80,33 @@ export class HistoriaClinicaComponent implements OnInit {
   }
 
   ConstruirDinamicos(){
-    const campoDinamicoUnoValue = { [this.keyDinamico1]: this.valueDinamico1 };
-    const campoDinamicoDosValue = { [this.keyDinamico2]: this.valueDinamico2 };
-    const campoDinamicoTresValue = { [this.keyDinamico3]: this.valueDinamico3 };
-  
-    this.form.get('campoDinamicoUno')?.setValue(campoDinamicoUnoValue);
+    let campoDinamicoUnoValue = { [this.keyDinamico1]: this.valueDinamico1 };
+    let campoDinamicoDosValue = { [this.keyDinamico2]: this.valueDinamico2 };
+    let campoDinamicoTresValue = { [this.keyDinamico3]: this.valueDinamico3 };
+    // this.form.get('especialista')
+    if(Object.values(campoDinamicoUnoValue).toString() === '' || Object.keys(campoDinamicoUnoValue).toString() === ''){
+      this.form.get('campoDinamicoUno')?.setValue({campo:'vacio'});
+    }else{
+      this.form.get('campoDinamicoUno')?.setValue(campoDinamicoUnoValue);
+    }
+    
+    if(Object.values(campoDinamicoDosValue).toString() === '' || Object.keys(campoDinamicoDosValue).toString() === ''){
+      this.form.get('campoDinamicoDos')?.setValue({campo:'vacio'});
+    }else{
+      this.form.get('campoDinamicoDos')?.setValue(campoDinamicoDosValue);
+
+    }
+    
+    if(Object.values(campoDinamicoTresValue).toString() === '' || Object.keys(campoDinamicoTresValue).toString() === ''){
+      this.form.get('campoDinamicoTres')?.setValue({campo:'vacio'});
+    }else{
+      this.form.get('campoDinamicoTres')?.setValue(campoDinamicoTresValue);
+
+    }
+    // campoDinamicoUnoValue? campoDinamicoUnoValue : campoDinamicoUnoValue = {campo:'vacio'};
+    // campoDinamicoDosValue? campoDinamicoDosValue : campoDinamicoDosValue = {campo:'vacio'};
+    // campoDinamicoTresValue? campoDinamicoTresValue : campoDinamicoTresValue = {campo:'vacio'};
     this.form.get('campoDinamicoDos')?.setValue(campoDinamicoDosValue);
-    this.form.get('campoDinamicoTres')?.setValue(campoDinamicoTresValue);
   }
 
 

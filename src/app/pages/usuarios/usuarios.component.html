@@ -10,19 +10,21 @@
             <button class="btn-agregar-user" (click)="AbrirFormAdministrador()">
                 Agregar Administrador
             </button>   
-            <button (click)="DescargarUsuariosExcel('especialistas')" style="width: fit-content;">
-                Descargar Especialistas
-            </button>
-            <button (click)="DescargarUsuariosExcel('pacientes')" style="width: fit-content;">
-                Descargar Pacientes
-            </button>
-            <button (click)="DescargarUsuariosExcel('administradores')" style="width: fit-content;">
-                Descargar Administradores
-            </button>
-            <button (click)="DescargarUsuariosExcel()" style="width: fit-content;">
-                Descargar Usuarios Completos
-            </button>
         <!-- </div> -->
+    </div>
+    <div class="row d-flex justify-content-evenly pt-5">
+        <button (click)="DescargarUsuariosExcel('especialistas')" style="width: fit-content;" StyleButtonCommon>
+            Descargar Especialistas
+        </button>
+        <button (click)="DescargarUsuariosExcel('pacientes')" style="width: fit-content;" StyleButtonCommon>
+            Descargar Pacientes
+        </button>
+        <button (click)="DescargarUsuariosExcel('administradores')" style="width: fit-content;" StyleButtonCommon>
+            Descargar Administradores
+        </button>
+        <button (click)="DescargarUsuariosExcel()" style="width: fit-content;" StyleButtonCommon>
+            Descargar Usuarios Completos
+        </button>
     </div>
     <div class="row">
             <h2>Especialistas</h2>
@@ -55,7 +57,23 @@
                           <h5 class="card-title">{{ paciente.usuario.nombre }} {{ paciente.usuario.apellido }}</h5>    
                           <p class="card-text">Edad: {{ paciente.usuario.edad}}</p>
                           <p class="card-text">Correo: <br>{{ paciente.usuario.correo}}</p>
-                          <p (click)="VerHistoriaClinica(paciente)" StyleButtonCommon *ngIf="paciente.usuario.historialClinico">Ver Historia Clinica</p>
+                          <!-- <p (click)="VerHistoriaClinica(paciente)" StyleButtonCommon *ngIf="paciente.usuario.historialClinico">Ver Historia Clinica</p> -->
+                          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon>more_vert</mat-icon>
+                          </button>
+                          <mat-menu #menu="matMenu" >
+                            <button mat-menu-item style="display: flex; justify-content: center;" *ngIf="paciente.usuario.historialClinico">
+                              <!-- <mat-icon>dialpad</mat-icon> -->
+                              <span (click)="VerHistoriaClinica(paciente)" StyleButtonCommon style="height: 95%; width: 90%; padding: 5px " >Ver Historia Clinica </span>
+                            </button>
+                            <button mat-menu-item style="display: flex; justify-content: center; align-items: center;">
+                              <span (click)="DescargarHistorialTurnos(paciente)" StyleButtonCommon style="height: 95%; width: 90%;  padding: 5px" >Descargar Historial de Turnos</span>
+                            </button>
+                            <button mat-menu-item style="display: flex; justify-content: center;" *ngIf="paciente.usuario.historialClinico">
+                              <!-- <mat-icon>notifications_off</mat-icon> -->
+                              <span style="height: 95%; width: 90%; "> <app-pdf-historia-clinica [paciente]="paciente"></app-pdf-historia-clinica></span>
+                            </button>
+                          </mat-menu>
                         </div>
                       </div>
                 </article>

@@ -8,7 +8,7 @@ import { Especialista } from '../models/Especialista';
 import { Administrador } from '../models/Administrador';
 import { ToastrService } from 'ngx-toastr';
 import { AdministradorService } from './administrador.service';
-import { Firestore ,doc,getDoc} from '@angular/fire/firestore';
+import { Firestore ,addDoc,collection,doc,getDoc} from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { BehaviorSubject } from 'rxjs';
@@ -83,9 +83,11 @@ export class AuthService {
         const resp = await this.especialistaService.CuentaAprobada(user.uid);
         if(resp === null){
           //Aca se sabe que es usuario y esta email verificado
+          this.LogInicioSesion();
           return true;          
         }else if(resp === true){
           console.log('es especialista y esta aprobado');
+          this.LogInicioSesion();
           return true;
         }else{
           this.toastf.warning('Alerta','Cuenta no aprobada por administrador',{timeOut:2000})
@@ -101,6 +103,7 @@ export class AuthService {
           return 'No existe';
         }else{
           console.log('es admin claro');
+          this.LogInicioSesion();
           return true;
         }
       }
@@ -298,5 +301,10 @@ export class AuthService {
 
   }
 
+
+  LogInicioSesion(){
+   let col = collection(this.firestore,'logInicioSesion');
+   addDoc(col,{fecha:new Date(), "userMail":this.auth.currentUser?.email});
+  }
 
 }

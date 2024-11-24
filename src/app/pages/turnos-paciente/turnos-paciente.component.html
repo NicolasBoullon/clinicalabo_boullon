@@ -1,36 +1,47 @@
 <div class="container-fluid cont-primary">
-    <div class="row d-flex justify-content-center align-items-center row-input">
-        <h3 class="d-flex justify-content-center" style="font-size: 2.5rem;">Mis Turnos</h3>
-        <input type="text" placeholder=" Buscar especialista o especialidad" [(ngModel)]="BuscarEspecialistaEspecialidad" id="input-buscar-esp" class="mb-2"  style="width: 30%;">
-    </div>
-    <div class="row d-flex justify-content-center align-items-start row-table mt-2">
-        <table class="table-mis-horarios">
-            <thead>
-                <th>Especialista</th>
-                <th>Dia</th>
-                <th>Especialidad</th>
-                <th>Horario </th>
-                <th>Estado</th>
-                <th>Accion</th>
-            </thead>
-            <tbody>
-                <!-- @for (turno of turnos; track $index) { -->
-                    <tr *ngFor="let turno of turnos | buscarEspecialistaEspecialidad : BuscarEspecialistaEspecialidad" >
-                        <!-- <td>{{ turno.dia * 1000 | date :'dd/MM/yyyy' }}</td> -->
-                        <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
-                        <td>{{formatDate(turno.dia) }}</td>
-                        <td>{{ turno.especialidad | titlecase}}</td>
-                        <td>{{ turno.horario }}  </td>
-                        <td [EstadoTurnoColor]="turno.estado">{{ turno.estado | titlecase }}</td>
-                        <td>
-                            <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button>
-                            <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
-                            <button *ngIf="turno.estado == 'finalizado'  && !turno.encuesta" (click)="RealizarEncuesta(turno)" StyleButtonCommon>Realizar Encuesta</button>
-                            <button *ngIf="turno.estado == 'finalizado' && !turno['calificacion-atencion']" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button>
-                        </td>
-                    </tr>
-                <!-- } -->
-            </tbody>
-        </table>
-    </div>
+
+    @if(mostrar |async){
+
+    }@else {
+        <div class="row" *ngIf="this.turnos.length == 0" style="height: 100%;width: 100%;">
+            <div class="col d-flex justify-content-center align-items-center " style="height: 100%;width: 100%;">
+                <p class="p-sin-turnos">No hay turnos para mostrar aca</p>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center align-items-center row-input" *ngIf="this.turnos.length > 0" >
+            <h3 class="d-flex justify-content-center" style="font-size: 2.5rem;">Mis Turnos</h3>
+            <input type="text" placeholder=" Buscar especialista o especialidad" [(ngModel)]="BuscarEspecialistaEspecialidad" id="input-buscar-esp" class="mb-2"  style="width: 30%;">
+        </div>
+        <div class="row d-flex justify-content-center align-items-start row-table mt-2" *ngIf="this.turnos.length > 0">
+            <table class="table-mis-horarios">
+                <thead>
+                    <th>Especialista</th>
+                    <th>Dia</th>
+                    <th>Especialidad</th>
+                    <th>Horario </th>
+                    <th>Estado</th>
+                    <th>Accion</th>
+                </thead>
+                <tbody>
+                    <!-- @for (turno of turnos; track $index) { -->
+                        <tr *ngFor="let turno of turnos | buscarEspecialistaEspecialidad : BuscarEspecialistaEspecialidad" >
+                            <!-- <td>{{ turno.dia * 1000 | date :'dd/MM/yyyy' }}</td> -->
+                            <td>{{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</td>
+                            <td>{{formatDate(turno.dia) }}</td>
+                            <td>{{ turno.especialidad | titlecase}}</td>
+                            <td>{{ turno.horario }}  </td>
+                            <td [EstadoTurnoColor]="turno.estado">{{ turno.estado | titlecase }}</td>
+                            <td>
+                                <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button>
+                                <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
+                                <button *ngIf="turno.estado == 'finalizado'  && !turno.encuesta" (click)="RealizarEncuesta(turno)" StyleButtonCommon>Realizar Encuesta</button>
+                                <button *ngIf="turno.estado == 'finalizado' && !turno['calificacion-atencion']" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button>
+                            </td>
+                        </tr>
+                    <!-- } -->
+                </tbody>
+            </table>
+        </div>
+    }
+    
 </div>

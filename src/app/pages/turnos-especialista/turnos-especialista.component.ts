@@ -129,6 +129,8 @@ export class TurnosEspecialistaComponent {
         console.log(value);
         if(value){
           value['especialista'] = `${turno.especialista.nombre} ${turno.especialista.apellido}`;
+          console.log(value);
+          
           await this.firestore.updateDocumentField('turnos',turno.id,'historialClinico',value);
           
           this.firestore.addElementArrayField('pacientes',pacienteCompleto[0].uid,`usuario.historialClinico`,value);

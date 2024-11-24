@@ -28,6 +28,7 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
   BuscarEspecialistaEspecialidad:string  = '';
   turnos:any = [];
   subTurnos!:Subscription;
+  mostrar!:Promise<boolean>
   ngOnInit(): void {
       console.log(this.authService.usuarioConectado);
       this.GetTurnos();
@@ -44,7 +45,6 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
           this.turnos = this.TurnosFiltrados(turnos);
           console.log(this.turnos);
           console.log(this.authService.usuarioConectado);
-          
           
         }
       })
@@ -118,6 +118,7 @@ export class TurnosPacienteComponent implements OnInit,OnDestroy{
   }
 
   TurnosFiltrados(arrayTurnos:Array<any>){
+
     return arrayTurnos.filter(turno=> turno.paciente.correo == this.authService.usuarioConectado?.correo)
   }
 
