@@ -16,6 +16,7 @@ import { EstaAprobadoDirective } from '../../core/directives/esta-aprobado.direc
 import { VerHistoriaClinicaComponent } from '../../shared/ver-historia-clinica/ver-historia-clinica.component';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 import { CommonModule } from '@angular/common';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-usuarios',
@@ -78,6 +79,123 @@ export class UsuariosComponent implements OnInit,OnDestroy{
     
     this.especialistasService.ActivarEspecialista(especialista, activado);
   }
+  
+  DescargarUsuariosExcel(tipo?: 'especialistas' | 'pacientes' | 'administradores') {
+    let usuarios!: any[];
+  
+    if (tipo) {
+      // Descargar solo un tipo de usuarios
+      if (tipo === 'especialistas') {
+        usuarios = this.especialistas.map((especialista: any) => ({
+          Nombre: especialista.usuario.nombre,
+          Apellido: especialista.usuario.apellido,
+          Correo: especialista.usuario.correo,
+          DNI: especialista.usuario.dni,
+          Edad: especialista.usuario.edad,
+          Rol: especialista.usuario.rol,
+          Imagen: especialista.usuario.imagen,
+          Especialidades: especialista.usuario.especialidades.join(', ') // Mantener el array de especialidades
+        }));
+      } else if (tipo === 'pacientes') {
+        usuarios = this.pacientes.map((paciente: any) => ({
+          Nombre: paciente.usuario.nombre,
+          Apellido: paciente.usuario.apellido,
+          Correo: paciente.usuario.correo,
+          DNI: paciente.usuario.dni,
+          Edad: paciente.usuario.edad,
+          Rol: paciente.usuario.rol,
+          ImagenUno: paciente.usuario.imagenUno,
+          ImagenDos: paciente.usuario.imagenDos,
+          ObraSocial: paciente.usuario.obraSocial
+        }));
+      } else if (tipo === 'administradores') {
+        usuarios = this.administradores.map((administrador: any) => ({
+          Nombre: administrador.usuario.nombre,
+          Apellido: administrador.usuario.apellido,
+          Correo: administrador.usuario.correo,
+          DNI: administrador.usuario.dni,
+          Edad: administrador.usuario.edad,
+          Rol: administrador.usuario.rol,
+          Imagen: administrador.usuario.imagen
+        }));
+      }
+  
+      const ws = XLSX.utils.json_to_sheet(usuarios);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
+      XLSX.writeFile(wb, `${tipo}.xlsx`);
+    } else {
+      // Combinar todos los usuarios en un solo Excel con títulos
+      const data: any[] = [];
+  
+      // Añadir encabezado para los datos (los títulos de las columnas)
+      data.push([
+        'Nombre', 'Apellido', 'Correo', 'DNI', 'Edad', 'Rol', 'Imagen', 'Especialidades'
+      ]);
+  
+      // Añadir especialistas con título
+      data.push(['Especialistas']);
+      this.especialistas.forEach((especialista: any) => {
+        data.push([
+          especialista.usuario.nombre,
+          especialista.usuario.apellido,
+          especialista.usuario.correo,
+          especialista.usuario.dni,
+          especialista.usuario.edad,
+          especialista.usuario.rol,
+          especialista.usuario.imagen,
+          especialista.usuario.especialidades.join(', '), // Especialidades como texto separado por comas
+        ]);
+      });
+      data.push([]);
+  
+      // Añadir pacientes con título
+      data.push([
+        'Nombre', 'Apellido', 'Correo', 'DNI', 'Edad', 'Rol', 'ImagenUno', 'ImagenDos', 'ObraSocial'
+      ]);
+      data.push(['Pacientes']);
+      this.pacientes.forEach((paciente: any) => {
+        data.push([
+          paciente.usuario.nombre,
+          paciente.usuario.apellido,
+          paciente.usuario.correo,
+          paciente.usuario.dni,
+          paciente.usuario.edad,
+          paciente.usuario.rol,
+          paciente.usuario.imagenUno,
+          paciente.usuario.imagenDos,
+          paciente.usuario.obraSocial
+        ]);
+      });
+      data.push([]);
+  
+      // Añadir administradores con título
+      data.push([
+        'Nombre', 'Apellido', 'Correo', 'DNI', 'Edad', 'Rol', 'Imagen'
+      ]);
+      data.push(['Administradores']);
+      this.administradores.forEach((administrador: any) => {
+        data.push([
+          administrador.usuario.nombre,
+          administrador.usuario.apellido,
+          administrador.usuario.correo,
+          administrador.usuario.dni,
+          administrador.usuario.edad,
+          administrador.usuario.rol,
+          administrador.usuario.imagen
+        ]);
+      });
+  
+      // Crear hoja de cálculo
+      const ws = XLSX.utils.aoa_to_sheet(data); // Usamos aoa_to_sheet para manejar títulos y datos
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Usuarios');
+      XLSX.writeFile(wb, `TodosLosUsuarios.xlsx`);
+    }
+  }
+  
+  
+  
 
   AbrirFormEspecialista(){
     this._matDialog.open(FormEspecialistaComponent);

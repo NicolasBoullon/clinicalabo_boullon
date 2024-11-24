@@ -10,6 +10,18 @@
             <button class="btn-agregar-user" (click)="AbrirFormAdministrador()">
                 Agregar Administrador
             </button>   
+            <button (click)="DescargarUsuariosExcel('especialistas')" style="width: fit-content;">
+                Descargar Especialistas
+            </button>
+            <button (click)="DescargarUsuariosExcel('pacientes')" style="width: fit-content;">
+                Descargar Pacientes
+            </button>
+            <button (click)="DescargarUsuariosExcel('administradores')" style="width: fit-content;">
+                Descargar Administradores
+            </button>
+            <button (click)="DescargarUsuariosExcel()" style="width: fit-content;">
+                Descargar Usuarios Completos
+            </button>
         <!-- </div> -->
     </div>
     <div class="row">
