@@ -5,51 +5,150 @@
                 <h2 class="h2-est">Estadisticas</h2> 
             </div>
     </div>
-    <div class="row d-flex justify-content-center align-items-center flex-column">
-        <div class="col-9">
-            <button StyleButtonCommon (click)="DescargarLogs()">Descargar</button>
-            <p class="p-desc">Descargar Logs Inicio de Sesion</p>
+    <div class="row d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
+        <div class="col-8 d-flex justify-content-center align-items-center">
+            <button StyleButtonCommon (click)="DescargarLogs()" class="btn-descargar">Descargar</button>
+            <p class="p-desc" style="display: flex; align-items: flex-end;">Descargar Registros Inicio de Sesión</p>
         </div>
 </div>
-    <div class="row d-flex justify-content-center align-items-center flex-column">
-            <div class="col-9">
+    <div class="row d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
+            <div class="col-8 d-flex justify-content-center align-items-center">
                 <canvas id="barChart" width="400" height="200"></canvas>
             </div>
-            <div class="col-9 mt-3">
-                <button StyleButtonCommon (click)="exportarPdf0()">Exportar a PDF</button>
+            <div class="col-8 mt-3 d-flex justify-content-center">
+                <button StyleButtonCommon (click)="exportarPdf0()" class="btn-descargar">Exportar a PDF</button>
             </div>
     </div>
-    <div class="row d-flex justify-content-center align-items-center flex-column">
+    <div class="row d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
 
-        <div class="col-9">
+        <div class="col-8 d-flex justify-content-center align-items-center">
             <canvas id="lineChart" width="400" height="200"></canvas>
         </div>
-        <div class="col-9 mt-3">
-            <button StyleButtonCommon (click)="exportarPdf1()">Exportar a PDF</button>
+        <div class="col-8 mt-3 d-flex justify-content-center">
+            <button StyleButtonCommon (click)="exportarPdf1()" class="btn-descargar">Exportar a PDF</button>
         </div>
     </div>
 
-    <div class="row d-flex justify-content-center align-items-center flex-column mt-4">
-        <div class="d-flex justify-content-center">
+    <div class="row d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
+        <h3 class="p-desc">Turnos Solicitados Por Medico</h3>
+        <div class="d-flex justify-content-evenly align-items-center  ">
             <div>
-                <label for="">Desde</label>
-                <input type="date" [(ngModel)]="FechaDesde" (change)="MostrarFecha()">
+                <label class="lbl-desde-hasta">Desde:</label>
+                <mat-form-field class="example-full-width">
+                    <mat-label >Selecciona una fecha</mat-label>
+                    <!-- Input del selector de fecha -->
+                    <input 
+                      matInput 
+                      [matDatepicker]="pickerDesde" 
+                      [(ngModel)]="FechaDesde" 
+                      (dateChange)="MostrarFecha()"
+                    >
+                    
+                    <!-- Icono del selector de fecha -->
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerDesde">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    
+                    <!-- Mat-datepicker -->
+                    <mat-datepicker #pickerDesde></mat-datepicker>
+                  </mat-form-field>
             </div>
             <div>
-                <label for="">Hasta</label>
-                <input type="date" [min]="FechaDesde" [(ngModel)]="FechaHasta" (change)="MostrarFecha()">
+                <label class="lbl-desde-hasta">Hasta:</label>
+                <!-- <input type="date" [min]="FechaDesde" [(ngModel)]="FechaHasta" (change)="MostrarFecha()"> -->
+                <mat-form-field class="example-full-width">
+                    <mat-label>Selecciona una fecha</mat-label>
+                    <!-- Input del selector de fecha -->
+                    <input 
+                      matInput 
+                      [matDatepicker]="pickerHasta" 
+                      [(ngModel)]="FechaHasta" 
+                      (dateChange)="MostrarFecha()"
+                    >
+                    
+                    <!-- Icono del selector de fecha -->
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerHasta">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    
+                    <!-- Mat-datepicker -->
+                    <mat-datepicker #pickerHasta></mat-datepicker>
+                  </mat-form-field>
             </div>
         </div>
         @if(!FechaDesde || !FechaHasta){
-            <div class="col-7">
+            <div class="col-8">
                 <h3>Seleccione las fechas.</h3>
             </div>
         }@else {
-            <div class="col-7">
-                <canvas id="tortaChart" width="200" height="100"></canvas>
+            <div class="col-5 d-flex justify-content-center align-items-center">
+                <canvas id="tortaChart" width="400" height="200"></canvas>
             </div>
-            <div class="col-9 mt-3">
-                <button StyleButtonCommon (click)="exportarPdf2()">Exportar a PDF</button>
+            <div class="col-5 mt-3 d-flex justify-content-center">
+                <button StyleButtonCommon (click)="exportarPdf2()" class="btn-descargar">Exportar a PDF</button>
+            </div>
+        }
+    </div>
+
+    <div class="row d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
+        <h3 class="p-desc">Turnos Finalizados Por Medico</h3>
+        <div class="d-flex justify-content-evenly">
+            <div class="d-flex justify-content-evenly align-items-center">
+                <label class="lbl-desde-hasta">Desde:</label>
+                <!-- <input type="date" [(ngModel)]="FechaDesdeFin" (change)="MostrarFechaFin()"> -->
+                <mat-form-field class="example-full-width">
+                    <mat-label>Selecciona una fecha</mat-label>
+                    <!-- Input del selector de fecha -->
+                    <input 
+                      matInput 
+                      [matDatepicker]="pickerDesdeFin" 
+                      [(ngModel)]="FechaDesdeFin" 
+                      (dateChange)="MostrarFechaFin()"
+                    >
+                    
+                    <!-- Icono del selector de fecha -->
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerDesdeFin">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    
+                    <!-- Mat-datepicker -->
+                    <mat-datepicker #pickerDesdeFin></mat-datepicker>
+                  </mat-form-field>
+            </div>
+            <div class="d-flex justify-content-evenly align-items-center">
+                <label class="lbl-desde-hasta">Hasta:</label>
+                <!-- <input type="date" [min]="FechaDesdeFin" [(ngModel)]="FechaHastaFin" (change)="MostrarFechaFin()"> -->
+                <mat-form-field class="example-full-width">
+                    <mat-label >Selecciona una fecha</mat-label>
+                    <!-- Input del selector de fecha -->
+                    <input 
+                      matInput 
+                      [matDatepicker]="pickerHastaFin" 
+                      [min]="FechaDesdeFin" 
+                      [(ngModel)]="FechaHastaFin" 
+                      (dateChange)="MostrarFechaFin()"
+                    >
+                    
+                    <!-- Icono del selector de fecha -->
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerHastaFin">
+                      <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    
+                    <!-- Mat-datepicker -->
+                    <mat-datepicker #pickerHastaFin></mat-datepicker>
+                  </mat-form-field>
+            </div>
+        </div>
+        @if(!FechaDesdeFin || !FechaHastaFin){
+            <div class="col-8">
+                <h3 >Seleccione las fechas.</h3>
+            </div>
+        }@else {
+            <div class="col-6 d-flex justify-content-center align-items-center">
+                <canvas id="polarAreaChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-6 mt-3 d-flex justify-content-center  ">
+                <button StyleButtonCommon (click)="exportarPdf3()" class="btn-descargar">Exportar a PDF</button>
             </div>
         }
     </div>

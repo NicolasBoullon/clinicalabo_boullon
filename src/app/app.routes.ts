@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { registroGuard } from './core/guards/registro.guard';
 import { estaLogGuard } from './core/guards/esta-log.guard';
-
+import {slideInAnimation} from './shared/animations/up-down'
 export const routes: Routes = [
     {path:'',redirectTo:'Inicio',pathMatch:'full'},
     {path:'Inicio',loadComponent:()=> import('./pages/inicio/inicio.component').then((c)=> c.InicioComponent)},
@@ -14,10 +14,9 @@ export const routes: Routes = [
     {path:'turnos-paciente',loadComponent:()=> import('./pages/turnos-paciente/turnos-paciente.component').then((c)=> c.TurnosPacienteComponent),canActivate: [estaLogGuard]},
     {path:'turnos-especialista',loadComponent:()=> import('./pages/turnos-especialista/turnos-especialista.component').then((c)=> c.TurnosEspecialistaComponent),canActivate: [estaLogGuard]},
     {path:'solicitar-turno',loadComponent:()=> import('./pages/solicitar-turno/solicitar-turno.component').then((c)=> c.SolicitarTurnoComponent),canActivate: [estaLogGuard]},
-    {path:'turnos',loadComponent:()=> import('./pages/turnos/turnos.component').then((c)=> c.TurnosComponent),canActivate: [estaLogGuard]},
+    {path:'turnos',loadComponent:()=> import('./pages/turnos/turnos.component').then((c)=> c.TurnosComponent),canActivate: [estaLogGuard], data: { animation: 'turnos' } },
     {path:'pacientes',loadComponent:()=> import('./pages/pacientes/pacientes.component').then((c)=> c.PacientesComponent),canActivate: [estaLogGuard]},
     {path:'estadisticas',loadComponent:()=> import('./pages/estadisticas/estadisticas.component').then((c)=> c.EstadisticasComponent),canActivate: [estaLogGuard]},
-    // {path:'login',loadComponent:()=> import('./pages/login/login.component').then((c)=> c.LoginComponent)},
     {path:'**',redirectTo:'Inicio',pathMatch:'full'},
 ];
 

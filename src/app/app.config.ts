@@ -13,12 +13,12 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-
 import { provideToastr } from 'ngx-toastr';
+
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes,withInMemoryScrolling({
-    scrollPositionRestoration: 'enabled',
-  }),), provideAnimationsAsync(),
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }),
+  provideRouter(routes,withInMemoryScrolling({scrollPositionRestoration: 'enabled',}),), 
+  provideAnimationsAsync(),
   provideAnimations(),
   { provide: LOCALE_ID, useValue: 'es-AR' },
    provideFirebaseApp(() => initializeApp({

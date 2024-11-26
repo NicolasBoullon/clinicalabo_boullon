@@ -264,6 +264,7 @@ export class UsuariosComponent implements OnInit,OnDestroy{
     this.subAdministradores.unsubscribe();
     this.subEspecialistas.unsubscribe();
     this.subPacientes.unsubscribe();
+    this.subTurnos.unsubscribe();
   }
 
   VerHistoriaClinica(paciente:any){

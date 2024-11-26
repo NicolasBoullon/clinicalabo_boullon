@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,ChangeDetectionStrategy, OnDestroy} from '@angular/core';
 import Chart from 'chart.js/auto';
 import { TurnosService } from '../../core/services/turnos.service';
 import { EspecialidadesService } from '../../core/services/especialidades.service';
@@ -9,15 +9,22 @@ import { FirestoreService } from '../../core/services/firestore.service';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 import * as XLSX from 'xlsx';
 import { PacientesService } from '../../core/services/pacientes.service';
-
+import {} from '@angular/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
-  imports: [CommonModule,FormsModule,StyleButtonDirective],
+  imports: [CommonModule,FormsModule,StyleButtonDirective,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatIconModule],
+  providers:[provideNativeDateAdapter()],
   templateUrl: './estadisticas.component.html',
   styleUrl: './estadisticas.component.css'
 })
-export class EstadisticasComponent implements OnInit{
+export class EstadisticasComponent implements OnInit,OnDestroy{
 
   constructor(private turnosService:TurnosService,private especialidadesService:EspecialidadesService, private firestoreService:FirestoreService,private pacientesService:PacientesService){}
 
@@ -34,6 +41,7 @@ export class EstadisticasComponent implements OnInit{
   barChart: Chart | undefined;
   lineChart: Chart | undefined;
   tortaChart: Chart | undefined | any;
+  polarAreaChart: Chart | undefined | any;
   wait!:Promise<boolean>;
   seleccionoCantidadTurnosPorEspecialidad:boolean =  true;
   optionSelected:string = 'cantidadDeTurnosPorEspecialidad';
@@ -41,6 +49,16 @@ export class EstadisticasComponent implements OnInit{
   FechaDesde!:any;
   FechaHasta!:any;
   turnosPorFecha: any[] = [];
+  FechaDesdeFin!:any;
+  FechaHastaFin!:any;
+  turnosPorFechaFin: any[] = [];
+
+  subPacientes!:Subscription;
+  subEspecialistas!:Subscription;
+  subTurnos!:Subscription;
+  subAdministradores!:Subscription;
+  subLogs!:Subscription;
+  subEspecialidades!:Subscription;
   ngOnInit(): void {
     this.GetTurnos();  
     this.GetEspecialidades();
@@ -51,7 +69,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   async GetPacientes(){
-    this.pacientesService.GetTodosPacientes().subscribe({
+    this.subPacientes =  this.pacientesService.GetTodosPacientes().subscribe({
       next:((value)=>{
         this.pacientes = value;
       })
@@ -59,7 +77,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   async GetEspecialistas(){
-    this.firestoreService.getCollection('especialistas').subscribe({
+    this.subEspecialistas=  this.firestoreService.getCollection('especialistas').subscribe({
       next:((value)=>{
         this.especialistas = value;
       })
@@ -67,7 +85,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   async GetAdmins(){
-    this.firestoreService.getCollection('administradores').subscribe({
+    this.subAdministradores= this.firestoreService.getCollection('administradores').subscribe({
       next:((value)=>{
         this.administradores = value;
       })
@@ -75,7 +93,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   async GetLogs(){
-    this.firestoreService.getCollectionOrderedByDate('logInicioSesion','fecha').subscribe({
+    this.subLogs= this.firestoreService.getCollectionOrderedByDate('logInicioSesion','fecha').subscribe({
       next:((value)=>{
         this.logs = value;
       })
@@ -83,7 +101,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   async GetTurnos(){
-    this.firestoreService.getCollectionOrderedByDate('turnos','dia').subscribe({
+    this.subTurnos= this.firestoreService.getCollectionOrderedByDate('turnos','dia').subscribe({
       next:((value)=>{
         this.turnos = value;
         console.log(this.turnos);
@@ -94,7 +112,7 @@ export class EstadisticasComponent implements OnInit{
   }
 
   async GetEspecialidades(){
-    this.especialidadesService.GetEspecialidades().subscribe({
+    this.subEspecialidades=this.especialidadesService.GetEspecialidades().subscribe({
       next:((value)=>{
         this.especialidades = value.map((esp: { Especialidad: string }) => esp.Especialidad);        
       })
@@ -103,29 +121,62 @@ export class EstadisticasComponent implements OnInit{
   }
 
   MostrarFecha(){
-    let fechaDesde: string;
-    let fechaHasta: string;
+    let fechaDesde!: string;
+    let fechaHasta!: string;
 
-    if (this.FechaDesde) {
-      const parts = this.FechaDesde.split('-');
-      fechaDesde = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
-    if (this.FechaHasta) {
-      const parts = this.FechaHasta.split('-');
-      fechaHasta = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    if(this.FechaDesde && this.FechaHasta){
+      fechaDesde= this.formatearFecha(this.FechaDesde)
+      fechaHasta = this.formatearFecha(this.FechaHasta);
     }
 
-    this.turnosPorFecha = this.turnos.filter(
-      (turno) =>
+    if(fechaDesde != '' && fechaHasta != ''){
+     this.turnosPorFecha = this.turnos.filter(
+       (turno) =>
         this.formatDate(turno.dia) >= fechaDesde && this.formatDate(turno.dia) <= fechaHasta
-    );
-
-    console.log(this.turnosPorFecha);
-    this.CalcularCantidadDeTurnosPorMedico(this.turnosPorFecha);
-    this.crearGraficoTorta();
-    
+      );
+      
+      console.log(this.turnosPorFecha);
+      this.CalcularCantidadDeTurnosPorMedico(this.turnosPorFecha);
+      setTimeout(() => {
+        this.crearGraficoTorta();
+      }, 200);
+    }
   }
 
+  MostrarFechaFin(){
+    let fechaDesde!: string ;
+    let fechaHasta!: string ;
+    if(this.FechaDesdeFin && this.FechaHastaFin){
+       fechaDesde= this.formatearFecha(this.FechaDesdeFin)
+       fechaHasta = this.formatearFecha(this.FechaHastaFin);
+    }
+    console.log(fechaDesde);
+    console.log(fechaHasta);
+    
+    
+    
+    if(fechaDesde != '' && fechaHasta != ''){
+      this.turnosPorFechaFin = this.turnos.filter(
+        (turno) =>
+          this.formatDate(turno.dia) >= fechaDesde && this.formatDate(turno.dia) <= fechaHasta && turno.estado == 'finalizado'
+      );
+
+      console.log(this.turnosPorFechaFin);
+      this.CalcularCantidadDeFinalizadosPorMedico(this.turnosPorFechaFin);
+      setTimeout(() => {
+        this.crearGraficoPolarArea();
+      }, 200);
+    }
+  }
+
+  formatearFecha(fecha: Date): string {
+    const dia = fecha.getDate().toString().padStart(2, '0'); // Asegura dos dígitos
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Meses empiezan en 0
+    const anio = fecha.getFullYear();
+  
+    return `${dia}/${mes}/${anio}`; // Retorna la fecha en formato dd/MM/yyyy
+  }
+  
 
   crearGraficoTorta() {
     if (this.turnosPorFecha.length === 0) {
@@ -198,14 +249,15 @@ export class EstadisticasComponent implements OnInit{
   CalcularCantidadDeFinalizadosPorMedico(turnos:any){
     this.cantidadDeTurnosFinalizadosPorMedico = {};
     turnos.forEach((turno:any) => {
-      
-      if (!this.cantidadDeTurnosFinalizadosPorMedico[turno.especialista.nombre]) {
-        this.cantidadDeTurnosFinalizadosPorMedico[turno.especialista.nombre] = 0;
+      if(turno.estado == 'finalizado'){
+        if (!this.cantidadDeTurnosFinalizadosPorMedico[turno.especialista.nombre]) {
+          this.cantidadDeTurnosFinalizadosPorMedico[turno.especialista.nombre] = 0;
+        }
+        this.cantidadDeTurnosFinalizadosPorMedico[turno.especialista.nombre]++;
       }
-      this.cantidadDeTurnosFinalizadosPorMedico[turno.especialista.nombre]++;
     });
 
-    console.log(this.cantidadDeTurnosPorMedico);
+    console.log(this.cantidadDeTurnosFinalizadosPorMedico);
   }
 
   CalcularCantidadDeTurnosPorEspecialidad(turnos:any[]){
@@ -470,6 +522,106 @@ export class EstadisticasComponent implements OnInit{
     };
   }
 
+  exportarPdf3() {
+    const doc = new jsPDF();
+    const width = doc.internal.pageSize.getWidth();
+    const height = doc.internal.pageSize.getHeight();
+
+    const logo = new Image();
+    logo.src = '../../../assets/imperiologdor.png';
+
+    logo.onload = () => {
+        const logoWidth = 100;
+        const logoHeight = 50;
+        const xPos = (width - logoWidth) / 2;
+        const yPos = 10;
+
+        doc.addImage(logo, 'PNG', xPos, yPos, logoWidth, logoHeight);
+
+        // Título del documento
+        const title = 'Estadísticas de turnos finalizados por médico';
+        doc.setFontSize(18);
+        const titleWidth = doc.getTextWidth(title);
+        const titleXPos = (width - titleWidth) / 2;
+        const titleYPos = yPos + logoHeight + 10;
+        doc.text(title, titleXPos, titleYPos);
+
+        const date = `Fecha de emisión: ${new Date().toLocaleDateString('es-AR')}`;
+        doc.setFontSize(12);
+        doc.text(date, 10, titleYPos + 20);
+
+        const canvas = document.getElementById('polarAreaChart') as HTMLCanvasElement;
+        if (canvas) {
+            const chartImage = canvas.toDataURL('image/png'); 
+            const chartXPos = 10;
+            const chartYPos = titleYPos + 30;
+            const chartWidth = width - 20; 
+            const chartHeight = (chartWidth * canvas.height) / canvas.width; 
+
+            doc.addImage(chartImage, 'PNG', chartXPos, chartYPos, chartWidth, chartHeight);
+        }
+
+        doc.save('Estadisticas_Turnos_Medico.pdf');
+    };
+}
+
+  crearGraficoPolarArea() {
+    if (this.turnosPorFechaFin.length === 0) {
+        console.warn("No hay datos para mostrar en el gráfico.");
+        return;
+    }
+    console.log(this.cantidadDeTurnosFinalizadosPorMedico);
+    
+    const labels = Object.keys(this.cantidadDeTurnosFinalizadosPorMedico); // Usar la nueva propiedad
+    const data = Object.values(this.cantidadDeTurnosFinalizadosPorMedico); // Valores correspondientes
+
+    const ctx = document.getElementById('polarAreaChart') as HTMLCanvasElement; // Cambiar el ID del canvas
+    if (ctx) {
+        if (this.polarAreaChart) {
+            this.polarAreaChart.destroy(); // Destruir gráfico previo si existe
+        }
+
+        this.polarAreaChart = new Chart(ctx, {
+            type: 'polarArea', // Tipo del gráfico
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                        ],
+                        hoverBackgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                        ]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                          font: {
+                            size: 18 
+                          }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Turnos Finalizados por Médico', // Cambiar texto del título
+                        font: {
+                          size: 24 
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+
   exportarPdf2() {
     const doc = new jsPDF();
     const width = doc.internal.pageSize.getWidth();
@@ -542,5 +694,14 @@ export class EstadisticasComponent implements OnInit{
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'LogsInicioDeSesion');
     XLSX.writeFile(wb, `LogsInicioDeSesion.xlsx`);
+  }
+
+  ngOnDestroy(): void {
+    this.subAdministradores.unsubscribe();
+    this.subEspecialidades.unsubscribe();
+    this.subEspecialistas.unsubscribe();
+    this.subPacientes.unsubscribe();
+    this.subTurnos.unsubscribe();
+    this.subLogs.unsubscribe();
   }
 }

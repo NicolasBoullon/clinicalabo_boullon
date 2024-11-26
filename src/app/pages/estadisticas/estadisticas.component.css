@@ -13,6 +13,20 @@
 }
 .p-desc{
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
     display: inline;
+    padding: 0px;
+    margin: 0px;
+}
+
+.lbl-desde-hasta{
+    font-size: 3rem;
+    padding-right: 10px;
+    font-weight: 600;
+    color: rgb(87, 87, 87);
+    text-shadow: 1px 1px 2px white;
+}
+
+.btn-descargar{
+    font-size: 2.3rem;
 }
