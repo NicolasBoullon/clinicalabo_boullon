@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { AuthService } from './core/services/auth.service';
 import { slideInAnimation } from './shared/animations/up-down';
+import { slideZoomInAnimation } from './shared/animations/up-down2';
 
 @Component({
   selector: 'app-root',
@@ -12,22 +13,18 @@ import { slideInAnimation } from './shared/animations/up-down';
   imports: [RouterOutlet,NavBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  animations:[slideInAnimation]
+  animations:[slideInAnimation,slideZoomInAnimation]
 })
 export class AppComponent implements OnInit{
   title = 'clinicalabo';
 
-  /**
-   *
-   */
-  constructor(private authService:AuthService,private _matDialog:MatDialog,private contexts: ChildrenOutletContexts) {
-    
-  }
+
+  constructor(private authService:AuthService,private _matDialog:MatDialog,private contexts: ChildrenOutletContexts) { }
 
   getRouteAnimationData() {
  
       const animationData = this.contexts.getContext('primary')?.route?.snapshot?.data?.['animation'];
-      console.log('Animation Data:', animationData);
+      // console.log('Animation Data:', animationData);
       return animationData;
   }
 

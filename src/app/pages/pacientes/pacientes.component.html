@@ -1,6 +1,6 @@
 <div class="container-fluid cont-primary">
     <div class="row">
-        <div class="col-1">
+        <div class="col-2">
             @if(yaInicio | async){
                 <div class="lista-usuarios">
                     @for (paciente of pacientesFiltradosAtendio; track $index) {
@@ -32,7 +32,7 @@
                 </div>
             }
         </div>
-        <div class="col-11">
+        <div class="col-10">
             <div class="row" style="height: 50%;">
                 @if(seleccionoPaciente){
               <div *ngIf="seleccionoPaciente.usuario.rol == 'Paciente' && seleccionoPaciente.usuario.historialClinico" class="div-historia-clinica cont-primary">
@@ -90,6 +90,10 @@
                     </tbody>
                 </table>
             </div>
+            }@else {
+                <div class="row" style="height: 100%; display: flex; align-items: center;" >
+                    <h2 style="text-align: center; font-size: 4rem;">Seleccione un paciente</h2>
+                </div>
             }
           </div>
             @if(seleccionoPaciente){
@@ -115,7 +119,11 @@
                               <td [EstadoTurnoColor]="turno.estado">{{ turno.estado | titlecase }}</td>
                               <td>
                                   <!-- <button *ngIf="turno.estado == 'pendiente' || turno.estado == 'aceptado'" (click)="CancelarTurno(turno)" StyleButtonCommon>Cancelar Turno</button> -->
-                                  <button *ngIf="turno.estado == 'finalizado' && turno.diagnostico" (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
+                                   @if(turno.estado == 'finalizado' && turno.diagnostico){
+                                       <button  (click)="VerResenia(turno)" StyleButtonCommon>Ver Diagnostico</button>
+                                   }@else {
+                                        Sin diagnostico
+                                   }
                                   <!-- <button *ngIf="turno.estado == 'finalizado'  && !turno.encuesta" (click)="RealizarEncuesta(turno)" StyleButtonCommon>Realizar Encuesta</button> -->
                                   <!-- <button *ngIf="turno.estado == 'finalizado' && !turno['calificacion-atencion']" (click)="CalificarAtencion(turno)" StyleButtonCommon>Calificar Atencion</button> -->
                               </td>

@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { BuscarEspecialidadPipe } from '../../core/pipes/buscar-especialidad.pipe';
 import { EspecialistasService } from '../../core/services/especialistas.service';
-import { SeleccionoEspecialidadDirective } from '../../core/directives/selecciono-especialidad.directive';
-import { SeleccionoEspecialistaDirective } from '../../core/directives/selecciono-especialista.directive';
+// import { SeleccionoEspecialidadDirective } from '../../core/directives/selecciono-especialidad.directive';
+// import { SeleccionoEspecialistaDirective } from '../../core/directives/selecciono-especialista.directive';
 import { TurnosService } from '../../core/services/turnos.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-solicitar-turno',
   standalone: true,
-  imports: [FormsModule,CommonModule,BuscarEspecialidadPipe,DatePipe,SeleccionoEspecialidadDirective,SeleccionoEspecialistaDirective,BuscarPacientePipe,BuscarEspecialistaPipe,StyleButtonDirective],
+  imports: [FormsModule,CommonModule,BuscarEspecialidadPipe,DatePipe,BuscarPacientePipe,BuscarEspecialistaPipe,StyleButtonDirective],
   templateUrl: './solicitar-turno.component.html',
   styleUrl: './solicitar-turno.component.css'
 })
