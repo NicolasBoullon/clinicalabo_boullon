@@ -3,7 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerComponent } from '../../shared/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { EspecialistasService } from '../../core/services/especialistas.service';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
@@ -11,15 +11,18 @@ import { jsPDF} from 'jspdf';
 import { StyleButtonDirective } from '../../core/directives/style-button.directive';
 import { ObjectKeyValuePipe } from '../../core/pipes/object-key-value.pipe';
 import { PdfHistoriaClinicaComponent } from '../../shared/pdf-historia-clinica/pdf-historia-clinica.component';
+import { TurnosService } from '../../core/services/turnos.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [SpinnerComponent,CommonModule,StyleButtonDirective,ObjectKeyValuePipe,PdfHistoriaClinicaComponent],
+  imports: [SpinnerComponent,CommonModule,StyleButtonDirective,ObjectKeyValuePipe,PdfHistoriaClinicaComponent,FormsModule],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
 export class MiPerfilComponent implements OnInit,OnDestroy{
+[x: string]: any;
 
   @ViewChild('pdfContainer', { read: ViewContainerRef }) pdfContainer!: ViewContainerRef;
   private pdfComponentRef!: ComponentRef<PdfHistoriaClinicaComponent>;
@@ -57,10 +60,18 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
   huboCambios:boolean = false;
 
   sub!:Subscription;
+  subTurnos!:Subscription;
+  turnos:any[] =[];
+  turnosFiltradosPaciente:any[]=[];
+  especialistasAtendieronPaciente:any[]=[];
+  wait!:Promise<boolean>;
+  especialistaSeleccionado!:any;
+  turnosConEspecialistaSeleccionado:any[] = [];
     // turno60sabado = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00'];
     // turnos30sabado = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30',
     //   '13:00','13:30','14:00'];
-  constructor(private authService:AuthService,private _matDialog:MatDialog,private especialistaService:EspecialistasService,private firestoreService:FirestoreService){}
+  constructor(private authService:AuthService,private _matDialog:MatDialog,private especialistaService:EspecialistasService,
+    private firestoreService:FirestoreService,private turnosService:TurnosService,private firestore:FirestoreService){}
   ngOnInit(): void {
     setTimeout(() => {
       // this.abrirSpinner();
@@ -83,6 +94,7 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
     .then(resp=>{
       if(resp){
         this.perfil = resp;
+
         console.log(this.perfil);
         if(this.perfil.usuario.rol == 'Especialista'){
          this.sub =  this.especialistaService.GetEspecialista(this.perfil.uid)
@@ -91,9 +103,14 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
               console.log(resp);
               this.perfil = resp;
               this.SetHorarios(resp);
+
             }
           })
           
+        }else if(this.perfil.usuario.rol == 'Paciente'){
+        
+          this.GetTurnos();
+
         }
         
         console.log('nice');
@@ -107,7 +124,146 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
       console.log(err);
       
     })
+
     // this.cerrarSpinner();
+  }
+
+  async GetTurnos(){
+    this.subTurnos = this.firestore.getCollectionOrderedByDate('turnos','dia').subscribe({
+      next:((value)=>{
+        this.turnos = value;
+        this.FiltrarTurnosConPaciente(value);
+      })
+    })
+  }
+  FiltrarTurnosConPaciente(turnos:any){ 
+    const especialistas:any[] = [];
+    turnos.forEach((turno:any) => {
+      if(turno.paciente.correo == this.perfil.usuario.correo){
+        this.turnosFiltradosPaciente.push(turno);
+        if(!especialistas.includes(`${turno.especialista.nombre} ${turno.especialista.apellido}`)){
+          this.especialistasAtendieronPaciente.push(turno.especialista);
+          especialistas.push(`${turno.especialista.nombre} ${turno.especialista.apellido}`);
+        }
+      }
+    });
+
+    console.log(this.especialistasAtendieronPaciente);
+    this.wait = Promise.resolve(true);
+  }
+
+  SeleccionoEspecialista(){
+    console.log(this.especialistaSeleccionado);
+    this.turnosConEspecialistaSeleccionado = this.turnosFiltradosPaciente.filter((turno:any)=> turno.especialista.correo == this.especialistaSeleccionado.correo);
+  }
+
+  DescargarAtenciones(){
+    this.turnosConEspecialistaSeleccionado
+    
+    const data: any[] = [];
+
+    data.push([`Atenciones de: ${this.turnosConEspecialistaSeleccionado[0].especialista.nombre} ${this.turnosConEspecialistaSeleccionado[0].especialista.apellido}`]);
+
+    let flagPend:boolean = false;
+    this.turnosConEspecialistaSeleccionado.forEach((turno:any) => {
+        if(turno.estado == 'pendiente'){
+          if(!flagPend){
+            data.push([]);
+            data.push(['Pendientes'])
+            data.push([
+              'Especialidad', 'Dia', 'Horario',
+            ]);
+          }
+          data.push([
+            turno.especialidad,this.formatDate(turno.dia),turno.horario
+          ])
+        }
+    });
+    
+    let flagAcep:boolean = false;
+    this.turnosConEspecialistaSeleccionado.forEach((turno:any) => {
+      if(turno.estado == 'aceptado'){
+        if(!flagAcep){
+          data.push([]);
+          data.push(['Aceptados'])
+          data.push([
+            'Especialidad', 'Dia', 'Horario',
+          ]);
+        }
+        data.push([
+          turno.especialidad,this.formatDate(turno.dia),turno.horario
+        ])
+      }
+    });
+
+    let flagCanc:boolean= false;
+    this.turnosConEspecialistaSeleccionado.forEach((turno:any) => {
+      if(turno.estado == 'cancelado'){
+        if(!flagCanc){
+          data.push([]);
+          data.push(['Cancelados'])
+          data.push([
+            'Especialidad', 'Dia', 'Horario','Razon Cancelado'
+          ]);
+        }
+        flagCanc = true;
+          data.push([
+            turno.especialidad,this.formatDate(turno.dia),turno.horario,turno.comentarioCancelarTurno
+          ])
+        }
+    });
+
+
+    let flagRech:boolean = false;
+    this.turnosConEspecialistaSeleccionado.forEach((turno:any) => {
+      if(turno.estado == 'rechazado'){
+        if(!flagRech){
+          data.push([]);
+          data.push(['Rechazados'])
+          data.push([
+            'Especialidad', 'Dia', 'Horario','Razon Rechazado'
+          ]);
+        }
+        flagRech = true;
+        data.push([
+          turno.especialidad,this.formatDate(turno.dia),turno.horario,turno.comentarioCancelado
+        ])
+      }
+    });
+
+    let flagFin:boolean = false;
+    this.turnosConEspecialistaSeleccionado.forEach((turno:any) => {
+      if(turno.estado == 'finalizado'){
+        if(!flagFin){
+          data.push([]);
+          data.push(['Finalizados'])
+          data.push([
+            'Especialidad', 'Dia', 'Horario','Diagnostico'
+          ]);
+        }
+        flagFin = true;
+        data.push([
+          turno.especialidad,this.formatDate(turno.dia),turno.horario,turno.diagnostico
+        ])
+      }
+    });
+
+
+
+    const ws = XLSX.utils.aoa_to_sheet(data); 
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Turnos');
+    XLSX.writeFile(wb, `TurnosDe${this.perfil.usuario.nombre}${this.perfil.usuario.apellido}Especialista${this.especialistaSeleccionado.apellido}.xlsx`);
+
+  }
+
+
+
+  formatDate(timestamp: { seconds: number, nanoseconds: number }): string {
+    const date = new Date(timestamp.seconds * 1000); 
+    
+    return formatDate(date, 'dd MMMM yyyy', 'es-AR');
+    // return formatDate(date, 'dd MMM yyyy, h:mm a', 'en-US');
   }
 
   CambiarHorarios(especialidad:string,evento:Event){

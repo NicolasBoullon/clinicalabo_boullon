@@ -1,0 +1,56 @@
+<div class="container-fluid cont-primary d-flex flex-column justify-content-center align-items-center">
+    <div class="row d-flex justify-content-center align-items-center flex-column">
+        <!-- @if(wait |asnyc){ -->
+            <div>
+                <h2 class="h2-est">Estadisticas</h2> 
+            </div>
+    </div>
+    <div class="row d-flex justify-content-center align-items-center flex-column">
+        <div class="col-9">
+            <button StyleButtonCommon (click)="DescargarLogs()">Descargar</button>
+            <p class="p-desc">Descargar Logs Inicio de Sesion</p>
+        </div>
+</div>
+    <div class="row d-flex justify-content-center align-items-center flex-column">
+            <div class="col-9">
+                <canvas id="barChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-9 mt-3">
+                <button StyleButtonCommon (click)="exportarPdf0()">Exportar a PDF</button>
+            </div>
+    </div>
+    <div class="row d-flex justify-content-center align-items-center flex-column">
+
+        <div class="col-9">
+            <canvas id="lineChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-9 mt-3">
+            <button StyleButtonCommon (click)="exportarPdf1()">Exportar a PDF</button>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center align-items-center flex-column mt-4">
+        <div class="d-flex justify-content-center">
+            <div>
+                <label for="">Desde</label>
+                <input type="date" [(ngModel)]="FechaDesde" (change)="MostrarFecha()">
+            </div>
+            <div>
+                <label for="">Hasta</label>
+                <input type="date" [min]="FechaDesde" [(ngModel)]="FechaHasta" (change)="MostrarFecha()">
+            </div>
+        </div>
+        @if(!FechaDesde || !FechaHasta){
+            <div class="col-7">
+                <h3>Seleccione las fechas.</h3>
+            </div>
+        }@else {
+            <div class="col-7">
+                <canvas id="tortaChart" width="200" height="100"></canvas>
+            </div>
+            <div class="col-9 mt-3">
+                <button StyleButtonCommon (click)="exportarPdf2()">Exportar a PDF</button>
+            </div>
+        }
+    </div>
+</div>

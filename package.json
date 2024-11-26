@@ -25,6 +25,7 @@
     "@coreui/icons-angular": "~5.2.21",
     "@popperjs/core": "~2.11.8",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.6",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "ng-recaptcha-18": "^1.0.1",

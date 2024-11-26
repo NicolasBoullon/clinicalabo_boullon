@@ -5,220 +5,229 @@
                 <app-spinner [background]='"#e6d5b8"' [stroke]="'#D4AF37'"></app-spinner>
             </div>
         }@else {
-            <div class="col d-flex justify-content-center align-items-center flex-column">
-                <article class="perfil">
-                <div class="d-flex">
-                    <img [src]="perfil.usuario.imagen" alt="" *ngIf="perfil.usuario.imagen" class="mx-2">
-                    <img [src]="perfil.usuario.imagenUno" alt="" *ngIf="perfil.usuario.imagenUno">
-                    <img [src]="perfil.usuario.imagenDos" alt="" *ngIf="perfil.usuario.imagenDos" class="mx-2">
-                    <div class="text-user d-flex flex-column align-items-start justify-content-evenly">
-                        <h3>{{ perfil.usuario.nombre }} {{ perfil.usuario.apellido }}</h3>
-                        <p>Dni: {{ perfil.usuario.dni }}</p>
-                        <p>Correo: {{ perfil.usuario.correo }}</p>
-                        <p>Edad: {{ perfil.usuario.edad }}</p>
-                        <!-- <button (click)="GenerarPdf()" StyleButtonCommon *ngIf="perfil.usuario.rol == 'Paciente'">Descargar Historial Clinico</button> -->
-                         <div *ngIf="perfil.usuario.rol == 'Paciente' && perfil.usuario.historialClinico">
-                            <app-pdf-historia-clinica [paciente]="perfil"></app-pdf-historia-clinica>
-                         </div>
-                        <div class="d-flex" *ngIf="perfil.usuario.rol == 'Especialista'">
-                            <table>
-                                <tbody>
-                                    <th>
-                                        Horarios
-                                    </th>
-                                    @for (esp of perfil.usuario.especialidades; track $index) {
-                                        <tr>
-                                            <td>
-                                                {{ esp }}
-                                            </td>
-                                            <td>
-                                                <select name="{{ esp }}" id="{{ esp }}" (change)="CambiarHorarios(esp,$event)" class="slc-horarios" *ngIf="MostrarHorarios(esp)">
-                                                    <option value="30" id="30">30 Minutos</option>
-                                                    <option value="60" id="60">60 Minutos</option>
-                                                </select>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+            @if(wait |async){
+                <div class="col d-flex justify-content-center align-items-center flex-column">
+                    <article class="perfil">
+                    <div class="d-flex">
+                        <img [src]="perfil.usuario.imagen" alt="" *ngIf="perfil.usuario.imagen" class="mx-2">
+                        <img [src]="perfil.usuario.imagenUno" alt="" *ngIf="perfil.usuario.imagenUno">
+                        <img [src]="perfil.usuario.imagenDos" alt="" *ngIf="perfil.usuario.imagenDos" class="mx-2">
+                        <div class="text-user d-flex flex-column align-items-start justify-content-evenly">
+                            <h3>{{ perfil.usuario.nombre }} {{ perfil.usuario.apellido }}</h3>
+                            <p>Dni: {{ perfil.usuario.dni }}</p>
+                            <p>Correo: {{ perfil.usuario.correo }}</p>
+                            <p>Edad: {{ perfil.usuario.edad }}</p>
+                            <!-- <button (click)="GenerarPdf()" StyleButtonCommon *ngIf="perfil.usuario.rol == 'Paciente'">Descargar Historial Clinico</button> -->
+                             <div *ngIf="perfil.usuario.rol == 'Paciente' && perfil.usuario.historialClinico">
+                                <app-pdf-historia-clinica [paciente]="perfil"></app-pdf-historia-clinica>
+                                <span>Seleccione un especialista</span>
+                                <select name="especialistas" id="" (change)="SeleccionoEspecialista()" [(ngModel)]="especialistaSeleccionado">
+                                    <option value="">Seleccione</option>
+                                    <option *ngFor="let especialista of especialistasAtendieronPaciente" [ngValue]="especialista">
+                                        {{ especialista.nombre }} {{ especialista.apellido }}
+                                      </option>
+                                </select>
+                                <button *ngIf="especialistaSeleccionado" (click)="DescargarAtenciones()" StyleButtonCommon>Descargar</button>
+                             </div>
+                            <div class="d-flex" *ngIf="perfil.usuario.rol == 'Especialista'">
+                                <table>
+                                    <tbody>
+                                        <th>
+                                            Horarios
+                                        </th>
+                                        @for (esp of perfil.usuario.especialidades; track $index) {
+                                            <tr>
+                                                <td>
+                                                    {{ esp }}
+                                                </td>
+                                                <td>
+                                                    <select name="{{ esp }}" id="{{ esp }}" (change)="CambiarHorarios(esp,$event)" class="slc-horarios" *ngIf="MostrarHorarios(esp)">
+                                                        <option value="30" id="30">30 Minutos</option>
+                                                        <option value="60" id="60">60 Minutos</option>
+                                                    </select>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-items-center mx-2" *ngIf="perfil.usuario.rol == 'Especialista'">
-                    <h3 class="d-flex justify-content-center">Dias de las especialidades</h3>
-                    <table class="tabla-dias">
-                        <thead>
-                            <th></th>
-                            <th>Lunes</th>
-                            <th>Martes</th>
-                            <th>Miercoles</th>
-                            <th>Jueves</th>
-                            <th>Viernes</th>
-                            <th>Sabado</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <select name="lunes" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
-                                        <option value="Seleccione">--Seleccione--</option>
-                                        @for (esp of perfil.usuario.especialidades; track $index) {
-                                            <option [value]="esp">{{ esp }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="martes" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
-                                        <option value="Seleccione">--Seleccione--</option>
-                                        @for (esp of perfil.usuario.especialidades; track $index) {
-                                            <option [value]="esp">{{ esp }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="miercoles" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
-                                        <option value="Seleccione">--Seleccione--</option>
-                                        @for (esp of perfil.usuario.especialidades; track $index) {
-                                            <option [value]="esp">{{ esp }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="jueves" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
-                                        <option value="Seleccione">--Seleccione--</option>
-                                        @for (esp of perfil.usuario.especialidades; track $index) {
-                                            <option [value]="esp">{{ esp }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="viernes" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
-                                        <option value="Seleccione">--Seleccione--</option>
-                                        @for (esp of perfil.usuario.especialidades; track $index) {
-                                            <option [value]="esp">{{ esp }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="sabado" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
-                                        <option value="Seleccione">--Seleccione--</option>
-                                        @for (esp of perfil.usuario.especialidades; track $index) {
-                                            <option [value]="esp">{{ esp }}</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Desde</td>
-                                <td>
-                                    <select name="lunes" id="slc-desde-lunes" (change)="CambiarDesde('lunes',$event)" class="select-horarios-desde">
-                                        <option value="----">--Seleccione--</option>
-                                        @for (turno of turnosLunes; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="martes" id="slc-desde-martes" (change)="CambiarDesde('martes',$event)" class="select-horarios-desde">
-                                        <option value="----">--Seleccione--</option>
-                                        @for (turno of turnosMartes; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="miercoles" id="slc-desde-miercoles" (change)="CambiarDesde('miercoles',$event)" class="select-horarios-desde">
-                                        <option value="----">--Seleccione--</option>
-                                        @for (turno of turnosMiercoles; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="jueves" id="slc-desde-jueves" (change)="CambiarDesde('jueves',$event)" class="select-horarios-desde">
-                                        <option value="----">--Seleccione--</option>
-                                        @for (turno of turnosJueves; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="viernes" id="slc-desde-viernes" (change)="CambiarDesde('viernes',$event)"class="select-horarios-desde" >
-                                        <option value="----">--Seleccione--</option>
-                                        @for (turno of turnosViernes; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="sabado" id="slc-desde-sabado" (change)="CambiarDesde('sabado',$event)" class="select-horarios-desde">
-                                        <option value="----">--Seleccione--</option>
-                                        @for (turno of turnosSabado; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Hasta</td>    <!-- HASTAAAAAAAAA-->
-                                <td [ngStyle]="{'background-color':!lunesActivado? 'var(--color-gris-medio)' : ''}">
-                                    <select name="lunes" id="slc-hasta-lunes" class="select-horarios-hasta" [disabled]="!lunesActivado" [ngStyle]="{'background-color':!lunesActivado? 'var(--color-gris-medio)' : ''}">
-                                        <option value="----"></option>
-                                        @for (turno of turnosHastaLunes; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td [ngStyle]="{'background-color':!martesActivado? 'var(--color-gris-medio)' : ''}">
-                                    <select name="martes" id="slc-hasta-martes" class="select-horarios-hasta" [disabled]="!martesActivado" [ngStyle]="{'background-color':!martesActivado? 'var(--color-gris-medio)' : ''}">
-                                        <option value="----"></option>
-                                        
-                                        @for (turno of turnosHastaMartes; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td [ngStyle]="{'background-color':!miercolesActivado? 'var(--color-gris-medio)' : ''}">
-                                    <select name="miercoles" id="slc-hasta-miercoles" class="select-horarios-hasta" [disabled]="!miercolesActivado" [ngStyle]="{'background-color':!miercolesActivado? 'var(--color-gris-medio)' : ''}">
-                                        <option value="----"></option>
-                                        
-                                        @for (turno of turnosHastaMiercoles; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td [ngStyle]="{'background-color':!juevesActivado? 'var(--color-gris-medio)' : ''}">
-                                    <select name="jueves" id="slc-hasta-jueves" class="select-horarios-hasta" [disabled]="!juevesActivado" [ngStyle]="{'background-color':!juevesActivado? 'var(--color-gris-medio)' : ''}"> 
-                                        @for (turno of turnosHastaJueves; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td [ngStyle]="{'background-color':!viernesActivado? 'var(--color-gris-medio)' : ''}">
-                                    <select name="viernes" id="slc-hasta-viernes" class="select-horarios-hasta" [disabled]="!viernesActivado" [ngStyle]="{'background-color':!viernesActivado? 'var(--color-gris-medio)' : ''}">
-                                        @for (turno of turnosHastaViernes; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td [ngStyle]="{'background-color':!sabadoActivado? 'var(--color-gris-medio)' : ''}">
-                                    <select name="sabado" id="slc-hasta-sabado" class="select-horarios-hasta" [disabled]="!sabadoActivado" [ngStyle]="{'background-color':!sabadoActivado? 'var(--color-gris-medio)' : ''}">
-                                        @for (turno of turnosHastaSabado; track $index) {
-                                            <option [value]="turno">{{ turno }}</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="d-flex justify-content-center mt-3">
-                    <button (click)="GuardarCambios()" class="btn-guardar-cambios" [disabled]="!huboCambios" *ngIf="perfil.usuario.rol == 'Especialista'">Guardar cambios</button>
-                </div>
-            </article>
-        </div>
-
+                    <div class="d-flex flex-column justify-content-center align-items-center mx-2" *ngIf="perfil.usuario.rol == 'Especialista'">
+                        <h3 class="d-flex justify-content-center">Dias de las especialidades</h3>
+                        <table class="tabla-dias">
+                            <thead>
+                                <th></th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miercoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sabado</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <select name="lunes" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
+                                            <option value="Seleccione">--Seleccione--</option>
+                                            @for (esp of perfil.usuario.especialidades; track $index) {
+                                                <option [value]="esp">{{ esp }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="martes" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
+                                            <option value="Seleccione">--Seleccione--</option>
+                                            @for (esp of perfil.usuario.especialidades; track $index) {
+                                                <option [value]="esp">{{ esp }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="miercoles" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
+                                            <option value="Seleccione">--Seleccione--</option>
+                                            @for (esp of perfil.usuario.especialidades; track $index) {
+                                                <option [value]="esp">{{ esp }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="jueves" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
+                                            <option value="Seleccione">--Seleccione--</option>
+                                            @for (esp of perfil.usuario.especialidades; track $index) {
+                                                <option [value]="esp">{{ esp }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="viernes" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
+                                            <option value="Seleccione">--Seleccione--</option>
+                                            @for (esp of perfil.usuario.especialidades; track $index) {
+                                                <option [value]="esp">{{ esp }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="sabado" id="horarios" class="especialidad-seleccionada" (change)="Cambio()">
+                                            <option value="Seleccione">--Seleccione--</option>
+                                            @for (esp of perfil.usuario.especialidades; track $index) {
+                                                <option [value]="esp">{{ esp }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Desde</td>
+                                    <td>
+                                        <select name="lunes" id="slc-desde-lunes" (change)="CambiarDesde('lunes',$event)" class="select-horarios-desde">
+                                            <option value="----">--Seleccione--</option>
+                                            @for (turno of turnosLunes; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="martes" id="slc-desde-martes" (change)="CambiarDesde('martes',$event)" class="select-horarios-desde">
+                                            <option value="----">--Seleccione--</option>
+                                            @for (turno of turnosMartes; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="miercoles" id="slc-desde-miercoles" (change)="CambiarDesde('miercoles',$event)" class="select-horarios-desde">
+                                            <option value="----">--Seleccione--</option>
+                                            @for (turno of turnosMiercoles; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="jueves" id="slc-desde-jueves" (change)="CambiarDesde('jueves',$event)" class="select-horarios-desde">
+                                            <option value="----">--Seleccione--</option>
+                                            @for (turno of turnosJueves; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="viernes" id="slc-desde-viernes" (change)="CambiarDesde('viernes',$event)"class="select-horarios-desde" >
+                                            <option value="----">--Seleccione--</option>
+                                            @for (turno of turnosViernes; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="sabado" id="slc-desde-sabado" (change)="CambiarDesde('sabado',$event)" class="select-horarios-desde">
+                                            <option value="----">--Seleccione--</option>
+                                            @for (turno of turnosSabado; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Hasta</td>    <!-- HASTAAAAAAAAA-->
+                                    <td [ngStyle]="{'background-color':!lunesActivado? 'var(--color-gris-medio)' : ''}">
+                                        <select name="lunes" id="slc-hasta-lunes" class="select-horarios-hasta" [disabled]="!lunesActivado" [ngStyle]="{'background-color':!lunesActivado? 'var(--color-gris-medio)' : ''}">
+                                            <option value="----"></option>
+                                            @for (turno of turnosHastaLunes; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td [ngStyle]="{'background-color':!martesActivado? 'var(--color-gris-medio)' : ''}">
+                                        <select name="martes" id="slc-hasta-martes" class="select-horarios-hasta" [disabled]="!martesActivado" [ngStyle]="{'background-color':!martesActivado? 'var(--color-gris-medio)' : ''}">
+                                            <option value="----"></option>
+                                            
+                                            @for (turno of turnosHastaMartes; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td [ngStyle]="{'background-color':!miercolesActivado? 'var(--color-gris-medio)' : ''}">
+                                        <select name="miercoles" id="slc-hasta-miercoles" class="select-horarios-hasta" [disabled]="!miercolesActivado" [ngStyle]="{'background-color':!miercolesActivado? 'var(--color-gris-medio)' : ''}">
+                                            <option value="----"></option>
+                                            
+                                            @for (turno of turnosHastaMiercoles; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td [ngStyle]="{'background-color':!juevesActivado? 'var(--color-gris-medio)' : ''}">
+                                        <select name="jueves" id="slc-hasta-jueves" class="select-horarios-hasta" [disabled]="!juevesActivado" [ngStyle]="{'background-color':!juevesActivado? 'var(--color-gris-medio)' : ''}"> 
+                                            @for (turno of turnosHastaJueves; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td [ngStyle]="{'background-color':!viernesActivado? 'var(--color-gris-medio)' : ''}">
+                                        <select name="viernes" id="slc-hasta-viernes" class="select-horarios-hasta" [disabled]="!viernesActivado" [ngStyle]="{'background-color':!viernesActivado? 'var(--color-gris-medio)' : ''}">
+                                            @for (turno of turnosHastaViernes; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td [ngStyle]="{'background-color':!sabadoActivado? 'var(--color-gris-medio)' : ''}">
+                                        <select name="sabado" id="slc-hasta-sabado" class="select-horarios-hasta" [disabled]="!sabadoActivado" [ngStyle]="{'background-color':!sabadoActivado? 'var(--color-gris-medio)' : ''}">
+                                            @for (turno of turnosHastaSabado; track $index) {
+                                                <option [value]="turno">{{ turno }}</option>
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <button (click)="GuardarCambios()" class="btn-guardar-cambios" [disabled]="!huboCambios" *ngIf="perfil.usuario.rol == 'Especialista'">Guardar cambios</button>
+                    </div>
+                </article>
+            </div>   
+            }
         <div *ngIf="perfil.usuario.rol == 'Paciente' && perfil.usuario.historialClinico" class="div-historia-clinica">
             <h2>Historia Clinica</h2>
             <table>
