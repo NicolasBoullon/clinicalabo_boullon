@@ -65,4 +65,12 @@ En la sección Mi Perfil podremos ver nuestros datos principales.
 Y como especialista en nuestro perfil podremos colocar todos nuestros horarios personalizados como querramos. Primero deberemos que especialidad queremos según el dia de la semana, luego los horarios y guardamos los cambios. De ser necesario podemos cambiar nuestros turnos de cada especialidad de 30 minutos a 60 minutos. Y luego volvemos a seleccionar los dias y horarios.
 ![Logo](src/assets/readme/miPerfilEspecialista.png)   
 
+### Estadisticas Y Graficos
+![Logo](src/assets/readme/estadisticasUno.png)   
+![Logo](src/assets/readme/estadisticasDos.png)   
+![Logo](src/assets/readme/estadisticasTres.png)   
+![Logo](src/assets/readme/estadisticasCuatro.png)   
+
+
+
 
