@@ -1,23 +1,6 @@
 import { trigger, style, animate, transition, query, keyframes } from '@angular/animations';
 
-export const slideInAnimation = trigger('routeAnimations', [
-  // Animación de deslizamiento para 'turnos'
-  transition('* => turnos', [
-    query(':enter', [
-      style({
-        position: 'absolute',
-        transform: 'translateY(-100%)',
-        width: '100%',
-        opacity: 0
-      }),
-      animate('2s ease-out', style({
-        transform: 'translateY(0%)',
-        opacity: 1
-      }))
-    ], { optional: true })
-  ]),
-
-  // Animación de rebote para 'bounce'
+export const bounceInAnimation = trigger('routeAnimations', [
   transition('* => bounce', [
     query(':enter', [
       style({

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { AuthService } from './core/services/auth.service';
 import { slideInAnimation } from './shared/animations/up-down';
-import { slideZoomInAnimation } from './shared/animations/up-down2';
+import { bounceInAnimation } from './shared/animations/bounce';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ import { slideZoomInAnimation } from './shared/animations/up-down2';
   imports: [RouterOutlet,NavBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  animations:[slideInAnimation,slideZoomInAnimation]
+  animations:[slideInAnimation,bounceInAnimation]
 })
 export class AppComponent implements OnInit{
   title = 'clinicalabo';

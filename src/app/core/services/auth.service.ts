@@ -79,10 +79,8 @@ export class AuthService {
       console.log(user);
       
       if(user.emailVerified){ //Aca ya tiene el email verificado
-        //Hay que ver si es especialista y si tiene aprobada o no la acc.
         const resp = await this.especialistaService.CuentaAprobada(user.uid);
         if(resp === null){
-          //Aca se sabe que es usuario y esta email verificado
           this.LogInicioSesion();
           return true;          
         }else if(resp === true){
@@ -108,7 +106,7 @@ export class AuthService {
         }
       }
       
-    } catch (e:any) { //Manejo de error al loguearse
+    } catch (e:any) { 
       switch (e.code) {
         case "auth/invalid-email":
           this.toastf.warning('Atencion!',"Correo electrónico inválido.",
