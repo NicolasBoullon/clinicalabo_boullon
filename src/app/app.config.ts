@@ -14,20 +14,14 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideToastr } from 'ngx-toastr';
-
+import {envirConfig} from './enviroments'
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes,withInMemoryScrolling({scrollPositionRestoration: 'enabled',}),), 
   provideAnimationsAsync(),
   provideAnimations(),
   { provide: LOCALE_ID, useValue: 'es-AR' },
-   provideFirebaseApp(() => initializeApp({
-    "projectId":"clinicaboullon",
-    "appId":"1:299995371834:web:8cca614c8b97a1f11cd803",
-    "storageBucket":"clinicaboullon.appspot.com",
-    "apiKey":"AIzaSyC1QL_DkDUTZLQ8lUyoV-rb3hosUnSZJSI",
-    "authDomain":"clinicaboullon.firebaseapp.com",
-    "messagingSenderId":"299995371834"})),
+   provideFirebaseApp(() => initializeApp(envirConfig)),
      provideAuth(() => getAuth()),
      provideToastr(),
       provideFirestore(() => getFirestore()),

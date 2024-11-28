@@ -103,6 +103,7 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
               console.log(resp);
               this.perfil = resp;
               this.SetHorarios(resp);
+              this.wait = Promise.resolve(true);
 
             }
           })
@@ -110,6 +111,7 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
         }else if(this.perfil.usuario.rol == 'Paciente'){
         
           this.GetTurnos();
+          this.wait = Promise.resolve(true);
 
         }
         
@@ -149,7 +151,6 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
     });
 
     console.log(this.especialistasAtendieronPaciente);
-    this.wait = Promise.resolve(true);
   }
 
   SeleccionoEspecialista(){
@@ -307,9 +308,9 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
   }
 
   SetHorarios(especialista:any){
-    // console.log(especialista);
-    //Esto setea las cabeceras
     const especialidadesElegiedasCabeceras = document.getElementsByClassName('especialidad-seleccionada') as HTMLCollectionOf<HTMLSelectElement>;
+    console.log(especialidadesElegiedasCabeceras,'xD');
+    
     const selectDesdeElements = document.getElementsByClassName('select-horarios-desde') as HTMLCollectionOf<HTMLSelectElement>;
     const selectHastaElements = document.getElementsByClassName('select-horarios-hasta') as HTMLCollectionOf<HTMLSelectElement>;
 
@@ -322,7 +323,7 @@ export class MiPerfilComponent implements OnInit,OnDestroy{
       especialidadesElegiedasCabeceras[3].value = especialista.usuario.jueves.dias.especialidad;
       especialidadesElegiedasCabeceras[4].value = especialista.usuario.viernes.dias.especialidad;
       especialidadesElegiedasCabeceras[5].value = especialista.usuario.sabado.dias.especialidad;
-    }, 1000);
+    }, 2000);
 
     //Esto setea los turnos dependiendo de si son turnos de 30 o 60 min
     this.turnosLunes = this.generarTurnos(especialista.usuario.lunes);

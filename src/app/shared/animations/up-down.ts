@@ -17,7 +17,6 @@ export const slideInAnimation = trigger('routeAnimations', [
     ], { optional: true })
   ]),
 
-  // Animación de rebote para 'bounce'
   transition('* => bounce', [
     query(':enter', [
       style({

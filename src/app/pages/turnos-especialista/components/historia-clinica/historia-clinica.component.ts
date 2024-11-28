@@ -106,7 +106,6 @@ export class HistoriaClinicaComponent implements OnInit {
     // campoDinamicoUnoValue? campoDinamicoUnoValue : campoDinamicoUnoValue = {campo:'vacio'};
     // campoDinamicoDosValue? campoDinamicoDosValue : campoDinamicoDosValue = {campo:'vacio'};
     // campoDinamicoTresValue? campoDinamicoTresValue : campoDinamicoTresValue = {campo:'vacio'};
-    this.form.get('campoDinamicoDos')?.setValue(campoDinamicoDosValue);
   }
 
 
